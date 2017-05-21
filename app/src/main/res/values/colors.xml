@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1565c0</color>
+    <color name="colorPrimaryDark">#003c8f</color>
+    <color name="colorAccent">#ffd600</color>
+    <color name="colorPrimaryLight">#5e92f3</color>
+    <color name="colorAccentLight">#ffff52</color>
+    <color name="colorAccentDark">#C7A500</color>
+
+    <color name="previousResultsBackg">#FFFF00</color>
+    <color name="currentRoutineBackg">#C6FF00</color>
+    <color name="currentMarksheetBackg">#00B0FF</color>
+    <color name="courseMaterialsBackg">#BA68C8</color>
+    <color name="calendarBackg">#E91E63</color>
+    <color name="notificationsBackg">#FF3D00</color>
+
+    <color name="blackTextColor">#000000</color>
+    <color name="whiteTextColor">#ffffff</color>
+</resources>
