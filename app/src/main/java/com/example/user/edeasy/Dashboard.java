@@ -2,6 +2,7 @@ package com.example.user.edeasy;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -34,6 +35,26 @@ public class Dashboard extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(Dashboard.this, ""+String.valueOf(i+1), Toast.LENGTH_LONG).show();
+                Intent intent = null;
+                if(i==0){
+                    intent = new Intent(Dashboard.this, PreviousResults.class);
+                    startActivity(intent);
+                }else if(i==1){
+                    intent = new Intent(Dashboard.this, CurrentRoutine.class);
+                    startActivity(intent);
+                }else if(i==2){
+                    intent = new Intent(Dashboard.this, CurrentMarksheet.class);
+                    startActivity(intent);
+                }else if (i==3){
+                    intent = new Intent(Dashboard.this, CourseMaterials.class);
+                    startActivity(intent);
+                }else if (i==4){
+                    intent = new Intent(Dashboard.this, CalendarDisplay.class);
+                    startActivity(intent);
+                }else if (i==5){
+                    intent = new Intent(Dashboard.this, NotificationsDisplay.class);
+                    startActivity(intent);
+                }
             }
         });
     }

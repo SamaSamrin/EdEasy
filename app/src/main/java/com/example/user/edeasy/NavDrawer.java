@@ -1,5 +1,6 @@
 package com.example.user.edeasy;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -79,17 +80,25 @@ public class NavDrawer extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        Intent i = null;
         if (id == R.id.dashboard_drawer_option) {
-
+            //loads dashboard activity
+            i = new Intent(NavDrawer.this, Dashboard.class);
+            startActivity(i);
         } else if (id == R.id.account_drawer_option) {
-
+            //loads account activity
+            i = new Intent(NavDrawer.this, AccountProfile.class);
+            startActivity(i);
         } else if (id == R.id.settings_drawer_option) {
-
+            //loads settings activity
+            i = new Intent(NavDrawer.this, Settings.class);
+            startActivity(i);
         } else if (id == R.id.logout_drawer_option) {
-
+            //loads logout dialogue
         } else if(id == R.id.chatroom_drawer_option){
-
+            //loads chatroom
+            i = new Intent(NavDrawer.this, Chatroom.class);
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
