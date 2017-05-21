@@ -5,6 +5,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +16,17 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Dashboard extends Activity {
+public class Dashboard extends AppCompatActivity {
 
     GridView dashboard_gv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard);
+        setContentView(R.layout.activity_nav_drawer);
+
+      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         dashboard_gv = (GridView) findViewById(R.id.dashboard_gridview);
         dashboard_gv.setAdapter(new GridAdapter(this));

@@ -13,9 +13,8 @@
         <item name="android:colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
+    <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
         <item name="android:toolbarStyle">@style/Widget.AppCompat.Toolbar</item>
     </style>
 </resources>

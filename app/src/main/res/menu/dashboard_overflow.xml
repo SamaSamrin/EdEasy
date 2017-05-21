@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Dashboard">
+
+    <item
+        android:id="@+id/settings_option"
+        android:title="Settings"
+        app:showAsAction="never"/><!--this ensures it will never show up as an action on ActionBar-->
+    <item
+        android:id="@+id/log_out_option"
+        android:title="Log Out"
+        app:showAsAction="never"
+        />
+</menu>
