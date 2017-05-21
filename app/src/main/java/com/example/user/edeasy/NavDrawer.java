@@ -81,12 +81,14 @@ public class NavDrawer extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.dashboard_drawer_option) {
-            
+
         } else if (id == R.id.account_drawer_option) {
 
         } else if (id == R.id.settings_drawer_option) {
 
         } else if (id == R.id.logout_drawer_option) {
+
+        } else if(id == R.id.chatroom_drawer_option){
 
         }
 
