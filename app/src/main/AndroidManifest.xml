@@ -50,7 +50,7 @@
         <activity
             android:name=".NotificationsDisplay"
             android:label="@string/title_activity_notifications_display"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
