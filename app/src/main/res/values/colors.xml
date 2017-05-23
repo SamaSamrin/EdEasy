@@ -14,6 +14,14 @@
     <color name="calendarBackg">#E91E63</color>
     <color name="notificationsBackg">#FF3D00</color>
 
+    <color name="courseIdBack">#004BA0</color>
+    <color name="gradeBack">#63A4FF</color>
+    <color name="gpaBack">#1976D2</color>
+
+    <color name="courseIdValueBack">#FFFF00</color>
+    <color name="gradeValueBack">#FFFF52</color>
+    <color name="gpaValueBack">#FFD600</color>
+
     <color name="blackTextColor">#000000</color>
     <color name="whiteTextColor">#ffffff</color>
 </resources>

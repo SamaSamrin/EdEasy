@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableLayout
+        android:id="@+id/semester_results_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*"
+        android:shrinkColumns="*">
+
+        <!--<TableRow-->
+            <!--android:id="@+id/titles"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:paddingTop="10dp"-->
+            <!--android:textAlignment="center">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/course_id_column_title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@color/courseIdBack"-->
+                <!--android:text="Course ID"-->
+                <!--android:padding="10dp"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textAllCaps="true"-->
+                <!--android:textColor="@color/whiteTextColor"/>-->
+            <!--<TextView-->
+                <!--android:id="@+id/grade_column_title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@color/gradeBack"-->
+                <!--android:text="Grade"-->
+                <!--android:padding="10dp"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textAllCaps="true"-->
+                <!--android:textColor="@color/whiteTextColor"/>-->
+            <!--<TextView-->
+                <!--android:id="@+id/gpa_column_title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:background="@color/gpaBack"-->
+                <!--android:text="GPA"-->
+                <!--android:padding="10dp"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textAllCaps="true"-->
+                <!--android:textColor="@color/whiteTextColor"/>-->
+        <!--</TableRow>-->
+
+        <TableRow
+            android:id="@+id/titleValues"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textAlignment="center">
+
+            <TextView
+                android:id="@+id/course_id_column_value"
+                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_weight="1"
+                android:text="Course ID"
+                android:padding="10dp"
+                android:background="@color/courseIdBack"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="@color/whiteTextColor"/>
+            <TextView
+                android:id="@+id/grade_column_value"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:text="Grade"
+                android:padding="10dp"
+                android:background="@color/gradeBack"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="@color/whiteTextColor"/>
+            <TextView
+                android:id="@+id/gpa_column_value"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:text="GPA"
+                android:padding="10dp"
+                android:background="@color/gpaBack"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                android:textColor="@color/whiteTextColor"/>
+        </TableRow>
+
+    </TableLayout>
+
+</LinearLayout>
