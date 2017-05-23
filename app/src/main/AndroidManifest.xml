@@ -33,8 +33,8 @@
         <activity android:name=".TodaysRoutine" />
         <activity
             android:name=".PreviousResults"
-            android:label="@string/title_activity_previous_results"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Previous Results"
+            android:theme="@style/AppTheme" />
         <activity android:name=".AccountProfile" />
         <activity
             android:name=".Settings"
