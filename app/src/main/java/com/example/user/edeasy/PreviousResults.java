@@ -68,6 +68,10 @@ public class PreviousResults extends Activity {
         spring14.add("3.7");
         spring14.add("3.0");
         spring14.add("3.3");
+        spring14.add("A");
+        spring14.add("A-");
+        spring14.add("B");
+        spring14.add("B+");
 
         List<String> summer14 = new ArrayList<String>();
         summer14.add("CSE111");
@@ -78,6 +82,10 @@ public class PreviousResults extends Activity {
         summer14.add("2.7");
         summer14.add("4.0");
         summer14.add("2.3");
+        summer14.add("B");
+        summer14.add("C+");
+        summer14.add("A");
+        summer14.add("C");
 
         List<String> fall2014 = new ArrayList<String>();
         fall2014.add("DEV101");
@@ -87,6 +95,10 @@ public class PreviousResults extends Activity {
         fall2014.add("3.7");
         fall2014.add("3.0");
         fall2014.add("3.3");
+        fall2014.add("C-");
+        fall2014.add("A-");
+        fall2014.add("B");
+        fall2014.add("B+");
 
         semester_result_details.put(semester_headers.get(0), spring14);
         semester_result_details.put(semester_headers.get(1), summer14);
@@ -118,7 +130,8 @@ class ExpandableListViewAdapterDemo extends BaseExpandableListAdapter{
     @Override
     public int getChildrenCount(int i) {
         int returns = this.tableList.get(this.headersList.get(i)).size();
-        returns = returns - getGroupCount() - 1;
+        int tosubtract = 2 * getGroupCount();
+        returns = returns - tosubtract - 2;
         Log.e(TAG, "child count returns = "+String.valueOf(returns) );
         return returns;
     }
@@ -164,7 +177,8 @@ class ExpandableListViewAdapterDemo extends BaseExpandableListAdapter{
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         String courseIdTitle = (String) getChild(i, i1);
-        String grade = (String) getChild(i, i1+4);
+        String gpa = (String) getChild(i, i1+getChildrenCount(i));//previously i1+4
+        String grade = (String) getChild(i, i1+getChildrenCount(i)+getChildrenCount(i));
         if (view == null){
             LayoutInflater inf = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inf.inflate(R.layout.previous_semesters_results_list_child, null);
@@ -173,6 +187,8 @@ class ExpandableListViewAdapterDemo extends BaseExpandableListAdapter{
         courseIdValue.setText(courseIdTitle);
         TextView gradeValue = (TextView) view.findViewById(R.id.grade_column_value);
         gradeValue.setText(grade);
+        TextView gpaValue = (TextView) view.findViewById(R.id.gpa_column_value);
+        gpaValue.setText(gpa);
         return view;
     }
 

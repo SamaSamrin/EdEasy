@@ -74,7 +74,7 @@
             <TextView
                 android:id="@+id/grade_column_value"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_weight="1"
                 android:text="Grade"
                 android:padding="10dp"
@@ -85,7 +85,7 @@
             <TextView
                 android:id="@+id/gpa_column_value"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_weight="1"
                 android:text="GPA"
                 android:padding="10dp"
