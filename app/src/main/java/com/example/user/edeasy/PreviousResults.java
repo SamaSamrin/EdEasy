@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,17 +64,29 @@ public class PreviousResults extends Activity {
         spring14.add("MAT110");
         spring14.add("PHY111");
         spring14.add("ENG101");
+        spring14.add("4.0");
+        spring14.add("3.7");
+        spring14.add("3.0");
+        spring14.add("3.3");
 
         List<String> summer14 = new ArrayList<String>();
         summer14.add("CSE111");
         summer14.add("MAT120");
         summer14.add("PHY112");
         summer14.add("ENG102");
+        summer14.add("3.0");
+        summer14.add("2.7");
+        summer14.add("4.0");
+        summer14.add("2.3");
 
         List<String> fall2014 = new ArrayList<String>();
         fall2014.add("DEV101");
         fall2014.add("HUM101");
         fall2014.add("ENG204");
+        fall2014.add("2.0");
+        fall2014.add("3.7");
+        fall2014.add("3.0");
+        fall2014.add("3.3");
 
         semester_result_details.put(semester_headers.get(0), spring14);
         semester_result_details.put(semester_headers.get(1), summer14);
@@ -87,6 +100,8 @@ class ExpandableListViewAdapterDemo extends BaseExpandableListAdapter{
     Context context = null;
     private List<String> headersList;
     private HashMap<String, List<String>> tableList;
+
+    static final String TAG = "**Adapter Demo**";
 
     ExpandableListViewAdapterDemo(Context context, List<String> list,
                                   HashMap<String, List<String>> hashMap){
@@ -102,7 +117,10 @@ class ExpandableListViewAdapterDemo extends BaseExpandableListAdapter{
 
     @Override
     public int getChildrenCount(int i) {
-        return this.tableList.size();
+        int returns = this.tableList.get(this.headersList.get(i)).size();
+        returns = returns - getGroupCount() - 1;
+        Log.e(TAG, "child count returns = "+String.valueOf(returns) );
+        return returns;
     }
 
     @Override
@@ -146,12 +164,15 @@ class ExpandableListViewAdapterDemo extends BaseExpandableListAdapter{
     @Override
     public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
         String courseIdTitle = (String) getChild(i, i1);
+        String grade = (String) getChild(i, i1+4);
         if (view == null){
             LayoutInflater inf = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inf.inflate(R.layout.previous_semesters_results_list_child, null);
         }
         TextView courseIdValue = (TextView) view.findViewById(R.id.course_id_column_value);
         courseIdValue.setText(courseIdTitle);
+        TextView gradeValue = (TextView) view.findViewById(R.id.grade_column_value);
+        gradeValue.setText(grade);
         return view;
     }
 

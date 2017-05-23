@@ -34,7 +34,7 @@ public class Dashboard extends AppCompatActivity {
         dashboard_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(Dashboard.this, ""+String.valueOf(i+1), Toast.LENGTH_LONG).show();
+                //Toast.makeText(Dashboard.this, ""+String.valueOf(i+1), Toast.LENGTH_LONG).show();
                 Intent intent = null;
                 if(i==0){
                     intent = new Intent(Dashboard.this, PreviousResults.class);
