@@ -6,52 +6,65 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TabHost;
+import android.widget.TableLayout;
 import android.widget.Toast;
 
 public class CurrentMarksheet extends Activity {
 
     private static final String TAG = "**Current Marksheet**";
     TabHost tabHost;
+    TabHost selectedTab;
+    String[] courseNames;
+    int numberOfCourses;
+    TableLayout marksTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_marksheet);
-        Log.e(TAG, "activity reached");
+       // Log.e(TAG, "activity reached");
+
+        numberOfCourses = 4;
+        //courseNames = new String[numberOfCourses];
+        courseNames = new String[]{"CSE110", "MAT110", "PHY111", "ENG101"};
+
         tabHost = (TabHost) findViewById(R.id.current_marksheet_tab_host);
         tabHost.setup();
         tabHost.setActivated(true);
 //        tabHost.showContextMenu();
-        Log.e(TAG, tabHost.toString());
+        //Log.e(TAG, tabHost.toString());
         if(tabHost.isShown())
             Log.e(TAG, "tab host is shown");
         if (tabHost.isActivated())
             Log.e(TAG, "tab host is activated");
         TabHost.TabSpec spec = tabHost.newTabSpec("course1");
         spec.setContent(R.id.tab1);
-        spec.setIndicator("CSE110");
+        spec.setIndicator(courseNames[0]);
         tabHost.addTab(spec);
         spec = tabHost.newTabSpec("course2");
         spec.setContent(R.id.tab2);
-        spec.setIndicator("MAT110");
+        spec.setIndicator(courseNames[1]);
         tabHost.addTab(spec);
         spec = tabHost.newTabSpec("course3");
         spec.setContent(R.id.tab3);
-        spec.setIndicator("PHY111");
+        spec.setIndicator(courseNames[2]);
         tabHost.addTab(spec);
         spec = tabHost.newTabSpec("course4");
         spec.setContent(R.id.tab4);
-        spec.setIndicator("ENG101");
+        spec.setIndicator(courseNames[3]);
         tabHost.addTab(spec);
         Log.e(TAG, spec.toString());
+
 
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String s) {
                 View view = tabHost.getCurrentView();
                 //view.setBackgroundColor(Color.GREEN);
-                String title = tabHost.getCurrentTabTag();
-                Toast.makeText(CurrentMarksheet.this, s, Toast.LENGTH_SHORT).show();
+                int index = tabHost.getCurrentTab();
+                Log.e(TAG, "selected tab index = "+ String.valueOf(index));
+                String selectedCourseName=courseNames[index];
+                Toast.makeText(CurrentMarksheet.this, selectedCourseName, Toast.LENGTH_SHORT).show();
             }
         });
     }
