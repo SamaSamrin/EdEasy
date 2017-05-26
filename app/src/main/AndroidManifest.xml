@@ -41,15 +41,15 @@
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".Chatroom"
-            android:label="@string/title_activity_chatroom"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_chatroom" />
         <activity android:name=".CurrentRoutine" />
-        <activity android:name=".CurrentMarksheet" />
+        <activity android:name=".CurrentMarksheet"
+            android:theme="@style/AppTheme"/>
         <activity android:name=".CourseMaterials" />
         <activity android:name=".CalendarDisplay" />
         <activity
             android:name=".NotificationsDisplay"
-            android:label="@string/title_activity_notifications_display"
+            android:label="Notifications"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

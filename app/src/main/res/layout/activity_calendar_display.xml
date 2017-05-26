@@ -15,5 +15,6 @@
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="55dp" />
     <!--Make it show the deadlines, ekta date e click korle oi date-er deadlines
-    niche jeno display hoy, in a scrollView-->
+    niche jeno display hoy, in a scrollView
+    each course will have a different color-->
 </android.widget.RelativeLayout>
