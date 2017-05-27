@@ -43,9 +43,13 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <include layout="@layout/marksheet_table_course1"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"/>
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <include layout="@layout/marksheet_table_course1"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"/>
+                    </ScrollView>
 
                 </LinearLayout>
 
@@ -54,9 +58,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <include layout="@layout/marksheet_table_course2"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"/>
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <include layout="@layout/marksheet_table_course2"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"/>
+                    </ScrollView>
                 </LinearLayout>
 
                 <LinearLayout
@@ -64,9 +72,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-                    <include layout="@layout/marksheet_table_course3"
-                        android:layout_height="wrap_content"
-                        android:layout_width="match_parent"/>
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <include layout="@layout/marksheet_table_course3"
+                            android:layout_height="wrap_content"
+                            android:layout_width="match_parent"/>
+                    </ScrollView>
             </LinearLayout>
 
                 <LinearLayout
@@ -74,9 +86,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
                     <include layout="@layout/marksheet_table_course4"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"/>
+                    </ScrollView>
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
