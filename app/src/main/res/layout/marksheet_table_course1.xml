@@ -4,53 +4,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:stretchColumns="*"
-    android:padding="10dp">
-        <TableRow
-            android:id="@+id/course1_row1_absence"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/absentDays"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:padding="10dp"
-                android:text="Days of Absence "
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/attendanceValue"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:padding="10dp"
-                android:text="2"
-                android:textSize="20sp"/>
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/course1_quiz1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/quiz1"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:padding="10dp"
-                android:text="Quiz 1"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/course1_quiz1_obtained_mark"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:padding="10dp"
-                android:text="8/10"
-                android:textSize="20sp"/>
-        </TableRow>
-
+    android:padding="10dp"
+    android:background="@color/pastelPurple">
     <TableRow
-        android:id="@+id/course1_quiz2"
+        android:id="@+id/course1_absence"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:id="@+id/quiz2"
+            android:id="@+id/course1_absentDays"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:text="Days of Absence "
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/attendanceValue"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:text="4"
+            android:textSize="20sp"/>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/quiz1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/course1_quiz1"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:text="Quiz 1"
+            android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/course1_quiz1_obtained_mark"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:text="14/15"
+            android:textSize="20sp"/>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/quiz2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/course1_quiz2"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:padding="10dp"
@@ -61,16 +62,16 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:padding="10dp"
-            android:text="14/20"
+            android:text="10/20"
             android:textSize="20sp"/>
     </TableRow>
 
     <TableRow
-        android:id="@+id/course1_quiz3"
+        android:id="@+id/quiz3"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:id="@+id/quiz3"
+            android:id="@+id/course1_quiz3"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:padding="10dp"
@@ -85,11 +86,11 @@
             android:textSize="20sp"/>
     </TableRow>
     <TableRow
-        android:id="@+id/course1_quiz4"
+        android:id="@+id/quiz4"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:id="@+id/quiz4"
+            android:id="@+id/course1_quiz4"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:padding="10dp"
@@ -104,11 +105,11 @@
             android:textSize="20sp"/>
     </TableRow>
     <TableRow
-        android:id="@+id/course1_mid"
+        android:id="@+id/mid"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:id="@+id/midterm"
+            android:id="@+id/course1_midterm"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:padding="10dp"
@@ -123,11 +124,11 @@
             android:textSize="20sp"/>
     </TableRow>
     <TableRow
-        android:id="@+id/course1_assignment"
+        android:id="@+id/assignment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:id="@+id/assignment"
+            android:id="@+id/course1_assignment"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:padding="10dp"
@@ -142,11 +143,11 @@
             android:textSize="20sp"/>
     </TableRow>
     <TableRow
-        android:id="@+id/course1_lab"
+        android:id="@+id/lab"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:id="@+id/lab"
+            android:id="@+id/course1_lab"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:padding="10dp"
@@ -161,11 +162,11 @@
             android:textSize="20sp"/>
     </TableRow>
     <TableRow
-        android:id="@+id/course1_finals"
+        android:id="@+id/finals"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
-            android:id="@+id/finals"
+            android:id="@+id/course1_finals"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:padding="10dp"
@@ -183,7 +184,7 @@
         android:id="@+id/total"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/currentMarksheetBackg">
+        android:background="@color/purple">
         <TextView
             android:id="@+id/course1_total_display"
             android:layout_height="match_parent"
@@ -198,7 +199,7 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:padding="10dp"
-            android:text="93/100"
+            android:text="87/100"
             android:textSize="20sp"
             android:textColor="@color/blackTextColor"/>
     </TableRow>

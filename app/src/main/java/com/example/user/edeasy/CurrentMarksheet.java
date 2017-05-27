@@ -64,7 +64,7 @@ public class CurrentMarksheet extends Activity {
                 int index = tabHost.getCurrentTab();
                 Log.e(TAG, "selected tab index = "+ String.valueOf(index));
                 String selectedCourseName=courseNames[index];
-                Toast.makeText(CurrentMarksheet.this, selectedCourseName, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CurrentMarksheet.this, selectedCourseName, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -24,4 +24,18 @@
 
     <color name="blackTextColor">#000000</color>
     <color name="whiteTextColor">#ffffff</color>
+
+    <color name="pastelPurple">#E1BEE7</color>
+    <color name="purple">#BA68C8</color>
+    <color name="lightBlue">#BBDEFB</color>
+    <color name="lightGreen">#CCFF90</color>
+    <color name="brightGreen">#76FF03</color>
+    <color name="darkGreen">#64DD17</color>
+    <color name="lightYellow">#F4FF81</color>
+    <color name="brightYellow">#FFFF00</color>
+    <color name="lightPeach">#FFCCBC</color>
+    <color name="peach">#FF8A80</color>
+    <color name="pastelGreen">#69F0AE</color>
+    <color name="lightPink">#FFCDD2</color>
+    <color name="coolGray">#B0BEC5</color>
 </resources>

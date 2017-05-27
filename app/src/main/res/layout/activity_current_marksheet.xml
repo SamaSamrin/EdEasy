@@ -43,7 +43,9 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <include layout="@layout/marksheet_table_course1"/>
+                    <include layout="@layout/marksheet_table_course1"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"/>
 
                 </LinearLayout>
 
@@ -52,7 +54,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <include layout="@layout/marksheet_table_course2"/>
+                    <include layout="@layout/marksheet_table_course2"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -60,7 +64,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-                    <include layout="@layout/marksheet_table_course3"/>
+                    <include layout="@layout/marksheet_table_course3"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"/>
             </LinearLayout>
 
                 <LinearLayout
@@ -68,7 +74,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <include layout="@layout/marksheet_table_course4"/>
+                    <include layout="@layout/marksheet_table_course4"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"/>
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
