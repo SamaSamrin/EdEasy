@@ -36,13 +36,13 @@ public class Dashboard extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //Toast.makeText(Dashboard.this, ""+String.valueOf(i+1), Toast.LENGTH_LONG).show();
                 Intent intent = null;
-                if(i==0){
+                if(i==0){//done
                     intent = new Intent(Dashboard.this, PreviousResults.class);
                     startActivity(intent);
                 }else if(i==1){
                     intent = new Intent(Dashboard.this, CurrentRoutine.class);
                     startActivity(intent);
-                }else if(i==2){
+                }else if(i==2){//done
                     intent = new Intent(Dashboard.this, CurrentMarksheet.class);
                     startActivity(intent);
                 }else if (i==3){
