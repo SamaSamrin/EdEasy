@@ -68,7 +68,7 @@ class GridAdapter extends BaseAdapter{
     Context context;
     String[] dashboard_items = {"PREVIOUS RESULTS", "CURRENT ROUTINE", "CURRENT MARKSHEET",
             "COURSE MATERIALS", "CALENDER", "NOTIFICATIONS"};
-    String[] colorBacks = {"#FFEA00", "#76FF03", "#00B0FF", "#BA68C8", "#E91E63", "#FF3D00"};
+    String[] colorBacks = {"#FFEA00", "#76FF03", "#00B0FF", "#BA68C8", "#EC407A", "#FF3D00"};
 //    int[] colors = {Color.CYAN, Color.YELLOW, Color.GREEN, Color.MAGENTA, Color.RED, Color.BLACK};
 //    int[] colors2 = {R.color.previousResultsBackg, R.color.currentRoutineBackg,
 //                      R.color.currentMarksheetBackg, R.color.courseMaterialsBackg,
