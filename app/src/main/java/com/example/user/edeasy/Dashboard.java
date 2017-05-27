@@ -3,11 +3,14 @@ package com.example.user.edeasy;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +99,13 @@ class GridAdapter extends BaseAdapter{
         TextView itemText = null;
         if(view==null){
             itemText = new TextView(context);
-            itemText.setLayoutParams(new GridView.LayoutParams(350, 350));
+            DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+            int screenwidth = metrics.widthPixels;
+            int orientation = context.getResources().getConfiguration().orientation;
+            if(orientation== Configuration.ORIENTATION_PORTRAIT)
+                itemText.setLayoutParams(new GridView.LayoutParams(screenwidth/2, screenwidth/2));
+            else
+                itemText.setLayoutParams(new GridView.LayoutParams(screenwidth/3, screenwidth/3));
             itemText.setPadding(10, 10, 10, 10);
             itemText.setGravity(Gravity.CENTER);
             itemText.setTextColor(Color.WHITE);
