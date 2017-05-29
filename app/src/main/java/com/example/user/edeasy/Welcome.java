@@ -34,6 +34,20 @@ public class Welcome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        databaseInitialization();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_login);
+        setSupportActionBar(toolbar);
+
+        tabHostHandling();
+
+        normalEmailInput = (EditText) findViewById(R.id.email_input);
+        normalPasswordInput = (EditText) findViewById(R.id.password_input);
+        googleEmailInput = (EditText) findViewById(R.id.email_input_google);
+        googlePasswordInput = (EditText) findViewById(R.id.password_input_google);
+    }
+
+    void databaseInitialization(){
         database = FirebaseDatabase.getInstance();
         usersDatabaseReference = database.getReference("users");
         childEventListener = new ChildEventListener() {
@@ -63,17 +77,6 @@ public class Welcome extends AppCompatActivity {
             }
         };
         usersDatabaseReference.addChildEventListener(childEventListener);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_login);
-        setSupportActionBar(toolbar);
-
-        tabHostHandling();
-
-
-        normalEmailInput = (EditText) findViewById(R.id.email_input);
-        normalPasswordInput = (EditText) findViewById(R.id.password_input);
-        googleEmailInput = (EditText) findViewById(R.id.email_input_google);
-        googlePasswordInput = (EditText) findViewById(R.id.password_input_google);
     }
 
     void tabHostHandling(){
@@ -94,11 +97,20 @@ public class Welcome extends AppCompatActivity {
     void signIn(){
         String email = normalEmailInput.getText().toString();
         String password = normalPasswordInput.getText().toString();
+        if(email!=null && password!=null) {
+            if (email.equals("") && password.equals(""))
+                Log.e(TAG, "email or password is empty");
+            else {
+                User user = new User(email, password);//added to users database
+                usersDatabaseReference.push().setValue(user);///****
+            }
+        }else{
+            Log.e(TAG, "email or password is null");
+        }
     }
 
     public void postSignIn(View view){
-
-
+        signIn();
         Intent intent = new Intent(Welcome.this, Dashboard.class);
         startActivity(intent);
     }

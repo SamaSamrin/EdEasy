@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioGroup"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+        <RadioButton
+            android:id="@+id/radiobutton_teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="I am a teacher"/>
+        <RadioButton
+            android:id="@+id/radiobutton_student"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="I am a student"/>
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/email_input_google"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/googlesigninEditText"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:hint="Enter your email"
+        android:inputType="textEmailAddress"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/radioGroup"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:id="@+id/password_input_google"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/googlesigninEditText"
+        android:ems="10"
+        android:gravity="center_horizontal"
+        android:hint="Enter your password"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/email_input_google"
+        android:layout_alignParentStart="true" />
+
+
+    <Button
+        android:id="@+id/signin_button_google"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:background="@color/googlesigninButton"
+        android:padding="10dp"
+        android:text="Sign in"
+        android:textColor="@color/whiteTextColor"
+        android:onClick="postSignIn"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/password_input_google"
+        android:layout_centerHorizontal="true" />
+
+
+</RelativeLayout>

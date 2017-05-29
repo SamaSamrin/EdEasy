@@ -39,4 +39,8 @@
     <color name="lightPink">#FFCDD2</color>
     <color name="coolGray">#B0BEC5</color>
     <color name="colorAccentFaded">#fee66a</color>
+
+    <color name="googlesigninBack">#4ED644</color>
+    <color name="googlesigninEditText">#a9ffa1</color>
+    <color name="googlesigninButton">#FF000A</color>
 </resources>

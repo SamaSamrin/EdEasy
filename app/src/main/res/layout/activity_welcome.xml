@@ -20,6 +20,14 @@
         app:titleTextColor="@color/whiteTextColor"
         android:textAlignment="center"/>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
     <TabHost
         android:id="@+id/tabHost_login"
         android:layout_width="match_parent"
@@ -27,7 +35,10 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="89dp">
-
+    <!--<ScrollView-->
+        <!--android:id="@+id/scrollView_login"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -46,7 +57,7 @@
                 <RelativeLayout
                     android:id="@+id/tab1_login"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="244dp"
                     android:background="@color/colorPrimaryLight"
                     android:orientation="vertical">
 
@@ -54,9 +65,10 @@
                         android:id="@+id/email_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
+                        android:layout_below="@+id/radiogroup_user_type_selection"
+                        android:layout_centerHorizontal="true"
                         android:layout_margin="10dp"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginTop="15dp"
                         android:background="@color/lightBlue"
                         android:ems="10"
                         android:gravity="center_horizontal"
@@ -83,81 +95,74 @@
                         android:id="@+id/signin_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/password_input"
+                        android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="29dp"
+                        android:layout_marginBottom="15dp"
                         android:background="@color/colorAccentFaded"
+                        android:onClick="postSignIn"
                         android:padding="10dp"
-                        android:text="Sign in"
-                        android:onClick="postSignIn"/>
+                        android:text="Sign in" />
+
+                    <RadioGroup
+                        android:id="@+id/radiogroup_user_type_selection"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:weightSum="1">
+
+                        <RadioButton
+                            android:id="@+id/radiobutton_teacher"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.12"
+                            android:padding="10dp"
+                            android:text="I am a teacher" />
+
+                        <RadioButton
+                            android:id="@+id/radiobutton_student"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:text="I am a student" />
+
+                    </RadioGroup>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/tab2_login"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/darkGreen"
+                    android:background="@color/googlesigninBack"
                     android:orientation="vertical">
 
-                    <EditText
-                        android:id="@+id/email_input_google"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="18dp"
-                        android:background="@color/lightGreen"
-                        android:ems="10"
-                        android:gravity="center_horizontal"
-                        android:padding="10dp"
-                        android:layout_margin="10dp"
-                        android:hint="Enter your email"
-                        android:inputType="textEmailAddress" />
-
-                    <EditText
-                        android:id="@+id/password_input_google"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/lightGreen"
-                        android:ems="10"
-                        android:gravity="center_horizontal"
-                        android:padding="10dp"
-                        android:hint="Enter your password"
-                        android:inputType="textPassword"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_below="@+id/email_input_google"
-                        android:layout_alignParentStart="true" />
-
-
-                    <Button
-                        android:id="@+id/signin_button_google"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/password_input_google"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="29dp"
-                        android:background="@color/peach"
-                        android:padding="10dp"
-                        android:text="Sign in"
-                        android:onClick="postSignIn"/>
-
+                    <include layout="@layout/tab2_login_google"/>
                 </RelativeLayout>
 
             </FrameLayout>
         </LinearLayout>
+        <!--</ScrollView>-->
     </TabHost>
 
     <Button
         android:id="@+id/signup_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tabHost_login"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:layout_margin="10dp"
         android:padding="10dp"
         android:text="Sign up!"
-        android:onClick="signUp"/>
+        android:onClick="signUp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/tabHost_login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="55dp" />
+
+        </RelativeLayout>
+
+    </ScrollView>
 
 
 </android.widget.RelativeLayout>
