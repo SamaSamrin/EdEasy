@@ -6,13 +6,27 @@
     android:layout_height="match_parent"
     tools:context="com.example.user.edeasy.CurrentMarksheet">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_current_marksheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:title="Current Marksheet"
+        app:titleTextColor="@color/whiteTextColor"/>
+
     <TabHost
         android:id="@+id/current_marksheet_tab_host"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp">
+        android:layout_marginTop="45dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbar_current_marksheet">
         <!--android:layout_marginBottom="8dp"-->
         <!--android:layout_marginLeft="8dp"-->
         <!--android:layout_marginRight="8dp"-->
@@ -97,5 +111,6 @@
             </FrameLayout>
         </LinearLayout>
     </TabHost>
+
 </android.widget.RelativeLayout>
 

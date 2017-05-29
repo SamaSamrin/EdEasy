@@ -50,7 +50,7 @@
         android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="@string/app_name"
+        app:title="Your Calendar"
         app:titleTextColor="@android:color/white" />
 
     <!--Make it show the deadlines, ekta date e click korle oi date-er deadlines

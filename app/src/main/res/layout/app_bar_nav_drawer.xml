@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
+            app:title="Dashboard"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:titleTextColor="@color/whiteTextColor" />
 

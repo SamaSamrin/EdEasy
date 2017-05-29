@@ -20,14 +20,14 @@
 
     <color name="courseIdValueBack">#FFFF00</color>
     <color name="gradeValueBack">#FFFF52</color>
-    <color name="gpaValueBack">#FFD600</color>
+    <color name="gpaValueBack">#ffd600</color>
 
     <color name="blackTextColor">#000000</color>
     <color name="whiteTextColor">#ffffff</color>
 
     <color name="pastelPurple">#E1BEE7</color>
     <color name="purple">#BA68C8</color>
-    <color name="lightBlue">#BBDEFB</color>
+    <color name="lightBlue">#bbdefb</color>
     <color name="lightGreen">#CCFF90</color>
     <color name="brightGreen">#76FF03</color>
     <color name="darkGreen">#64DD17</color>
@@ -38,4 +38,5 @@
     <color name="pastelGreen">#69F0AE</color>
     <color name="lightPink">#FFCDD2</color>
     <color name="coolGray">#B0BEC5</color>
+    <color name="colorAccentFaded">#fee66a</color>
 </resources>

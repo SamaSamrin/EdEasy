@@ -13,10 +13,8 @@ public class CurrentMarksheet extends Activity {
 
     private static final String TAG = "**Current Marksheet**";
     TabHost tabHost;
-    TabHost selectedTab;
     String[] courseNames;
     int numberOfCourses;
-    TableLayout marksTable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
