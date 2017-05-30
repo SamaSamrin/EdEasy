@@ -9,6 +9,18 @@
     <string name="title_activity_previous_results">PreviousResults</string>
     <string name="title_activity_settings">Settings</string>
 
+    <string-array name="departments">
+        <item name="CSE">CSE</item>
+        <item name="EEE">EEE</item>
+        <item name="MNS">MNS</item>
+        <item name="BBS">BBS</item>
+        <item name="PHR">PHR</item>
+        <item name="ARC">ARC</item>
+        <item name="BIL">BIL</item>
+        <item name="ENG">ENG</item>
+        <item name="ECO">ECO</item>
+    </string-array>
+
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->

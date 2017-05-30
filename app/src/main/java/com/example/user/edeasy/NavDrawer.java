@@ -1,9 +1,11 @@
 package com.example.user.edeasy;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class NavDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -95,6 +98,7 @@ public class NavDrawer extends AppCompatActivity
             startActivity(i);
         } else if (id == R.id.logout_drawer_option) {
             //loads logout dialogue
+            logOut();
         } else if(id == R.id.chatroom_drawer_option){
             //loads chatroom
             i = new Intent(NavDrawer.this, Chatroom.class);
@@ -104,5 +108,26 @@ public class NavDrawer extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void logOut(){
+        new AlertDialog.Builder(this)
+                .setTitle("Log out")
+                .setMessage("Do you want to log out?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(NavDrawer.this, "Logging Out", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(NavDrawer.this, Welcome.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+                .show();
     }
 }

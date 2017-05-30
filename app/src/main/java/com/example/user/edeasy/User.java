@@ -6,19 +6,49 @@ package com.example.user.edeasy;
 
 class User {
 
-    private String username;
-    private String firstName;
-    private String lastName;
-    public String email;
-    public String password;
-    private long id;
+    private Course[] courses_assigned;
     private String department;
+    public String email;
+    private String full_name;
+//    private String firstName;
+//    private String lastName;
+    public String password;
+    private String student_id;
     private String role;
-    private Course[] assignedCourses;
     private String semester;
 
     User(String email, String password){
         this.email = email;
         this.password = password;
+    }
+
+    User(Course[] courses_assigned, String department, String email, String full_name,
+         String password, String semester, String student_id){
+        this.department = department;
+        this.email = email;
+        this.full_name = full_name;
+        this.password = password;
+        this.semester = semester;
+        this.student_id = student_id;
+    }
+
+    String getEmail(){
+        return email;
+    }
+
+    String getFull_name(){
+        return full_name;
+    }
+
+    String getPassword(){
+        return password;
+    }
+
+    String getRole(){
+        return role;
+    }
+
+    void setRole(String role){
+        this.role = role;
     }
 }
