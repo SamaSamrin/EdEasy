@@ -1,6 +1,7 @@
 package com.example.user.edeasy;
 
 import android.content.Intent;
+import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
@@ -81,12 +82,18 @@ public class Welcome extends AppCompatActivity {
 
         TabHost.TabSpec spec = tabHost_login.newTabSpec("usual login");
         spec.setContent(R.id.tab1_login);
-        spec.setIndicator("Login");
+        if(Build.VERSION.SDK_INT >= 21)
+            spec.setIndicator("", getResources().getDrawable(R.drawable.email_1, null));
+        else
+            spec.setIndicator("Login");
         tabHost_login.addTab(spec);
 
         spec = tabHost_login.newTabSpec("google login");
         spec.setContent(R.id.tab2_login);
-        spec.setIndicator("Google");
+        if(Build.VERSION.SDK_INT >= 21)
+            spec.setIndicator("", getResources().getDrawable(R.drawable.google, null));
+        else
+            spec.setIndicator("Google");
         tabHost_login.addTab(spec);
     }
 

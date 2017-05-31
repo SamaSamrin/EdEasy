@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,10 +18,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class NavDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String TAG = "**NavDrawer**";
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +35,14 @@ public class NavDrawer extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -68,6 +76,8 @@ public class NavDrawer extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
+        Log.e(TAG, "on Options Item Selected");
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -82,6 +92,8 @@ public class NavDrawer extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        Log.e(TAG, "on Navigation Item Selected");
+
         int id = item.getItemId();
         Intent i = null;
         if (id == R.id.dashboard_drawer_option) {
@@ -129,5 +141,41 @@ public class NavDrawer extends AppCompatActivity
                     }
                 })
                 .show();
+    }
+}
+
+class DrawerItemClickListener implements ListView.OnItemClickListener {
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        selectItem(position);
+    }
+
+
+    /**
+     * Swaps fragments in the main content view
+     */
+    private void selectItem(int position) {
+//        // Create a new fragment and specify the planet to show based on position
+//        Fragment fragment = new PlanetFragment();
+//        Bundle args = new Bundle();
+//        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
+//        fragment.setArguments(args);
+//
+//        // Insert the fragment by replacing any existing fragment
+//        FragmentManager fragmentManager = getFragmentManager();
+//        fragmentManager.beginTransaction()
+//                .replace(R.id.content_frame, fragment)
+//                .commit();
+//
+//        // Highlight the selected item, update the title, and close the drawer
+//        mDrawerList.setItemChecked(position, true);
+//        setTitle(mPlanetTitles[position]);
+//        mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+//    @Override
+    public void setTitle(CharSequence title) {
+//        mTitle = title;
+//        getActionBar().setTitle(mTitle);
     }
 }

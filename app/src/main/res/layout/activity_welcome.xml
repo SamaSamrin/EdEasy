@@ -136,7 +136,6 @@
                     android:id="@+id/tab2_login"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/googlesigninBack"
                     android:orientation="vertical">
 
                     <include layout="@layout/tab2_login_google"/>
@@ -153,6 +152,8 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="Sign up!"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/whiteTextColor"
         android:onClick="goToSignUp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
