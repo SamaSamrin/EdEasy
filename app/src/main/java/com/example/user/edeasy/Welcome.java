@@ -111,9 +111,9 @@ public class Welcome extends AppCompatActivity {
         studentsChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                UserSnap user = dataSnapshot.getValue(UserSnap.class);
-                if(email!=null) email = user.getEmail();
-                Toast.makeText(Welcome.this, "user's email is = "+user.getEmail(), Toast.LENGTH_SHORT).show();
+                User user = dataSnapshot.getValue(User.class);
+                if(username!=null) username = user.getFull_name();
+                Toast.makeText(Welcome.this, "username is = "+username, Toast.LENGTH_SHORT).show();
 //                HashMap<String, Object> objectHashMap = (HashMap<String, Object>) dataSnapshot.getValue();
 //                if (objectHashMap == null){
 //                    Log.e(TAG, "null hashmap dataSnapshot");

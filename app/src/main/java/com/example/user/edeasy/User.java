@@ -17,6 +17,10 @@ class User {
     private String role;
     private String semester;
 
+    public User(){
+
+    }
+
     User(String email, String password){
         this.email = email;
         this.password = password;
@@ -32,11 +36,13 @@ class User {
         this.student_id = student_id;
     }
 
-    String getEmail(){
+    public String getEmail(){
         return email;
     }
 
-    String getFull_name(){
+    void setFull_name(String name){ full_name = name; }
+
+    public String getFull_name(){
         return full_name;
     }
 
