@@ -6,44 +6,50 @@
             android:id="@+id/dashboard_drawer_option"
             android:icon="@drawable/dashboard"
             android:title="Dashboard" />
-        <!--<item-->
-            <!--android:id="@+id/nav_gallery"-->
-            <!--android:icon="@drawable/ic_menu_gallery"-->
-            <!--android:title="Gallery" />-->
-        <!--<item-->
-            <!--android:id="@+id/nav_slideshow"-->
-            <!--android:icon="@drawable/ic_menu_slideshow"-->
-            <!--android:title="Slideshow" />-->
-        <!--<item-->
-            <!--android:id="@+id/nav_manage"-->
-            <!--android:icon="@drawable/ic_menu_manage"-->
-            <!--android:title="Tools" />-->
 
         <item android:id="@+id/account_drawer_option"
             android:title="Account"
             android:icon="@drawable/user_male"/>
-        <item android:id="@+id/chatroom_drawer_option"
-            android:title="Chatroom"
-            android:icon="@drawable/chat"/>
-        <item android:id="@+id/settings_drawer_option"
-            android:title="Settings"
-            android:icon="@drawable/ic_menu_manage"/>
-        <item android:id="@+id/logout_drawer_option"
-            android:title="Log Out"
-            android:icon="@drawable/logout"/>
+        <!--<item android:id="@+id/chatroom_drawer_option"-->
+            <!--android:title="Chatroom"-->
+            <!--android:icon="@drawable/chat"/>-->
     </group>
 
-    <!--<item android:title="Communicate">-->
-        <!--<menu>-->
-            <!--<item-->
-                <!--android:id="@+id/nav_share"-->
-                <!--android:icon="@drawable/ic_menu_share"-->
-                <!--android:title="Share" />-->
-            <!--<item-->
-                <!--android:id="@+id/nav_send"-->
-                <!--android:icon="@drawable/ic_menu_send"-->
-                <!--android:title="Send" />-->
-        <!--</menu>-->
-    <!--</item>-->
+    <item android:title="Course Materials"
+        android:icon="@drawable/stack">
+        <menu>
+            <item
+                android:id="@+id/course1_drawer_item"
+                android:icon="@drawable/stack"
+                android:title="CSE110" />
+            <item
+                android:id="@+id/course2_drawer_item"
+                android:icon="@drawable/tick"
+                android:title="MAT120" />
+            <item
+                android:id="@+id/course3_drawer_item"
+                android:icon="@drawable/tick"
+                android:title="PHY111" />
+            <item
+                android:id="@+id/course4_drawer_item"
+                android:icon="@drawable/tick"
+                android:title="ENG101" />
+            <item
+                android:id="@+id/course5_drawer_item"
+                android:icon="@drawable/tick"
+                android:title="CSE110"
+                android:visible="false"/>
+        </menu>
+
+    </item>
+
+    <group android:checkableBehavior="single">
+            <item android:id="@+id/settings_drawer_option"
+                android:title="Settings"
+                android:icon="@drawable/ic_menu_manage"/>
+            <item android:id="@+id/logout_drawer_option"
+                android:title="Log Out"
+                android:icon="@drawable/logout"/>
+    </group>
 
 </menu>

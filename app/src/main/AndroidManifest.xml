@@ -18,7 +18,7 @@
         <activity
             android:name=".Dashboard"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".NavDrawer"
             android:theme="@style/AppTheme.NoActionBar">
@@ -40,7 +40,8 @@
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".Chatroom"
-            android:label="@string/title_activity_chatroom" />
+            android:label="@string/title_activity_chatroom"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".CurrentRoutine" />
         <activity
             android:name=".CurrentMarksheet"
@@ -62,8 +63,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignUp"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".SignUp"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ChatroomCourse1" />
+        <activity android:name=".ChatroomCourse2" />
+        <activity android:name=".ChatroomCourse3" />
+        <activity android:name=".ChatroomCourse4" />
+        <activity android:name=".ChatroomCourse5"></activity>
     </application>
 
 </manifest>

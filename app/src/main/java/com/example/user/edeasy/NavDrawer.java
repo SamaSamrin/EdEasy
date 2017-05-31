@@ -111,11 +111,12 @@ public class NavDrawer extends AppCompatActivity
         } else if (id == R.id.logout_drawer_option) {
             //loads logout dialogue
             logOut();
-        } else if(id == R.id.chatroom_drawer_option){
-            //loads chatroom
-            i = new Intent(NavDrawer.this, Chatroom.class);
-            startActivity(i);
         }
+//      else if(id == R.id.chatroom_drawer_option){
+//            //loads chatroom
+//            i = new Intent(NavDrawer.this, Chatroom.class);
+//            startActivity(i);
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
