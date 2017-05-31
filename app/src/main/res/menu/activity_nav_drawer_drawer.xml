@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/top_drawer_menu"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/dashboard_drawer_option"
             android:icon="@drawable/dashboard"
@@ -15,35 +16,36 @@
             <!--android:icon="@drawable/chat"/>-->
     </group>
 
-    <item android:title="Course Materials"
-        android:icon="@drawable/stack">
+    <item android:id="@+id/course_materials_section"
+        android:title="Course Materials">
         <menu>
             <item
                 android:id="@+id/course1_drawer_item"
-                android:icon="@drawable/stack"
+                android:icon="@drawable/one"
                 android:title="CSE110" />
             <item
                 android:id="@+id/course2_drawer_item"
-                android:icon="@drawable/tick"
+                android:icon="@drawable/two"
                 android:title="MAT120" />
             <item
                 android:id="@+id/course3_drawer_item"
-                android:icon="@drawable/tick"
+                android:icon="@drawable/three"
                 android:title="PHY111" />
             <item
                 android:id="@+id/course4_drawer_item"
-                android:icon="@drawable/tick"
+                android:icon="@drawable/four"
                 android:title="ENG101" />
             <item
                 android:id="@+id/course5_drawer_item"
-                android:icon="@drawable/tick"
+                android:icon="@drawable/five"
                 android:title="CSE110"
                 android:visible="false"/>
         </menu>
 
     </item>
 
-    <group android:checkableBehavior="single">
+    <group  android:id="@+id/bottom_drawer_menu"
+        android:checkableBehavior="single">
             <item android:id="@+id/settings_drawer_option"
                 android:title="Settings"
                 android:icon="@drawable/ic_menu_manage"/>
