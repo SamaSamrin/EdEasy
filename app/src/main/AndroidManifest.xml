@@ -29,7 +29,8 @@
             <!-- <data android:host="www.google.com" android:scheme="http"/> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".TodaysRoutine" />
+        <activity android:name=".CurrentRoutine"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".PreviousResults"
             android:label="Previous Results"
@@ -70,7 +71,7 @@
         <activity android:name=".ChatroomCourse2" />
         <activity android:name=".ChatroomCourse3" />
         <activity android:name=".ChatroomCourse4" />
-        <activity android:name=".ChatroomCourse5"></activity>
+        <activity android:name=".ChatroomCourse5"/>
     </application>
 
 </manifest>

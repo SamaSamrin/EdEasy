@@ -1,9 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.user.edeasy.CurrentRoutine">
 
-</android.support.constraint.ConstraintLayout>
+    <TableLayout
+        android:id="@+id/todays_routine"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_above="@+id/see_full_routine_button"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:padding="5dp"
+        android:stretchColumns="*"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="76dp">
+
+
+        <TableRow
+            android:id="@+id/current_routine_first_class"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/current_routine_first_class_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="8:00am-9:30am"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/current_routine_first_class_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="CSE110 - ABC - UB20301"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </TableLayout>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_current_routine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:title="Current Routine"
+        app:titleTextColor="@color/whiteTextColor"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/see_full_routine_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="5dp"
+        android:background="@color/colorAccentLight"
+        android:text="View full routine"
+        android:textStyle="bold"
+        android:onClick="viewFullRoutine"/>
+
+    <TextView
+        android:id="@+id/current_routine_day_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/todays_routine"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbar_current_routine"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="12dp"
+        android:background="@color/lightBlue"
+        android:padding="5dp"
+        android:text="Sunday"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/blackTextColor"
+        android:textSize="18sp" />
+</android.widget.RelativeLayout>
