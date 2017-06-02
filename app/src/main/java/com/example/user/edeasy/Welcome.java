@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +16,7 @@ import android.widget.TabHost;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +37,7 @@ public class Welcome extends AppCompatActivity {
     String selectedRole = "";
     String username = "ANONYMOUS";
     String email;
+    String password;
 
     //database
     FirebaseDatabase database;
@@ -52,6 +55,7 @@ public class Welcome extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
 
         databaseInitialization();
+        authenticationInitialization();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_login);
         setSupportActionBar(toolbar);
@@ -74,6 +78,19 @@ public class Welcome extends AppCompatActivity {
 
         attachStudentDatabaseListener();
         attachTeachersDatabaseListener();
+    }
+
+    void authenticationInitialization(){
+        auth = FirebaseAuth.getInstance();
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user!=null)
+                    Log.e(TAG, user.getDisplayName());
+            }
+        };
+
     }
 
     void tabHostHandling(){
@@ -214,6 +231,7 @@ public class Welcome extends AppCompatActivity {
 
     public void postSignIn(View view){
         signIn();
+        //auth.signInWithEmailAndPassword(email, "student1");
         Intent intent = new Intent(Welcome.this, NavDrawer.class);
         intent.putExtra("username", username);
         intent.putExtra("role", selectedRole);

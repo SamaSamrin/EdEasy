@@ -22,6 +22,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import layout.CourseOneMaterials;
 
 public class NavDrawer extends AppCompatActivity
@@ -86,7 +89,7 @@ public class NavDrawer extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        Log.e(TAG, "on Options Item Selected");
+        //Log.e(TAG, "on Options Item Selected");
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -168,12 +171,19 @@ public class NavDrawer extends AppCompatActivity
     }
 
     public void logOut(){
-        new AlertDialog.Builder(this)
+        final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Log out")
                 .setMessage("Do you want to log out?")
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseAuth auth = FirebaseAuth.getInstance();
+                        FirebaseUser user = auth.getCurrentUser();
+                        if (user == null)
+                            Log.e(TAG, "before signout : no current user");
+                        auth.signOut();
+                        //if (user == null)
+                          //  Log.e(TAG, "no current user");
                         Toast.makeText(NavDrawer.this, "Logging Out", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(NavDrawer.this, Welcome.class);
                         startActivity(intent);
@@ -182,10 +192,16 @@ public class NavDrawer extends AppCompatActivity
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        dialogInterface.dismiss();
                     }
                 })
                 .show();
+//        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+//            @Override
+//            public void onShow(DialogInterface dialogInterface) {
+//                dialog.getButton(R.id.dia)
+//            }
+//        });
     }
 }
 
@@ -193,6 +209,7 @@ class DrawerItemClickListener implements ListView.OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         selectItem(position);
+        Log.e("NavDrawer : onItemClick", String.valueOf(position));
     }
 
 
