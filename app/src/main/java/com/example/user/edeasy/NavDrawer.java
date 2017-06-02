@@ -114,7 +114,7 @@ public class NavDrawer extends AppCompatActivity
         int id = item.getItemId();
         Fragment fragment = new Dashboard();
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().add(containerView.getId(), fragment).commit();
+        //fragmentManager.beginTransaction().add(containerView.getId(), fragment).commit();
 
         Intent i = null;
         switch (id) {

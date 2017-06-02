@@ -8,7 +8,7 @@
     tools:context="com.example.user.edeasy.Dashboard"
     tools:showIn="@layout/app_bar_nav_drawer">
 
-    <include layout="@layout/activity_dashboard"/>
+    <!--<include layout="@layout/activity_dashboard"/>-->
     <!--<TextView-->
         <!--android:layout_width="wrap_content"-->
         <!--android:layout_height="wrap_content"-->
