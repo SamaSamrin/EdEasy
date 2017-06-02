@@ -214,7 +214,7 @@ public class Welcome extends AppCompatActivity {
 
     public void postSignIn(View view){
         signIn();
-        Intent intent = new Intent(Welcome.this, Dashboard.class);
+        Intent intent = new Intent(Welcome.this, NavDrawer.class);
         intent.putExtra("username", username);
         intent.putExtra("role", selectedRole);
         intent.putExtra("email", email);

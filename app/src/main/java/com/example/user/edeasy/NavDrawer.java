@@ -22,19 +22,27 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import layout.CourseOneMaterials;
+
 public class NavDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "**NavDrawer**";
     private String username;
+    private View containerView;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //containerView = (View) findViewById(R.id.nav_view);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+//        Fragment fragment = new Dashboard();
+//        FragmentManager manager = getSupportFragmentManager();
+//        manager.beginTransaction().add(fragment, "fragment").commit();
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -47,10 +55,11 @@ public class NavDrawer extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        containerView = navigationView;
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -81,8 +90,13 @@ public class NavDrawer extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_log_out) {
+            logOut();
             return true;
+        }else if (id == R.id.action_settings){
+            Log.e(TAG, "settings action");
+            Intent i = new Intent(NavDrawer.this, Settings.class);
+            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
@@ -95,23 +109,50 @@ public class NavDrawer extends AppCompatActivity
         Log.e(TAG, "on Navigation Item Selected");
 
         int id = item.getItemId();
+        Fragment fragment = new Dashboard();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(containerView.getId(), fragment).commit();
+
         Intent i = null;
-        if (id == R.id.dashboard_drawer_option) {
-            //loads dashboard activity
-            i = new Intent(NavDrawer.this, Dashboard.class);
-            startActivity(i);
-        } else if (id == R.id.account_drawer_option) {
-            //loads account activity
-            i = new Intent(NavDrawer.this, AccountProfile.class);
-            startActivity(i);
-        } else if (id == R.id.settings_drawer_option) {
-            //loads settings activity
-            i = new Intent(NavDrawer.this, Settings.class);
-            startActivity(i);
-        } else if (id == R.id.logout_drawer_option) {
-            //loads logout dialogue
-            logOut();
-        }
+        switch (id) {
+            case (R.id.dashboard_drawer_option) :
+                //loads dashboard activity
+                Log.e(TAG, "dashboard drawer");
+               // fragmentManager.beginTransaction().commit();//.addToBackStack(null).commit()
+                i = new Intent(NavDrawer.this, Dashboard_Activity.class);
+                startActivity(i);
+                break;
+            case  (R.id.account_drawer_option) :
+                //loads account activity
+                Log.e(TAG, "account drawer");
+                i = new Intent(NavDrawer.this, AccountProfile.class);
+                startActivity(i);
+                break;
+            case (R.id.course1_drawer_item) :
+                fragment = new CourseOneMaterials();
+                //Toolbar toolbar = (Toolbar) view.findViewById(R.id.dashboard_toolbar);
+                if(toolbar != null)
+                    toolbar.setTitle("CSE110");
+                fragmentManager.beginTransaction().replace(containerView.getId(), fragment).commit();
+                break;
+//            case (R.id.settings_drawer_option) :
+//                //loads settings activity
+//                Log.e(TAG, "settings drawer");
+//                i = new Intent(NavDrawer.this, Settings.class);
+//                startActivity(i);
+//                break;
+//            case (R.id.logout_drawer_option) :
+//                //loads logout dialogue
+//                Log.e(TAG, "logout drawer");
+//                logOut();
+//                break;
+            default:
+                Log.e(TAG, "default drawer");
+                fragment = new Dashboard();
+                fragmentManager.beginTransaction().replace(containerView.getId(), fragment).commit();
+                break;
+            }
+
 //      else if(id == R.id.chatroom_drawer_option){
 //            //loads chatroom
 //            i = new Intent(NavDrawer.this, Chatroom.class);
@@ -119,7 +160,10 @@ public class NavDrawer extends AppCompatActivity
 //        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if(drawer!=null)
         drawer.closeDrawer(GravityCompat.START);
+        else
+            Log.e(TAG, "null drawer");
         return true;
     }
 
