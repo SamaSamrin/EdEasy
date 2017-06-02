@@ -42,10 +42,11 @@ public class NavDrawer extends AppCompatActivity
         //containerView = (View) findViewById(R.id.nav_view);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("Dashboard");
 
-//        Fragment fragment = new Dashboard();
-//        FragmentManager manager = getSupportFragmentManager();
-//        manager.beginTransaction().add(fragment, "fragment").commit();
+        Fragment fragment = new Dashboard();
+       FragmentManager manager = getSupportFragmentManager();
+       manager.beginTransaction().add(R.id.fragment_container,fragment).commit();
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -121,9 +122,11 @@ public class NavDrawer extends AppCompatActivity
             case (R.id.dashboard_drawer_option) :
                 //loads dashboard activity
                 Log.e(TAG, "dashboard drawer");
+                fragment = new Dashboard();
                // fragmentManager.beginTransaction().commit();//.addToBackStack(null).commit()
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 i = new Intent(NavDrawer.this, Dashboard_Activity.class);
-                startActivity(i);
+//                startActivity(i);
                 break;
             case  (R.id.account_drawer_option) :
                 //loads account activity

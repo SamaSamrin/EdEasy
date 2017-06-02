@@ -62,12 +62,12 @@ public class Dashboard extends Fragment {
 
         Log.e(TAG, "view = "+view.getId());
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.dashboard_toolbar);
-
-        if(Build.VERSION.SDK_INT >= 21) {
-            if(toolbar != null)
-                getActivity().setActionBar(toolbar);
-        }
+//        Toolbar toolbar = (Toolbar) view.findViewById(R.id.dashboard_toolbar);
+//
+//        if(Build.VERSION.SDK_INT >= 21) {
+//            if(toolbar != null)
+//                getActivity().setActionBar(toolbar);
+//        }
         //else
             //actio(toolbar);
 
