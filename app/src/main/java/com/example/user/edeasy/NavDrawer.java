@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import layout.CourseOneMaterials;
+//import layout.CourseOneMaterials;
 
 public class NavDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -140,7 +140,22 @@ public class NavDrawer extends AppCompatActivity
                 //Toolbar toolbar = (Toolbar) view.findViewById(R.id.dashboard_toolbar);
                 if(toolbar != null)
                     toolbar.setTitle("CSE110");
-                fragmentManager.beginTransaction().replace(containerView.getId(), fragment).commit();
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                break;
+            case (R.id.course2_drawer_item) :
+                fragment = new CourseTwoMaterials();
+                toolbar.setTitle("MAT120");
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                break;
+            case (R.id.course3_drawer_item) :
+                fragment = new CourseThreeMaterials();
+                toolbar.setTitle("PHY111");
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                break;
+            case (R.id.course4_drawer_item) :
+                fragment = new CourseFourMaterials();
+                toolbar.setTitle("ENG101");
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
 //            case (R.id.settings_drawer_option) :
 //                //loads settings activity
@@ -153,22 +168,12 @@ public class NavDrawer extends AppCompatActivity
 //                Log.e(TAG, "logout drawer");
 //                logOut();
 //                break;
-            default:
-                Log.e(TAG, "default drawer");
-                fragment = new Dashboard();
-                fragmentManager.beginTransaction().replace(containerView.getId(), fragment).commit();
-                break;
             }
 
-//      else if(id == R.id.chatroom_drawer_option){
-//            //loads chatroom
-//            i = new Intent(NavDrawer.this, Chatroom.class);
-//            startActivity(i);
-//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if(drawer!=null)
-        drawer.closeDrawer(GravityCompat.START);
+            drawer.closeDrawer(GravityCompat.START);
         else
             Log.e(TAG, "null drawer");
         return true;
