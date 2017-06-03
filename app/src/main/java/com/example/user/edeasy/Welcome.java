@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.TabHost;
 import android.widget.Toast;
 
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.firebase.ui.auth.AuthUI;
@@ -135,11 +136,58 @@ public class Welcome extends AppCompatActivity {
     }
 
     void onSignedIn(String username){
-
+        this.username = username;
+        if (selectedRole.equals("student"))
+            attachStudentDatabaseListener();
+        else if(selectedRole.equals("teacher"))
+            attachTeachersDatabaseListener();
     }
 
     void onSignedOut(){
+        this.username = "ANONYMOUS";
+        detachDatabaseListeners();
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN){
+            Log.e(TAG, "Activity from RC_SIGN_IN");
+            if (resultCode == RESULT_OK)
+                Toast.makeText(Welcome.this, "Signed in", Toast.LENGTH_SHORT).show();
+            else if (resultCode == RESULT_CANCELED)
+                Toast.makeText(Welcome.this, "Sign in cancelled", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(authStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(authStateListener != null)
+            auth.removeAuthStateListener(authStateListener);
+        detachDatabaseListeners();
+    }
+
+    private void createAccount(){//for sign up
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if(!task.isSuccessful()){
+                            Toast.makeText(Welcome.this, "Sign up failed", Toast.LENGTH_SHORT ).show();
+                            Log.e(TAG, "Sign up failed, task unsuccessful in onComplete()");
+                        }
+                    }
+                });
     }
 
     void tabHostHandling(){
@@ -250,6 +298,17 @@ public class Welcome extends AppCompatActivity {
         teachersDatabaseReference.addChildEventListener(teachersChildEventListener);
     }
 
+    void detachDatabaseListeners(){
+        if (studentsChildEventListener != null) {
+            studentsDatabaseReference.removeEventListener(studentsChildEventListener);
+            studentsChildEventListener = null;
+        }
+        if (teachersChildEventListener != null) {
+            teachersDatabaseReference.removeEventListener(teachersChildEventListener);
+            teachersChildEventListener = null;
+        }
+    }
+
 
     void signIn(){
         //roleSelection();
@@ -276,6 +335,16 @@ public class Welcome extends AppCompatActivity {
         }else{
             Log.e(TAG, "email or password is null");
         }
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(!task.isSuccessful()){
+                            Toast.makeText(Welcome.this, "Sign in failed", Toast.LENGTH_SHORT ).show();
+                            Log.e(TAG, "Sign in failed, task unsuccessful in onComplete()");
+                        }
+                    }
+                });
     }
 
     public void postSignIn(View view){
