@@ -131,6 +131,7 @@ public class NavDrawer extends AppCompatActivity
             case  (R.id.account_drawer_option) :
                 //loads account activity
                 Log.e(TAG, "account drawer");
+                toolbar.setTitle("Account");
                 fragment = new AccountProfile();
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
