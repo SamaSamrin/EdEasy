@@ -36,6 +36,7 @@
     <color name="pastelGreen">#69F0AE</color>
     <color name="lightPink">#FFCDD2</color>
     <color name="coolGray">#B0BEC5</color>
+    <color name="lightGray">#EFEBE9</color>
     <color name="colorAccentFaded">#fee66a</color>
     <!-- DARK COLORS -->
     <color name="darkerGreen">#1B5E20</color>

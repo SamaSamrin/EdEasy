@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/blue_flowers_blurred"
     tools:context="com.example.user.edeasy.Welcome">
 
     <android.support.v7.widget.Toolbar
@@ -136,6 +137,7 @@
                     android:id="@+id/tab2_login"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/lightGray"
                     android:orientation="vertical">
 
                     <include layout="@layout/tab2_login_google"/>
