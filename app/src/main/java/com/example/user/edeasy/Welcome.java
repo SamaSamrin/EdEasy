@@ -42,6 +42,7 @@ public class Welcome extends AppCompatActivity {
     String username = "ANONYMOUS";
     String email;
     String password;
+    String studentID;
 
     //database
     FirebaseDatabase database;
@@ -74,6 +75,26 @@ public class Welcome extends AppCompatActivity {
 
         roleSelection();
 
+        Intent intent = getIntent();
+        if (intent != null) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null) {
+                username = bundle.getString("fullname");
+                Log.e(TAG, "username = " + username);
+                email = bundle.getString("email");
+                Log.e(TAG, "email = "+email);
+                password = bundle.getString("password");
+                Log.e(TAG, "password = " + password);
+                studentID = bundle.getString("studentID");
+                Log.e(TAG, "student ID = " + studentID);
+                boolean passwordMatched = bundle.getBoolean("password matched");
+                Log.e(TAG, "received password matched? = "+passwordMatched);
+
+                //Toast.makeText(Welcome.this, "received password match? " + String.valueOf(passwordMatched), Toast.LENGTH_SHORT).show();
+            } else
+                Log.e(TAG, "received bundle is null");
+        }else
+            Log.e(TAG, "received intent is null");
     }
 
     void databaseInitialization(){
@@ -110,6 +131,14 @@ public class Welcome extends AppCompatActivity {
                 }
             }
         };
+
+    }
+
+    void onSignedIn(String username){
+
+    }
+
+    void onSignedOut(){
 
     }
 
