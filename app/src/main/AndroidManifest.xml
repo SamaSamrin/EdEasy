@@ -35,7 +35,6 @@
             android:name=".PreviousResults"
             android:label="Previous Results"
             android:theme="@style/AppTheme" />
-        <activity android:name=".AccountProfile" />
         <activity
             android:name=".Settings"
             android:label="@string/title_activity_settings"

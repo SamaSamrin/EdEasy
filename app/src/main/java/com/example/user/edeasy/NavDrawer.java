@@ -63,7 +63,7 @@ public class NavDrawer extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        containerView = navigationView;
+        //containerView = navigationView;
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -125,14 +125,14 @@ public class NavDrawer extends AppCompatActivity
                 fragment = new Dashboard();
                // fragmentManager.beginTransaction().commit();//.addToBackStack(null).commit()
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                i = new Intent(NavDrawer.this, Dashboard_Activity.class);
+                //i = new Intent(NavDrawer.this, Dashboard_Activity.class);
 //                startActivity(i);
                 break;
             case  (R.id.account_drawer_option) :
                 //loads account activity
                 Log.e(TAG, "account drawer");
-                i = new Intent(NavDrawer.this, AccountProfile.class);
-                startActivity(i);
+                fragment = new AccountProfile();
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
             case (R.id.course1_drawer_item) :
                 fragment = new CourseOneMaterials();
