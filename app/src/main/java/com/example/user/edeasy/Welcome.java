@@ -188,24 +188,26 @@ public class Welcome extends AppCompatActivity {
         detachDatabaseListeners();
     }
 
-    private void createAccount(String email, String password){//for sign up
+    private void createAccount(String email, String password) {//for sign up
         Log.e(TAG, "inside createAccount");
-        auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.e(TAG, "reached add On Complete Listener of createAccount()");
-            // If sign in fails, display a message to the user. If sign in succeeds
-            // the auth state listener will be notified and logic to handle the
-            // signed in user can be handled in the listener.
-                        if(!task.isSuccessful()){
-                            //Toast.makeText(Welcome.this, "Sign up failed", Toast.LENGTH_SHORT ).show();
-                            Log.e(TAG, "Sign up failed, task unsuccessful in onComplete()");
-                        }else{
-                            Log.e(TAG, "Sign up sucessful");
+        if (email != null && password != null) {
+            auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.e(TAG, "reached add On Complete Listener of createAccount()");
+                            // If sign in fails, display a message to the user. If sign in succeeds
+                            // the auth state listener will be notified and logic to handle the
+                            // signed in user can be handled in the listener.
+                            if (!task.isSuccessful()) {
+                                //Toast.makeText(Welcome.this, "Sign up failed", Toast.LENGTH_SHORT ).show();
+                                Log.e(TAG, "Sign up failed, task unsuccessful in onComplete()");
+                            } else {
+                                Log.e(TAG, "Sign up sucessful");
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     void tabHostHandling(){

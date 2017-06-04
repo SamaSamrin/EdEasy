@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.user.edeasy.R;
 
@@ -24,6 +25,8 @@ public class CourseOneMaterials extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String course1Name = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = "Course 1 Fragment";
+    ListView course1MaterialsView;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -66,6 +69,7 @@ public class CourseOneMaterials extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        course1MaterialsView = (ListView) container.findViewById(R.id.course1_materials_listview);
         return inflater.inflate(R.layout.fragment_course_one_materials, container, false);
     }
 
