@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -188,9 +189,14 @@ public class NavDrawer extends AppCompatActivity
                     public void onClick(DialogInterface dialogInterface, int i) {
                         FirebaseAuth auth = FirebaseAuth.getInstance();
                         FirebaseUser user = auth.getCurrentUser();
+                       // AuthUI authUI = AuthUI.getInstance();
                         if (user == null)
                             Log.e(TAG, "before signout : no current user");
                         auth.signOut();
+//                        if (authUI != null)
+//                            authUI.signOut(NavDrawer.this);
+//                        else
+//                            Log.e(TAG, "auth UI instance is null");
                         //if (user == null)
                           //  Log.e(TAG, "no current user");
                         Toast.makeText(NavDrawer.this, "Logging Out", Toast.LENGTH_SHORT).show();

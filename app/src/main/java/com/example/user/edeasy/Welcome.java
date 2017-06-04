@@ -44,6 +44,7 @@ public class Welcome extends AppCompatActivity {
     String email;
     String password;
     String studentID;
+    String roleFromSignup;
 
     //database
     FirebaseDatabase database;
@@ -90,7 +91,15 @@ public class Welcome extends AppCompatActivity {
                 Log.e(TAG, "student ID = " + studentID);
                 boolean passwordMatched = bundle.getBoolean("password matched");
                 Log.e(TAG, "received password matched? = "+passwordMatched);
-
+                roleFromSignup = bundle.getString("role");
+                Log.e(TAG, "role from signup = "+roleFromSignup);
+                if (roleFromSignup != null) {
+                    if (roleFromSignup.equals("teacher"))
+                        attachTeachersDatabaseListener();
+                    else if (roleFromSignup.equals("student"))
+                        attachTeachersDatabaseListener();
+                }
+                createAccount(email, password);
                 //Toast.makeText(Welcome.this, "received password match? " + String.valueOf(passwordMatched), Toast.LENGTH_SHORT).show();
             } else
                 Log.e(TAG, "received bundle is null");
@@ -115,20 +124,25 @@ public class Welcome extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user!=null) {
                     //user is signed in
-                    Log.e(TAG, user.getDisplayName());
-                    onSignedIn(user.getDisplayName());
+                    if(user.getDisplayName() != null) {
+                        Log.e(TAG, user.getDisplayName() + " message");
+                        onSignedIn(user.getDisplayName());
+                    }else{
+                        Log.e(TAG, "user has no name");
+                        onSignedIn(username);
+                    }
                 }
                 else {
                     //user is signed out
                     Log.e(TAG, "current user is null");
                     onSignedOut();
-                    startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
-                            .setIsSmartLockEnabled(false)
-                            .setProviders(Arrays.asList(
-                                    new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()
-                            ))
-                            .build(), RC_SIGN_IN);
+//                    startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
+//                            .setIsSmartLockEnabled(false)
+//                            .setProviders(Arrays.asList(
+//                                    new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
+//                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()
+//                            ))
+//                            .build(), RC_SIGN_IN);
                 }
             }
         };
@@ -174,17 +188,21 @@ public class Welcome extends AppCompatActivity {
         detachDatabaseListeners();
     }
 
-    private void createAccount(){//for sign up
+    private void createAccount(String email, String password){//for sign up
+        Log.e(TAG, "inside createAccount");
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
+                        Log.e(TAG, "reached add On Complete Listener of createAccount()");
+            // If sign in fails, display a message to the user. If sign in succeeds
+            // the auth state listener will be notified and logic to handle the
+            // signed in user can be handled in the listener.
                         if(!task.isSuccessful()){
-                            Toast.makeText(Welcome.this, "Sign up failed", Toast.LENGTH_SHORT ).show();
+                            //Toast.makeText(Welcome.this, "Sign up failed", Toast.LENGTH_SHORT ).show();
                             Log.e(TAG, "Sign up failed, task unsuccessful in onComplete()");
+                        }else{
+                            Log.e(TAG, "Sign up sucessful");
                         }
                     }
                 });
@@ -313,13 +331,16 @@ public class Welcome extends AppCompatActivity {
     void signIn(){
         //roleSelection();
         Log.e(TAG, "selected role = "+selectedRole);
-        email = normalEmailInput.getText().toString();
-        String password = normalPasswordInput.getText().toString();
+        if (email==null)
+            email = normalEmailInput.getText().toString();
+        if (password == null)
+            password = normalPasswordInput.getText().toString();
         if(email!=null && password!=null) {
             if (email.equals("") && password.equals(""))
                 Log.e(TAG, "email or password is empty");
             else {
                 User user = new User(email, password);//added to users database
+                createAccount(email, password);
                 //user.setRole(selectedRole);
                 if(!selectedRole.equals("")) {
                     user.setRole(selectedRole);
@@ -335,16 +356,18 @@ public class Welcome extends AppCompatActivity {
         }else{
             Log.e(TAG, "email or password is null");
         }
-        auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(!task.isSuccessful()){
-                            Toast.makeText(Welcome.this, "Sign in failed", Toast.LENGTH_SHORT ).show();
-                            Log.e(TAG, "Sign in failed, task unsuccessful in onComplete()");
+        if((email!=null && !email.equals("")) && ((password!=null) && !password.equals(""))) {
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (!task.isSuccessful()) {
+                                Toast.makeText(Welcome.this, "Sign in failed", Toast.LENGTH_SHORT).show();
+                                Log.e(TAG, "Sign in failed, task unsuccessful in onComplete()");
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     public void postSignIn(View view){

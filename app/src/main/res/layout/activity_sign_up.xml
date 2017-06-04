@@ -37,7 +37,7 @@
 
     <EditText
         android:id="@+id/normal_password_input"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -54,7 +54,7 @@
 
     <EditText
         android:id="@+id/password_confirmation_input"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -69,7 +69,7 @@
 
     <EditText
         android:id="@+id/student_id_input"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -88,7 +88,7 @@
         android:id="@+id/department_dropdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="54dp"
         android:minWidth="100dp"
         app:layout_constraintRight_toRightOf="parent"
@@ -133,7 +133,7 @@
 
     <EditText
         android:id="@+id/email_input_signup"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Enter your email address"
@@ -142,20 +142,78 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fullNameInput"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginRight="8dp" />
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
 
     <EditText
         android:id="@+id/phone_number_input"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Enter your phone number"
         android:inputType="phone"
-        tools:layout_editor_absoluteY="298dp"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/student_id_input"/>
+        app:layout_constraintTop_toBottomOf="@+id/student_id_input"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <TextView
+        android:id="@+id/select_role_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="10dp"
+        android:text="You are a :"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.078"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/role_signup"
+        app:layout_constraintTop_toBottomOf="@+id/choose_department_prompt"
+        app:layout_constraintVertical_bias="0.013" />
+
+    <RadioGroup
+        android:id="@+id/role_signup"
+        android:layout_width="228dp"
+        android:layout_height="43dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.941"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/department_dropdown"
+        app:layout_constraintVertical_bias="0.083">
+
+        <RadioButton
+            android:id="@+id/role_teacher_signup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:checked="true"
+            android:padding="10dp"
+            android:text="Teacher" />
+
+        <RadioButton
+            android:id="@+id/role_student_signup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:checked="false"
+            android:padding="10dp"
+            android:text="Student" />
+    </RadioGroup>
+
 </android.support.constraint.ConstraintLayout>

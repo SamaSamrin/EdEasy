@@ -1,6 +1,7 @@
 package com.example.user.edeasy;
 
 import android.content.Intent;
+import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ public class SignUp extends AppCompatActivity {
     EditText passwordConfirmationInput;
     EditText studentIDInput;
     EditText phoneNumberInput;
+    RadioGroup roleGroup;
     //EditText departmentInput;
 
     String fullName;
@@ -31,6 +34,7 @@ public class SignUp extends AppCompatActivity {
     String studentID;
     String phoneNumber;
     String department;
+    String role;
     boolean passwordMatched = true;
 
     @Override
@@ -61,6 +65,22 @@ public class SignUp extends AppCompatActivity {
         passwordConfirmationInput = (EditText) findViewById(R.id.password_confirmation_input);
         studentIDInput = (EditText) findViewById(R.id.student_id_input);
         phoneNumberInput = (EditText) findViewById(R.id.phone_number_input);
+        roleGroup = (RadioGroup) findViewById(R.id.role_signup);
+        roleGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+                switch (i){
+                    case (R.id.role_teacher_signup) :
+                        role = "teacher";
+                        Log.e(TAG, "teacher role selected");
+                        break;
+                    case (R.id.role_student_signup) :
+                        role = "student";
+                        Log.e(TAG, "student role selected");
+                        break;
+                }
+            }
+        });
     }
 
     void getAllInputs(){
@@ -108,6 +128,7 @@ public class SignUp extends AppCompatActivity {
         intent.putExtra("studentID", studentID);
         intent.putExtra("phone number", phoneNumber);
         intent.putExtra("department", department);
+        intent.putExtra("role", role);
         startActivity(intent);
     }
 }
