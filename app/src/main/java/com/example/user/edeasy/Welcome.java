@@ -99,7 +99,7 @@ public class Welcome extends AppCompatActivity {
                     else if (roleFromSignup.equals("student"))
                         attachTeachersDatabaseListener();
                 }
-                createAccount(email, password);
+                createAccount();
                 //Toast.makeText(Welcome.this, "received password match? " + String.valueOf(passwordMatched), Toast.LENGTH_SHORT).show();
             } else
                 Log.e(TAG, "received bundle is null");
@@ -124,18 +124,19 @@ public class Welcome extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user!=null) {
                     //user is signed in
-                    if(user.getDisplayName() != null) {
-                        Log.e(TAG, user.getDisplayName() + " message");
-                        onSignedIn(user.getDisplayName());
-                    }else{
-                        Log.e(TAG, "user has no name");
-                        onSignedIn(username);
+                    //user is signed in
+                    Log.e(TAG, "user signed in");
+                    String user_name = user.getDisplayName();
+                    String user_email = user.getEmail();
+                    Log.e(TAG, "on auth state changed: name = "+user_name+" , email = "+user_email);
+                    whenSignedIn("Username", user_email);
+                    String user_id = user.getUid();
+                    Log.e(TAG, "on auth state changed: user id = "+user_id);
                     }
-                }
                 else {
                     //user is signed out
                     Log.e(TAG, "current user is null");
-                    onSignedOut();
+                    //onSignedOut();
 //                    startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
 //                            .setIsSmartLockEnabled(false)
 //                            .setProviders(Arrays.asList(
@@ -147,6 +148,30 @@ public class Welcome extends AppCompatActivity {
             }
         };
 
+    }
+
+    void getValues(){
+        if (email==null && password==null){
+            if (normalEmailInput.getText() != null)
+                email = normalEmailInput.getText().toString().trim();
+            if (email.length()==0){
+                normalEmailInput.setError("email cannot be empty");
+                normalEmailInput.requestFocus();
+            }
+            if (normalPasswordInput.getText() != null)
+                password = normalPasswordInput.getText().toString().trim();
+            if (password.length()==0){
+                normalPasswordInput.setError("password cannot be empty");
+                normalPasswordInput.requestFocus();
+            }
+        }
+    }
+
+    void whenSignedIn(String name, String email){
+        Intent intent = new Intent(Welcome.this, NavDrawer.class);
+        intent.putExtra("email", email);
+        intent.putExtra("name", name);
+        startActivity(intent);
     }
 
     void onSignedIn(String username){
@@ -188,26 +213,23 @@ public class Welcome extends AppCompatActivity {
         detachDatabaseListeners();
     }
 
-    private void createAccount(String email, String password) {//for sign up
+    private void createAccount() {//for sign up
         Log.e(TAG, "inside createAccount");
-        if (email != null && password != null) {
+        if (email!=null && password!=null) {
             auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            Log.e(TAG, "reached add On Complete Listener of createAccount()");
-                            // If sign in fails, display a message to the user. If sign in succeeds
-                            // the auth state listener will be notified and logic to handle the
-                            // signed in user can be handled in the listener.
-                            if (!task.isSuccessful()) {
-                                //Toast.makeText(Welcome.this, "Sign up failed", Toast.LENGTH_SHORT ).show();
-                                Log.e(TAG, "Sign up failed, task unsuccessful in onComplete()");
-                            } else {
-                                Log.e(TAG, "Sign up sucessful");
+                            Log.e(TAG, "create account : on complete");
+                            if (task.isSuccessful())
+                                Log.e(TAG, "task successful");
+                            else {
+                                Log.e(TAG, "task not successful"+task.getException().getMessage());
                             }
                         }
                     });
-        }
+        }else
+            Log.e(TAG, "createAccount() : email or password is null");
     }
 
     void tabHostHandling(){
@@ -333,46 +355,32 @@ public class Welcome extends AppCompatActivity {
     void signIn(){
         //roleSelection();
         Log.e(TAG, "selected role = "+selectedRole);
-        if (email==null)
-            email = normalEmailInput.getText().toString();
-        if (password == null)
-            password = normalPasswordInput.getText().toString();
-        if(email!=null && password!=null) {
-            if (email.equals("") && password.equals(""))
-                Log.e(TAG, "email or password is empty");
-            else {
-                User user = new User(email, password);//added to users database
-                createAccount(email, password);
-                //user.setRole(selectedRole);
-                if(!selectedRole.equals("")) {
-                    user.setRole(selectedRole);
-                    Log.e(TAG, "created user is a "+user.getRole());
-                    if (selectedRole.equals("student"))
-                        studentsDatabaseReference.push().setValue(user);///****
-                    else if (selectedRole.equals("teacher"))
-                        teachersDatabaseReference.push().setValue(user);
-                }else{
-                    Log.e(TAG, "user's role is not set");
-                }
-            }
-        }else{
-            Log.e(TAG, "email or password is null");
-        }
-        if((email!=null && !email.equals("")) && ((password!=null) && !password.equals(""))) {
-            auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(Welcome.this, "Sign in failed", Toast.LENGTH_SHORT).show();
-                                Log.e(TAG, "Sign in failed, task unsuccessful in onComplete()");
+        if (email!=null && password!=null ) {
+            if (email.length()!=0 && password.length()!=0) {
+                auth.signInWithEmailAndPassword(email, password)
+                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                Log.e(TAG, "sign in : on complete ");
+                                if (task.isSuccessful())
+                                    Log.e(TAG, "task successful");
+                                else {
+                                    if (task.getException().getMessage().contains("There is no user record corresponding to this identifier. The user may have been deleted.")) {
+                                        createAccount();
+                                        signIn();
+                                    }
+                                    Log.e(TAG, "task not successful " + task.getException().getMessage());
+                                }
                             }
-                        }
-                    });
-        }
+                        });
+            }else
+                Log.e(TAG, "signIn() : email or password is empty");
+        }else
+            Log.e(TAG, "signIn() : email or password is null");
     }
 
     public void postSignIn(View view){
+        getValues();
         signIn();
         //auth.signInWithEmailAndPassword(email, "student1");
         Intent intent = new Intent(Welcome.this, NavDrawer.class);

@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -33,6 +34,7 @@ public class NavDrawer extends AppCompatActivity
 
     private static final String TAG = "**NavDrawer**";
     private String username;
+    private String user_email;
     private View containerView;
     Toolbar toolbar;
 
@@ -66,6 +68,18 @@ public class NavDrawer extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         //containerView = navigationView;
         navigationView.setNavigationItemSelectedListener(this);
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle!=null){
+            username = bundle.getString("name");
+            user_email = bundle.getString("email");
+            TextView drawer_header_name = (TextView) findViewById(R.id.drawer_header_title);
+            if (drawer_header_name!=null)
+                drawer_header_name.setText(username);
+            TextView drawer_header_email = (TextView) findViewById(R.id.drawer_header_subtitle);
+            if (drawer_header_email!=null)
+                drawer_header_email.setText(user_email);
+        }
     }
 
     @Override
@@ -111,7 +125,7 @@ public class NavDrawer extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        Log.e(TAG, "on Navigation Item Selected");
+        //Log.e(TAG, "on Navigation Item Selected");
 
         int id = item.getItemId();
         Fragment fragment = new Dashboard();
