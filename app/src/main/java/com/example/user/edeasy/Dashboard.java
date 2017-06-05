@@ -15,6 +15,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -130,6 +133,17 @@ public class Dashboard extends Fragment {
             /*throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");*/
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.nav_drawer, menu);
+        Log.e(TAG, "on create options menu");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

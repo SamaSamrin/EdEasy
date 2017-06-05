@@ -44,14 +44,14 @@
 
     </item>
 
-    <!--<group  android:id="@+id/bottom_drawer_menu"-->
-        <!--android:checkableBehavior="single">-->
+    <group  android:id="@+id/bottom_drawer_menu"
+        android:checkableBehavior="single">
             <!--<item android:id="@+id/settings_drawer_option"-->
                 <!--android:title="Settings"-->
                 <!--android:icon="@drawable/ic_menu_manage"/>-->
-            <!--<item android:id="@+id/logout_drawer_option"-->
-                <!--android:title="Log Out"-->
-                <!--android:icon="@drawable/logout"/>-->
-    <!--</group>-->
+            <item android:id="@+id/logout_drawer_option"
+                android:title="Log Out"
+                android:icon="@drawable/logout"/>
+    </group>
 
 </menu>

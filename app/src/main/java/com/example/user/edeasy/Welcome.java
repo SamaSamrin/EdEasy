@@ -124,7 +124,6 @@ public class Welcome extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user!=null) {
                     //user is signed in
-                    //user is signed in
                     Log.e(TAG, "user signed in");
                     String user_name = user.getDisplayName();
                     String user_email = user.getEmail();
@@ -135,7 +134,7 @@ public class Welcome extends AppCompatActivity {
                     }
                 else {
                     //user is signed out
-                    Log.e(TAG, "current user is null");
+                    Log.e(TAG, "user signed out");
                     //onSignedOut();
 //                    startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
 //                            .setIsSmartLockEnabled(false)

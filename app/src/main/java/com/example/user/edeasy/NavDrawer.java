@@ -37,6 +37,7 @@ public class NavDrawer extends AppCompatActivity
     private String user_email;
     private View containerView;
     Toolbar toolbar;
+    FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,8 @@ public class NavDrawer extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Dashboard");
+
+        auth = FirebaseAuth.getInstance();
 
         Fragment fragment = new Dashboard();
        FragmentManager manager = getSupportFragmentManager();
@@ -96,6 +99,7 @@ public class NavDrawer extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.nav_drawer, menu);
+        Log.e(TAG, "on create options menu");
         return true;
     }
 
@@ -178,11 +182,11 @@ public class NavDrawer extends AppCompatActivity
 //                i = new Intent(NavDrawer.this, Settings.class);
 //                startActivity(i);
 //                break;
-//            case (R.id.logout_drawer_option) :
-//                //loads logout dialogue
-//                Log.e(TAG, "logout drawer");
-//                logOut();
-//                break;
+            case (R.id.logout_drawer_option) :
+                //loads logout dialogue
+                Log.e(TAG, "logout drawer");
+                logOut();
+                break;
             }
 
 
@@ -214,6 +218,7 @@ public class NavDrawer extends AppCompatActivity
                         //if (user == null)
                           //  Log.e(TAG, "no current user");
                         Toast.makeText(NavDrawer.this, "Logging Out", Toast.LENGTH_SHORT).show();
+
                         Intent intent = new Intent(NavDrawer.this, Welcome.class);
                         startActivity(intent);
                     }
