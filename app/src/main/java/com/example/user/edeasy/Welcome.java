@@ -220,10 +220,19 @@ public class Welcome extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             Log.e(TAG, "create account : on complete");
-                            if (task.isSuccessful())
-                                Log.e(TAG, "task successful");
+                            if (task.isSuccessful()) {
+                                Log.e(TAG, "creating account successful");
+                                User user = new User(email, password);
+                                if (selectedRole.equals("student")) {
+                                    DatabaseReference newRef = studentsDatabaseReference.push();
+                                    newRef.setValue(user);
+                                }else if (selectedRole.equals("teacher")) {
+                                    DatabaseReference newRef = teachersDatabaseReference.push();
+                                    newRef.setValue(user);
+                                }
+                            }
                             else {
-                                Log.e(TAG, "task not successful"+task.getException().getMessage());
+                                Log.e(TAG, "creating account not successful"+task.getException().getMessage());
                             }
                         }
                     });

@@ -8,11 +8,11 @@ class User {
 
     private Course[] courses_assigned;
     private String department;
-    public String email;
+    private String email;
     private String full_name;
 //    private String firstName;
 //    private String lastName;
-    public String password;
+    private String password;
     private String student_id;
     private String role;
     private String semester;
@@ -42,11 +42,11 @@ class User {
 
     void setFull_name(String name){ full_name = name; }
 
-    public String getFull_name(){
+    String getFull_name(){
         return full_name;
     }
 
-    String getPassword(){
+    public String getPassword(){
         return password;
     }
 
