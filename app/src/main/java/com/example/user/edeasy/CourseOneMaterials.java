@@ -28,6 +28,8 @@ public class CourseOneMaterials extends Fragment {
     private static final String TAG = "Course 1 Fragment";
     ListView course1MaterialsView;
 
+
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;

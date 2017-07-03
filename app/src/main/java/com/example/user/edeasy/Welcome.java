@@ -26,6 +26,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -56,6 +58,10 @@ public class Welcome extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseAuth.AuthStateListener authStateListener;
     private static final int RC_SIGN_IN = 1;
+    //storage
+    FirebaseStorage storage;
+    StorageReference storageReference;
+    StorageReference CSE_docsReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +70,7 @@ public class Welcome extends AppCompatActivity {
 
         databaseInitialization();
         authenticationInitialization();
+        storageInitialization();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_login);
         setSupportActionBar(toolbar);
@@ -147,6 +154,12 @@ public class Welcome extends AppCompatActivity {
             }
         };
 
+    }
+
+    void storageInitialization(){
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        CSE_docsReference = storageReference.child("docs/CSE/CSE110");
     }
 
     void getValues(){
