@@ -74,14 +74,21 @@ public class NavDrawer extends AppCompatActivity
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!=null){
-            username = bundle.getString("name");
-            user_email = bundle.getString("email");
-            TextView drawer_header_name = (TextView) findViewById(R.id.drawer_header_title);
-            if (drawer_header_name!=null)
-                drawer_header_name.setText(username);
-            TextView drawer_header_email = (TextView) findViewById(R.id.drawer_header_subtitle);
-            if (drawer_header_email!=null)
-                drawer_header_email.setText(user_email);
+            if (bundle.getString("parent")!=null) {
+                Log.e(TAG, "bundle is not null");
+                username = bundle.getString("name");
+                user_email = bundle.getString("email");
+                TextView drawer_header_name = (TextView) findViewById(R.id.drawer_header_title);
+                if (drawer_header_name != null)
+                    drawer_header_name.setText(username);
+                TextView drawer_header_email = (TextView) findViewById(R.id.drawer_header_subtitle);
+                if (drawer_header_email != null)
+                    drawer_header_email.setText(user_email);
+            }else{
+                Log.e(TAG, "bundle's parent is null");
+            }
+        }else{
+            Log.e(TAG, "bundle is null");
         }
     }
 

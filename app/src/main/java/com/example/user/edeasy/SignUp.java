@@ -116,11 +116,11 @@ public class SignUp extends AppCompatActivity {
             Log.e(TAG, "phone number input null");
     }
 
-    public void goBackToSignIn(View view){
+    public void goBackToSignIn(View view){//goes back to user profile
         getAllInputs();
         if (!passwordMatched)
             Toast.makeText(SignUp.this, "passwords dont match", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(SignUp.this, Welcome.class);
+        Intent intent = new Intent(SignUp.this, AccountProfile.class);
         intent.putExtra("fullname", fullName);
         intent.putExtra("email", email);
         intent.putExtra("password", password);

@@ -296,16 +296,10 @@ public class Welcome extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 User user = dataSnapshot.getValue(User.class);
+                Log.e(TAG, "on child added, s="+s);
                 if(username!=null) username = user.getFull_name();
+                Log.e(TAG, "new student : username = "+username);
                 Toast.makeText(Welcome.this, "username is = "+username, Toast.LENGTH_SHORT).show();
-//                HashMap<String, Object> objectHashMap = (HashMap<String, Object>) dataSnapshot.getValue();
-//                if (objectHashMap == null){
-//                    Log.e(TAG, "null hashmap dataSnapshot");
-//                }else {
-//                    System.out.println(objectHashMap.keySet());
-//                    //String username = objectHashMap.get("full_name").toString();
-//                    //Log.e(TAG, "child added = " + username);
-//                }
             }
 
             @Override
@@ -406,8 +400,12 @@ public class Welcome extends AppCompatActivity {
         //auth.signInWithEmailAndPassword(email, "student1");
         Intent intent = new Intent(Welcome.this, NavDrawer.class);
         intent.putExtra("username", username);
+        Log.e(TAG, "username = "+username);
         intent.putExtra("role", selectedRole);
+        Log.e(TAG, "role = "+selectedRole);
         intent.putExtra("email", email);
+        Log.e(TAG, "email = "+email);
+        intent.putExtra("parent", "Welcome");
         startActivity(intent);
     }
 

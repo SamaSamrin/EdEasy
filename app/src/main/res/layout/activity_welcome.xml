@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blue_flowers_blurred"
+    android:background="@color/whiteTextColor"
     tools:context="com.example.user.edeasy.Welcome">
 
     <android.support.v7.widget.Toolbar

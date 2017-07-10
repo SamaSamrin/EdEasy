@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.user.edeasy.R;
+import com.google.firebase.database.DatabaseReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +29,8 @@ public class CourseOneMaterials extends Fragment {
     private static final String TAG = "Course 1 Fragment";
     ListView course1MaterialsView;
 
-
+    DatabaseReference databaseReference;
+    String roleOfUser;
 
     // TODO: Rename and change types of parameters
     private String mParam1;

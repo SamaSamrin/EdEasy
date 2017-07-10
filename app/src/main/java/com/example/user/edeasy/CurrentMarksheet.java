@@ -4,17 +4,22 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TableLayout;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
-public class CurrentMarksheet extends Activity {
+class CurrentMarksheet extends Activity {
 
     private static final String TAG = "**Current Marksheet**";
     TabHost tabHost;
     String[] courseNames;
     int numberOfCourses;
+    GestureDetector gestureDetector;
+    ViewFlipper flipper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,8 @@ public class CurrentMarksheet extends Activity {
         //courseNames = new String[numberOfCourses];
         courseNames = new String[]{"CSE110", "MAT110", "PHY111", "ENG101"};
 
+        setGestureDetector();
+        flipper = new ViewFlipper(this);
         tabHost = (TabHost) findViewById(R.id.current_marksheet_tab_host);
         tabHost.setup();
         tabHost.setActivated(true);
@@ -63,6 +70,42 @@ public class CurrentMarksheet extends Activity {
                 Log.e(TAG, "selected tab index = "+ String.valueOf(index));
                 String selectedCourseName=courseNames[index];
                 //Toast.makeText(CurrentMarksheet.this, selectedCourseName, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //tabHost.on
+    }
+
+    void setGestureDetector(){
+        gestureDetector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public void onShowPress(MotionEvent e) {
+
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return false;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent e) {
+
+            }
+
+            @Override
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                return false;
             }
         });
     }
