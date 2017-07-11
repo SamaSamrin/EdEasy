@@ -35,6 +35,7 @@ public class NavDrawer extends AppCompatActivity
     private static final String TAG = "**NavDrawer**";
     private String username;
     private String user_email;
+    String[] courses = new String[5];
     private View containerView;
     Toolbar toolbar;
     FirebaseAuth auth;
@@ -71,6 +72,14 @@ public class NavDrawer extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         //containerView = navigationView;
         navigationView.setNavigationItemSelectedListener(this);
+        //cannot get the views properly
+
+        TextView drawer_header_name = (TextView) navigationView.findViewById(R.id.drawer_header_title);
+        if (drawer_header_name != null)
+            Log.e(TAG, "drawer header name is - "+drawer_header_name.toString());
+        else
+            Log.e(TAG, "drawer header name is still null");
+        TextView drawer_header_email = (TextView) findViewById(R.id.drawer_header_subtitle);
 
         Bundle bundle = getIntent().getExtras();
         if (bundle!=null){
@@ -78,14 +87,30 @@ public class NavDrawer extends AppCompatActivity
                 Log.e(TAG, "bundle is not null");
                 username = bundle.getString("name");
                 user_email = bundle.getString("email");
-                TextView drawer_header_name = (TextView) findViewById(R.id.drawer_header_title);
-                if (drawer_header_name != null)
+                //setting drawer's header's name and email, but cannot get the header view
+                if (drawer_header_name != null) {
                     drawer_header_name.setText(username);
-                TextView drawer_header_email = (TextView) findViewById(R.id.drawer_header_subtitle);
-                if (drawer_header_email != null)
+                    Log.e(TAG, "drawer header username = "+username);
+                }else{
+                    Log.e(TAG, "drawer header name textview is null");
+                }
+                if (drawer_header_email != null) {
                     drawer_header_email.setText(user_email);
+                    Log.e(TAG, "drawer header email = "+user_email);
+                }else{
+                    Log.e(TAG, "drawer header email textview is null");
+                }
             }else{
                 Log.e(TAG, "bundle's parent is null");
+                //even if there is no activity starting the intent,
+                //setting drawer's header's name and email,
+                // but cannot get the header views properly, always show null
+                if (drawer_header_name != null && drawer_header_email != null) {
+                    drawer_header_name.setText(username);
+                    drawer_header_email.setText(user_email);
+                }else{
+                    Log.e(TAG, "drawer header email and name both null");
+                }
             }
         }else{
             Log.e(TAG, "bundle is null");
