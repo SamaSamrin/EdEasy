@@ -15,9 +15,9 @@ import android.widget.Toast;
 
 public class SignUp extends AppCompatActivity {
 
-    String TAG = "Sign Up";
+    String TAG = "Sign Up/Add Info";
 
-    String[] departments = {"CSE", "EEE", "MNS", "PHR", "ECO", "BBS", "BIL", "ARC"};
+    String[] departments = {"ARC","BBS", "BIL","CSE","ECO", "EEE", "MNS", "PHR"};
     EditText fullNameInput;
     EditText emailInput;
     EditText passwordInput;
@@ -27,14 +27,14 @@ public class SignUp extends AppCompatActivity {
     RadioGroup roleGroup;
     //EditText departmentInput;
 
-    String fullName;
-    String email;
-    String password;
-    String passwordReEntered;
-    String studentID;
-    String phoneNumber;
-    String department;
-    String role;
+    String fullName = "default full name";
+    String email = "default email";
+    String password = "default password";
+    String passwordReEntered = "default re-entered password";
+    String studentID = "default student ID";
+    String phoneNumber = "default phone number";
+    String department = "default department";
+    String role = "default role";
     boolean passwordMatched = true;
 
     @Override
@@ -42,6 +42,7 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        //handling departments spinner
         final Spinner departmentDropdown = (Spinner) findViewById(R.id.department_dropdown);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,
                 departments);
@@ -58,7 +59,7 @@ public class SignUp extends AppCompatActivity {
 
             }
         });
-
+        //handling all EditText fields
         fullNameInput = (EditText) findViewById(R.id.fullNameInput);
         emailInput = (EditText) findViewById(R.id.email_input_signup);
         passwordInput = (EditText) findViewById(R.id.normal_password_input);
@@ -83,6 +84,7 @@ public class SignUp extends AppCompatActivity {
         });
     }
 
+    //one method to get all inputs after checking for null, when the user clicks the save button
     void getAllInputs(){
         fullName = fullNameInput.getText().toString();
         //Log.e(TAG, "name input = "+fullName);
@@ -116,10 +118,15 @@ public class SignUp extends AppCompatActivity {
             Log.e(TAG, "phone number input null");
     }
 
-    public void goBackToSignIn(View view){//goes back to user profile
+    //on click method for button
+    public void saveAllInfo(View view){
+        //gets all given info
         getAllInputs();
         if (!passwordMatched)
             Toast.makeText(SignUp.this, "passwords dont match", Toast.LENGTH_SHORT).show();
+        //add all these info to the user's database
+        
+        //sends all of them back to user profile
         Intent intent = new Intent(SignUp.this, AccountProfile.class);
         intent.putExtra("fullname", fullName);
         intent.putExtra("email", email);

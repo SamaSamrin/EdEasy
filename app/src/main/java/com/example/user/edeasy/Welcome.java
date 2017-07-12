@@ -46,6 +46,8 @@ public class Welcome extends AppCompatActivity {
     String email;
     String password;
     String studentID;
+    String department;
+    Course[] courses;
     String roleFromSignup;
 
     //database
@@ -61,7 +63,7 @@ public class Welcome extends AppCompatActivity {
     //storage
     FirebaseStorage storage;
     StorageReference storageReference;
-    StorageReference CSE_docsReference;
+    StorageReference CSE_storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +161,7 @@ public class Welcome extends AppCompatActivity {
     void storageInitialization(){
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
-        CSE_docsReference = storageReference.child("docs/CSE/CSE110");
+        CSE_storageReference = storageReference.child("CSE");
     }
 
     void getValues(){
