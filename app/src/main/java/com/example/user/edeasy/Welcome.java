@@ -49,6 +49,7 @@ public class Welcome extends AppCompatActivity {
     String department;
     Course[] courses;
     String roleFromSignup;
+    String user_key;
 
     User user;
     //database
@@ -92,13 +93,13 @@ public class Welcome extends AppCompatActivity {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 username = bundle.getString("fullname");
-                Log.e(TAG, "username = " + username);
+                Log.e(TAG, "checking Intent: username = " + username);
                 email = bundle.getString("email");
-                Log.e(TAG, "email = "+email);
+                Log.e(TAG, "checking Intent: email = "+email);
                 password = bundle.getString("password");
-                Log.e(TAG, "password = " + password);
+                Log.e(TAG, "checking Intent: password = " + password);
                 studentID = bundle.getString("studentID");
-                Log.e(TAG, "student ID = " + studentID);
+                Log.e(TAG, "checking Intent: student ID = " + studentID);
                 boolean passwordMatched = bundle.getBoolean("password matched");
                 Log.e(TAG, "received password matched? = "+passwordMatched);
                 roleFromSignup = bundle.getString("role");
@@ -117,7 +118,8 @@ public class Welcome extends AppCompatActivity {
             Log.e(TAG, "received intent is null");
     }
 
-    void databaseInitialization(){
+    void databaseInitialization() {
+        Log.e(TAG, "databaseInitialization");
         database = FirebaseDatabase.getInstance();
         Log.e(TAG, "database reference = "+database.getReference().toString());
         studentsDatabaseReference = database.getReference("users").child("students");
@@ -128,6 +130,7 @@ public class Welcome extends AppCompatActivity {
     }
 
     void authenticationInitialization(){
+        Log.e(TAG, "authenticationInitialization");
         auth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -139,14 +142,11 @@ public class Welcome extends AppCompatActivity {
                     String user_name = user.getDisplayName();
                     String user_email = user.getEmail();
                     Log.e(TAG, "on auth state changed: name = "+user_name+" , email = "+user_email);
-                    whenSignedIn("Username", user_email);
                     String user_id = user.getUid();
+                    //user_key = user_id;
                     Log.e(TAG, "on auth state changed: user id = "+user_id);
-                    DatabaseReference userdbRef = studentsDatabaseReference.child(user.getUid());
-                    if (userdbRef == null)
-                        Log.e(TAG, "user db reference is null");
-                    else
-                        Log.e(TAG, userdbRef.toString());
+                    //go to nav drawer with these user info
+                    whenSignedIn("Username", user_email);
                 }
                 else {
                     //user is signed out
@@ -166,12 +166,14 @@ public class Welcome extends AppCompatActivity {
     }
 
     void storageInitialization(){
+        Log.e(TAG, "storageInitialization");
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         CSE_storageReference = storageReference.child("CSE");
     }
 
     void getValues(){
+        Log.e(TAG, "getValues");
         if (email==null && password==null){
             if (normalEmailInput.getText() != null)
                 email = normalEmailInput.getText().toString().trim();
@@ -185,13 +187,20 @@ public class Welcome extends AppCompatActivity {
                 normalPasswordInput.setError("password cannot be empty");
                 normalPasswordInput.requestFocus();
             }
+            if (selectedRole.isEmpty()) {
+                Log.e(TAG, "getValues() - role is empty");
+                roleSelection();
+            }
         }
     }
 
     void whenSignedIn(String name, String email){
+        Log.e(TAG, "whenSignedIn");
         Intent intent = new Intent(Welcome.this, NavDrawer.class);
         intent.putExtra("email", email);
         intent.putExtra("name", name);
+        intent.putExtra("parent", "Welcome");
+        intent.putExtra("role", selectedRole);
         startActivity(intent);
     }
 
@@ -210,6 +219,7 @@ public class Welcome extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e(TAG, "onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN){
             Log.e(TAG, "Activity from RC_SIGN_IN");
@@ -222,12 +232,14 @@ public class Welcome extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        Log.e(TAG, "onStart");
         super.onStart();
         auth.addAuthStateListener(authStateListener);
     }
 
     @Override
     protected void onStop() {
+        Log.e(TAG, "onStop");
         super.onStop();
         if(authStateListener != null)
             auth.removeAuthStateListener(authStateListener);
@@ -235,7 +247,7 @@ public class Welcome extends AppCompatActivity {
     }
 
     private void createAccount() {//for sign up
-        Log.e(TAG, "inside createAccount");
+        Log.e(TAG, "createAccount");
         if (email!=null && password!=null) {
             auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -244,14 +256,7 @@ public class Welcome extends AppCompatActivity {
                             Log.e(TAG, "create account : on complete");
                             if (task.isSuccessful()) {
                                 Log.e(TAG, "creating account successful");
-                                User user = new User(email, password);
-                                if (selectedRole.equals("student")) {
-                                    DatabaseReference newRef = studentsDatabaseReference.push();
-                                    newRef.setValue(user);
-                                }else if (selectedRole.equals("teacher")) {
-                                    DatabaseReference newRef = teachersDatabaseReference.push();
-                                    newRef.setValue(user);
-                                }
+                                addNewUserToDatabase(email);
                             }
                             else {
                                 Log.e(TAG, "creating account not successful"+task.getException().getMessage());
@@ -263,6 +268,7 @@ public class Welcome extends AppCompatActivity {
     }
 
     void tabHostHandling(){
+        Log.e(TAG, "tabHostHandling");
         tabHost_login = (TabHost) findViewById(R.id.tabHost_login);
         tabHost_login.setup();
 
@@ -284,6 +290,7 @@ public class Welcome extends AppCompatActivity {
     }
 
      void roleSelection(){
+         Log.e(TAG, "roleSelection");
         RadioGroup roleSelectionGroup = (RadioGroup) findViewById(R.id.radiogroup_user_type_selection);
         roleSelectionGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -301,6 +308,7 @@ public class Welcome extends AppCompatActivity {
     }
 
     void attachStudentDatabaseListener(){
+        Log.e(TAG, "attachStudentDatabaseListener");
         studentsChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -335,6 +343,7 @@ public class Welcome extends AppCompatActivity {
     }
 
     void attachTeachersDatabaseListener(){
+        Log.e(TAG, "attachTeachersDatabaseListener");
         teachersChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -365,6 +374,7 @@ public class Welcome extends AppCompatActivity {
     }
 
     void detachDatabaseListeners(){
+        Log.e(TAG, "detachDatabaseListeners");
         if (studentsChildEventListener != null) {
             studentsDatabaseReference.removeEventListener(studentsChildEventListener);
             studentsChildEventListener = null;
@@ -378,7 +388,7 @@ public class Welcome extends AppCompatActivity {
 
     void signIn(){
         //roleSelection();
-        Log.e(TAG, "SIGN IN METHOD begins");
+        Log.e(TAG, "signIn");
         Log.e(TAG, "selected role = "+selectedRole);
         if (email!=null && password!=null ) {
             if (email.length()!=0 && password.length()!=0) {
@@ -405,22 +415,67 @@ public class Welcome extends AppCompatActivity {
     }
 
     public void postSignIn(View view){
+        Log.e(TAG, "postSignIn");
         getValues();
         signIn();
+        //addNewUserToDatabase(email);
         //auth.signInWithEmailAndPassword(email, "student1");
+        FirebaseUser user = auth.getCurrentUser();
+        if (user==null)
+            Log.e(TAG, "postSignIng: current user is null");
+        else
+            Log.e(TAG, "postSignIn: current user is - "+user.getEmail());
+
         Intent intent = new Intent(Welcome.this, NavDrawer.class);
         intent.putExtra("username", username);
-        Log.e(TAG, "username = "+username);
+        Log.e(TAG, "postSignIn: username = "+username);
         intent.putExtra("role", selectedRole);
-        Log.e(TAG, "role = "+selectedRole);
+        Log.e(TAG, "postSignIn: role = "+selectedRole);
         intent.putExtra("email", email);
-        Log.e(TAG, "email = "+email);
+        Log.e(TAG, "postSignIn: email = "+email);
         intent.putExtra("parent", "Welcome");
+//        if (user_key != null) {
+//            intent.putExtra("key", user_key);
+//            Log.e(TAG, "postSignIn: "+user_key);
+//        }else{
+//            Log.e(TAG, "postSignIn: user key is null");
+//        }
         startActivity(intent);
     }
 
     public void goToSignUp(View view){
         Intent intent = new Intent(Welcome.this, SignUp.class);
         startActivity(intent);
+    }
+
+    void addNewUserToDatabase(String emailInput){
+        Log.e(TAG, "addNewUserToDatabase");
+        int croppedEmailIdLimit = emailInput.length() - 4;
+        String emailID = emailInput.substring(0, croppedEmailIdLimit);
+        User user = new User(emailInput, password);
+        DatabaseReference newRef = null;
+        //user_key = auth.getCurrentUser().getUid();
+        if (emailInput != null) {
+            if (selectedRole.equals("student")) {
+                newRef = studentsDatabaseReference.child(emailID);
+                //newRef.setValue(user);
+                //user_key = newRef.getKey();
+            } else if (selectedRole.equals("teacher")) {
+                newRef = teachersDatabaseReference.child(emailID);
+                //newRef.setValue(user);
+                //user_key = newRef.getKey();
+            }
+            if (newRef != null) {
+                Log.e(TAG, "adding values to new keys of the new user");
+                newRef.child("email").setValue(emailInput);
+                newRef.child("password").setValue(password);
+                newRef.child("role").setValue(selectedRole);
+//                user_key = auth.getCurrentUser().getUid();
+//                user.setKey(user_key);
+//                Log.e(TAG, "new user's key: " + user_key);
+            }else{
+                Log.e(TAG, "addNewUser to db: new Ref is null");
+            }
+        }
     }
 }

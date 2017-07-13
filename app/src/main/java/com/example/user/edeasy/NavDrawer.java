@@ -48,6 +48,7 @@ public class NavDrawer extends AppCompatActivity
     String user_role = "default role";
     String user_department;
     String user_id;
+    String user_key;
     String[] courses = new String[5];
     User user;
 
@@ -87,6 +88,7 @@ public class NavDrawer extends AppCompatActivity
                 username = bundle.getString("name");
                 user_email = bundle.getString("email");
                 user_role = bundle.getString("role");
+                //user_key = bundle.getString("key");
                 //setting drawer's header's name and email, but cannot get the header view
 //                if (drawer_header_name != null) {
 //                    drawer_header_name.setText(username);
@@ -117,39 +119,19 @@ public class NavDrawer extends AppCompatActivity
         if(currentUser != null){
             user_id = currentUser.getUid();
             Log.e(TAG, "current user ID = "+user_id);
+            user_email = currentUser.getEmail();
+            Log.e(TAG, "current user email = " + user_email);
+            //GET THE USER KEY FROM THE USERS' DATABASE USING THIS EMAIL
+
+            user_key = studentsDatabaseReference.child("email").orderByValue().equalTo(user_email).toString();
+            Log.e(TAG, "current user key = "+user_key);
+
             //if (user_role.equals("student")) {****USER ROLE NOT RECEIVED PROPERLY******
                 currentUserRef = studentsDatabaseReference.child(user_id);
 //            }else if (user_role.equals("teacher")){
 //                currentUserRef = teachersDatabaseReference.child(user_id);
 //            }
             //username = currentUser.getDisplayName();
-            if (currentUserRef!=null) {
-                user_email = currentUser.getEmail();
-                Log.e(TAG, "current user email = " + user_email);
-                currentUserRef.orderByChild("email").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        user = dataSnapshot.getValue(User.class);
-                        if(user!=null) {
-                            Log.e(TAG, "entered data change of current user ref");
-                            Log.e(TAG, "onDataCahnge : username = " + user.getFull_name());
-                            Log.e(TAG, "onDataChange : user role = " + user.getRole());
-                        }else{
-                            Log.e(TAG, "onDataChange : user is null");//USER IS NULL
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.e(TAG, "database error : "+databaseError.toString());
-                    }
-                });
-                String nameuri = currentUserRef.child("full_name").toString();
-                username = currentUser.getDisplayName();
-                Log.e(TAG, "current username = "+username);
-            }else{
-                Log.e(TAG, "current user database reference null");
-            }
         }else{
             Log.e(TAG, "current Firebase user is null");
         }

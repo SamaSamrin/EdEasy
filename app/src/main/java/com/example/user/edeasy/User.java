@@ -15,7 +15,8 @@ class User {
     private String password;
     private String student_id;
     private String role;
-   // private String semester;
+    //private String key;
+    // private String semester;
 
     public User(){
 
@@ -57,4 +58,8 @@ class User {
     void setRole(String role){
         this.role = role;
     }
+
+//    String getKey(){ return  key;}
+//
+//    void setKey(String key){this.key = key;}
 }
