@@ -50,6 +50,7 @@ public class Welcome extends AppCompatActivity {
     Course[] courses;
     String roleFromSignup;
 
+    User user;
     //database
     FirebaseDatabase database;
     DatabaseReference studentsDatabaseReference;
@@ -118,6 +119,7 @@ public class Welcome extends AppCompatActivity {
 
     void databaseInitialization(){
         database = FirebaseDatabase.getInstance();
+        Log.e(TAG, "database reference = "+database.getReference().toString());
         studentsDatabaseReference = database.getReference("users").child("students");
         teachersDatabaseReference = database.getReference("users").child("teachers");
 
@@ -140,7 +142,12 @@ public class Welcome extends AppCompatActivity {
                     whenSignedIn("Username", user_email);
                     String user_id = user.getUid();
                     Log.e(TAG, "on auth state changed: user id = "+user_id);
-                    }
+                    DatabaseReference userdbRef = studentsDatabaseReference.child(user.getUid());
+                    if (userdbRef == null)
+                        Log.e(TAG, "user db reference is null");
+                    else
+                        Log.e(TAG, userdbRef.toString());
+                }
                 else {
                     //user is signed out
                     Log.e(TAG, "user signed out");
@@ -297,7 +304,7 @@ public class Welcome extends AppCompatActivity {
         studentsChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                User user = dataSnapshot.getValue(User.class);
+                user = dataSnapshot.getValue(User.class);
                 Log.e(TAG, "on child added, s="+s);
                 if(username!=null) username = user.getFull_name();
                 Log.e(TAG, "new student : username = "+username);
@@ -371,6 +378,7 @@ public class Welcome extends AppCompatActivity {
 
     void signIn(){
         //roleSelection();
+        Log.e(TAG, "SIGN IN METHOD begins");
         Log.e(TAG, "selected role = "+selectedRole);
         if (email!=null && password!=null ) {
             if (email.length()!=0 && password.length()!=0) {

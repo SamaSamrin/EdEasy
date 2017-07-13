@@ -1,0 +1,154 @@
+{
+  "departments" : {
+    "BIL" : {
+      "courses" : {
+        "ENG101" : {
+          "pre-req" : "ENG0091",
+          "title" : "Basics of English"
+        },
+        "ENG102" : {
+          "title" : "Technical Writing"
+        }
+      }
+    },
+    "CSE" : {
+      "courses" : {
+        "CSE110" : {
+          "pre-requisite" : 0,
+          "sections" : [ null, {
+            "faculty" : "TBA"
+          } ],
+          "title" : "Introduction to Programming I"
+        }
+      },
+      "faculties" : {
+        "ACH" : {
+          "email" : "amitabha@bracu.ac.bd",
+          "fullname" : "Amitabha Chakrabarty",
+          "phone" : "04478444112",
+          "userID" : "sdrt"
+        },
+        "BIS" : {
+          "email" : "rubelbiswas@bracu.ac.bd",
+          "fullname" : "Rubel Biswas",
+          "phone" : "04478444060"
+        },
+        "DIP" : {
+          "email" : "dipankar@bracu.ac.bd",
+          "fullname" : "Dipankar Chaki",
+          "phone" : "04478444060"
+        },
+        "HOS" : {
+          "email" : "Hossain.arif@bracu.ac.bd",
+          "fullname" : "Hossain Arif",
+          "phone" : "04478444060"
+        },
+        "JIU" : {
+          "email" : "jia.uddin@bracu.ac.bd",
+          "fullname" : "Jia Uddin",
+          "phone" : "04478444144"
+        },
+        "KHR" : {
+          "email" : "khalilur@bracu.ac.bd",
+          "fullname" : "Md. Khalilur Rahman",
+          "phone" : "04478444111"
+        },
+        "MSA" : {
+          "email" : "mabdullah@bracu.ac.bd",
+          "fullname" : "Matin Saad Abdullah",
+          "phone" : "04478444113"
+        },
+        "SOC" : {
+          "email" : "sonia.corraya@bracu.ac.bd",
+          "fullname" : "Sonia Corraya",
+          "phone" : "04478444060"
+        }
+      },
+      "students" : [ null, "user1", "-KlPsb7HDGQixuMGJrZ", "-KlPxA3Hbn0cBwb7OdEs" ]
+    },
+    "EEE" : {
+      "courses" : {
+        "EEE161" : {
+          "title" : "Main lab"
+        }
+      }
+    },
+    "ENG" : {
+      "courses" : {
+        "ENG231" : {
+          "title" : "ENG 231 title"
+        }
+      }
+    },
+    "MNS" : {
+      "courses" : {
+        "MAT110" : {
+          "pre-requisite" : 0,
+          "title" : "Mathematics I"
+        },
+        "MAT120" : {
+          "pre-requisite" : "MAT110",
+          "title" : "Mathematics II"
+        }
+      }
+    },
+    "PHR" : {
+      "courses" : {
+        "PHR101" : {
+          "title" : "Introduction to Pharmacy"
+        }
+      }
+    }
+  },
+  "users" : {
+    "admins" : {
+      "admin1" : {
+        "email" : "samasamrin@gmail.com",
+        "password" : 123456,
+        "username" : "sama92"
+      }
+    },
+    "students" : {
+      "-KlPsb7HDGQixuMGJrZ-" : {
+        "department" : "CSE",
+        "email" : "fffd@gnvh.com",
+        "full_name" : "Ghira Hani",
+        "password" : "ghfggg"
+      },
+      "-KlPxA3Hbn0cBwb7OdEs" : {
+        "department" : "CSE",
+        "email" : "abc@gmail.com",
+        "full_name" : "Faci Tadgi",
+        "password" : "ffffc"
+      },
+      "-Kluvi9McwQyGtN5_sXC" : {
+        "email" : "sama@yahoo.com",
+        "password" : "123456"
+      },
+      "-KohXkUEn0w9QN-_8Qno" : {
+        "email" : "reqop@gmail.com",
+        "password" : "123456"
+      },
+      "user1" : {
+        "courses_assigned" : {
+          "course1" : "CSE110",
+          "course2" : "MAT120",
+          "course3" : "PHY111",
+          "course4" : "ENG101"
+        },
+        "department" : "CSE",
+        "email" : "student1@gmail.com",
+        "full_name" : "Sama Samrin",
+        "password" : "student1",
+        "semester" : "Spring 2013",
+        "student_id" : 13101125
+      }
+    },
+    "teachers" : {
+      "user1" : {
+        "email" : "teacher1@gmail.com",
+        "password" : "password1"
+      }
+    }
+  }
+}

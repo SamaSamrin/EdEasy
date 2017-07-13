@@ -6,7 +6,7 @@ package com.example.user.edeasy;
 
 class User {
 
-    private Course[] courses_assigned;
+   // private Course[] courses_assigned;
     private String department;
     private String email;
     private String full_name;
@@ -15,7 +15,7 @@ class User {
     private String password;
     private String student_id;
     private String role;
-    private String semester;
+   // private String semester;
 
     public User(){
 
@@ -32,7 +32,7 @@ class User {
         this.email = email;
         this.full_name = full_name;
         this.password = password;
-        this.semester = semester;
+        //this.semester = semester;
         this.student_id = student_id;
     }
 

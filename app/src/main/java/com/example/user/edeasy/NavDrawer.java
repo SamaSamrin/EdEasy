@@ -2,6 +2,7 @@ package com.example.user.edeasy;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,6 +27,14 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 //import layout.CourseOneMaterials;
 
@@ -33,12 +42,26 @@ public class NavDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String TAG = "**NavDrawer**";
-    private String username;
-    private String user_email;
+
+    String username;
+    String user_email;
+    String user_role = "default role";
+    String user_department;
+    String user_id;
     String[] courses = new String[5];
+    User user;
+
     private View containerView;
     Toolbar toolbar;
+
     FirebaseAuth auth;
+    DatabaseReference databaseReference;
+    DatabaseReference studentsDatabaseReference;
+    DatabaseReference teachersDatabaseReference;
+    DatabaseReference currentUserRef;
+    StorageReference storageReference;
+    StorageReference CSE_storageRef;
+    FirebaseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +73,90 @@ public class NavDrawer extends AppCompatActivity
         toolbar.setTitle("Dashboard");
 
         auth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        studentsDatabaseReference = databaseReference.child("students");
+        teachersDatabaseReference = databaseReference.child("teachers");
+        storageReference = FirebaseStorage.getInstance().getReference();
+        CSE_storageRef = storageReference.child("CSE");
+        currentUser = auth.getCurrentUser();
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle!=null){
+            if (bundle.getString("parent")!=null) {
+                Log.e(TAG, "bundle is not null");
+                username = bundle.getString("name");
+                user_email = bundle.getString("email");
+                user_role = bundle.getString("role");
+                //setting drawer's header's name and email, but cannot get the header view
+//                if (drawer_header_name != null) {
+//                    drawer_header_name.setText(username);
+//                    Log.e(TAG, "drawer header username = "+username);
+//                }else{
+//                    Log.e(TAG, "drawer header name textview is null");
+//                }
+//                if (drawer_header_email != null) {
+//                    drawer_header_email.setText(user_email);
+//                    Log.e(TAG, "drawer header email = "+user_email);
+//                }else{
+//                    Log.e(TAG, "drawer header email textview is null");
+//                }
+            }else{
+                Log.e(TAG, "bundle's parent is null");
+                //cannot get the header views properly, always show null
+//                if (drawer_header_name != null && drawer_header_email != null) {
+//                    drawer_header_name.setText(username);
+//                    drawer_header_email.setText(user_email);
+//                }else{
+//                    Log.e(TAG, "drawer header email and name both null");
+//                }
+            }
+        }else{
+            Log.e(TAG, "bundle is null");
+        }
+
+        if(currentUser != null){
+            user_id = currentUser.getUid();
+            Log.e(TAG, "current user ID = "+user_id);
+            //if (user_role.equals("student")) {****USER ROLE NOT RECEIVED PROPERLY******
+                currentUserRef = studentsDatabaseReference.child(user_id);
+//            }else if (user_role.equals("teacher")){
+//                currentUserRef = teachersDatabaseReference.child(user_id);
+//            }
+            //username = currentUser.getDisplayName();
+            if (currentUserRef!=null) {
+                user_email = currentUser.getEmail();
+                Log.e(TAG, "current user email = " + user_email);
+                currentUserRef.orderByChild("email").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        user = dataSnapshot.getValue(User.class);
+                        if(user!=null) {
+                            Log.e(TAG, "entered data change of current user ref");
+                            Log.e(TAG, "onDataCahnge : username = " + user.getFull_name());
+                            Log.e(TAG, "onDataChange : user role = " + user.getRole());
+                        }else{
+                            Log.e(TAG, "onDataChange : user is null");//USER IS NULL
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e(TAG, "database error : "+databaseError.toString());
+                    }
+                });
+                String nameuri = currentUserRef.child("full_name").toString();
+                username = currentUser.getDisplayName();
+                Log.e(TAG, "current username = "+username);
+            }else{
+                Log.e(TAG, "current user database reference null");
+            }
+        }else{
+            Log.e(TAG, "current Firebase user is null");
+        }
 
         Fragment fragment = new Dashboard();
-       FragmentManager manager = getSupportFragmentManager();
-       manager.beginTransaction().add(R.id.fragment_container,fragment).commit();
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().add(R.id.fragment_container,fragment).commit();
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -72,8 +175,8 @@ public class NavDrawer extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         //containerView = navigationView;
         navigationView.setNavigationItemSelectedListener(this);
-        //cannot get the views properly
 
+        //cannot get the views properly
         TextView drawer_header_name = (TextView) navigationView.findViewById(R.id.drawer_header_title);
         if (drawer_header_name != null)
             Log.e(TAG, "drawer header name is - "+drawer_header_name.toString());
@@ -81,40 +184,7 @@ public class NavDrawer extends AppCompatActivity
             Log.e(TAG, "drawer header name is still null");
         TextView drawer_header_email = (TextView) findViewById(R.id.drawer_header_subtitle);
 
-        Bundle bundle = getIntent().getExtras();
-        if (bundle!=null){
-            if (bundle.getString("parent")!=null) {
-                Log.e(TAG, "bundle is not null");
-                username = bundle.getString("name");
-                user_email = bundle.getString("email");
-                //setting drawer's header's name and email, but cannot get the header view
-                if (drawer_header_name != null) {
-                    drawer_header_name.setText(username);
-                    Log.e(TAG, "drawer header username = "+username);
-                }else{
-                    Log.e(TAG, "drawer header name textview is null");
-                }
-                if (drawer_header_email != null) {
-                    drawer_header_email.setText(user_email);
-                    Log.e(TAG, "drawer header email = "+user_email);
-                }else{
-                    Log.e(TAG, "drawer header email textview is null");
-                }
-            }else{
-                Log.e(TAG, "bundle's parent is null");
-                //even if there is no activity starting the intent,
-                //setting drawer's header's name and email,
-                // but cannot get the header views properly, always show null
-                if (drawer_header_name != null && drawer_header_email != null) {
-                    drawer_header_name.setText(username);
-                    drawer_header_email.setText(user_email);
-                }else{
-                    Log.e(TAG, "drawer header email and name both null");
-                }
-            }
-        }else{
-            Log.e(TAG, "bundle is null");
-        }
+
     }
 
     @Override
@@ -268,6 +338,20 @@ public class NavDrawer extends AppCompatActivity
 //                dialog.getButton(R.id.dia)
 //            }
 //        });
+    }
+
+    void databaseSingleEventListener(){
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
 

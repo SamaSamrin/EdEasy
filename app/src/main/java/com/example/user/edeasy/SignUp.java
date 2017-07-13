@@ -125,7 +125,7 @@ public class SignUp extends AppCompatActivity {
         if (!passwordMatched)
             Toast.makeText(SignUp.this, "passwords dont match", Toast.LENGTH_SHORT).show();
         //add all these info to the user's database
-        
+
         //sends all of them back to user profile
         Intent intent = new Intent(SignUp.this, AccountProfile.class);
         intent.putExtra("fullname", fullName);
