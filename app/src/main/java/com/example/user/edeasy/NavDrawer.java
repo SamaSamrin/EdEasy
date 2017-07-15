@@ -138,6 +138,19 @@ public class NavDrawer extends AppCompatActivity
                 currentUserRef = studentsDatabaseReference.child(emailID);
                 if (currentUserRef != null){
                     Log.e(TAG, "line 138: current user reference is - "+currentUserRef.toString());
+                    DatabaseReference nameRef = currentUserRef.child("name");
+                    nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            username = dataSnapshot.getValue(String.class);
+                            Log.e(TAG, "line 146: the current username from snapshot is = "+username);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e(TAG, "line 151: database error = "+databaseError.toString());
+                        }
+                    });
                 }else{
                     Log.e(TAG, "line 140: current user reference is null");
                 }
@@ -348,6 +361,7 @@ public class NavDrawer extends AppCompatActivity
             }
         });
     }
+
 }
 
 class DrawerItemClickListener implements ListView.OnItemClickListener {
