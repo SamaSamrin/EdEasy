@@ -65,6 +65,8 @@ public class NavDrawer extends AppCompatActivity
     FirebaseUser currentUser;
 
     Bundle bundle;
+    TextView nav_user;
+    TextView nav_user_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,15 +107,24 @@ public class NavDrawer extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        //containerView = navigationView;
+        View hView =  navigationView.getHeaderView(0);
+        Log.e(TAG, "line 109: headerView is - "+hView.toString());
+        nav_user = (TextView)hView.findViewById(R.id.drawer_header_title);
+        Log.e(TAG, "line 111: setting username - "+username);
+        nav_user.setText(username);
+        nav_user_email = (TextView) hView.findViewById(R.id.drawer_header_subtitle);
+        nav_user_email.setText(user_email);
+
         navigationView.setNavigationItemSelectedListener(this);
+        //containerView = navigationView;
+
 
         //cannot get the views properly
-        TextView drawer_header_name = (TextView) navigationView.findViewById(R.id.drawer_header_title);
-        if (drawer_header_name != null)
-            Log.e(TAG, "drawer header name is - "+drawer_header_name.toString());
-        else
-            Log.e(TAG, "drawer header name is still null");
+//        TextView drawer_header_name = (TextView) navigationView.findViewById(R.id.drawer_header_title);
+//        if (drawer_header_name != null)
+//            Log.e(TAG, "drawer header name is - "+drawer_header_name.toString());
+//        else
+//            Log.e(TAG, "drawer header name is still null");
         TextView drawer_header_email = (TextView) findViewById(R.id.drawer_header_subtitle);
 
 
@@ -338,26 +349,28 @@ public class NavDrawer extends AppCompatActivity
 //            Log.e(TAG, "line 128: current user key = "+user_key);
 
             //if (user_role.equals("student")) {****USER ROLE NOT RECEIVED PROPERLY******
+            //nav_user_email.setText(user_email);
             int croppedEmailIdLimit = user_email.length() - 4;
             String emailID = user_email.substring(0, croppedEmailIdLimit);
             currentUserRef = studentsDatabaseReference.child(emailID);
             if (currentUserRef != null){
-                Log.e(TAG, "line 345: current user reference is - "+currentUserRef.toString());
+                Log.e(TAG, "line 352: current user reference is - "+currentUserRef.toString());
                 DatabaseReference nameRef = currentUserRef.child("name");
                 nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         username = dataSnapshot.getValue(String.class);
-                        Log.e(TAG, "line 351: the current username from snapshot is = "+username);
+                        Log.e(TAG, "line 358: the current username from snapshot is = "+username);
+                        nav_user.setText(username);
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.e(TAG, "line 356: database error = "+databaseError.toString());
+                        Log.e(TAG, "line 364: database error = "+databaseError.toString());
                     }
                 });
             }else{
-                Log.e(TAG, "line 360: current user reference is null");
+                Log.e(TAG, "line 368: current user reference is null");
             }
 //            }else if (user_role.equals("teacher")){
 //                currentUserRef = teachersDatabaseReference.child(user_id);

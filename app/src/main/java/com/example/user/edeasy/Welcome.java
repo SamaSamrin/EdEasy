@@ -26,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -52,6 +53,7 @@ public class Welcome extends AppCompatActivity {
     String user_key;
 
     User user;
+    FirebaseUser firebaseUser;
     //database
     FirebaseDatabase database;
     DatabaseReference studentsDatabaseReference;
@@ -93,17 +95,17 @@ public class Welcome extends AppCompatActivity {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 username = bundle.getString("fullname");
-                Log.e(TAG, "checking Intent: username = " + username);
+                Log.e(TAG, "line 97: username = " + username);
                 email = bundle.getString("email");
-                Log.e(TAG, "checking Intent: email = "+email);
+                Log.e(TAG, "line 99: email = "+email);
                 password = bundle.getString("password");
-                Log.e(TAG, "checking Intent: password = " + password);
+                Log.e(TAG, "line 101: password = " + password);
                 studentID = bundle.getString("studentID");
-                Log.e(TAG, "checking Intent: student ID = " + studentID);
+                Log.e(TAG, "line 103: student ID = " + studentID);
                 boolean passwordMatched = bundle.getBoolean("password matched");
-                Log.e(TAG, "received password matched? = "+passwordMatched);
+                Log.e(TAG, "line 105 : received password matched? = "+passwordMatched);
                 roleFromSignup = bundle.getString("role");
-                Log.e(TAG, "role from signup = "+roleFromSignup);
+                Log.e(TAG, "line 107 : role from signup = "+roleFromSignup);
                 if (roleFromSignup != null) {
                     if (roleFromSignup.equals("teacher"))
                         attachTeachersDatabaseListener();
@@ -113,9 +115,9 @@ public class Welcome extends AppCompatActivity {
                 createAccount();
                 //Toast.makeText(Welcome.this, "received password match? " + String.valueOf(passwordMatched), Toast.LENGTH_SHORT).show();
             } else
-                Log.e(TAG, "received bundle is null");
+                Log.e(TAG, "line 117 : received bundle is null");
         }else
-            Log.e(TAG, "received intent is null");
+            Log.e(TAG, "line 119 : received intent is null");
     }
 
     void databaseInitialization() {
@@ -141,12 +143,12 @@ public class Welcome extends AppCompatActivity {
                     Log.e(TAG, "user signed in");
                     String user_name = user.getDisplayName();
                     String user_email = user.getEmail();
-                    Log.e(TAG, "on auth state changed: name = "+user_name+" , email = "+user_email);
+                    Log.e(TAG, "145 : on auth state changed: name = "+user_name+" , email = "+user_email);
                     String user_id = user.getUid();
                     //user_key = user_id;
-                    Log.e(TAG, "on auth state changed: user id = "+user_id);
+                    Log.e(TAG, "148 : on auth state changed: user id = "+user_id);
                     //go to nav drawer with these user info
-                    whenSignedIn("Username", user_email);
+                    whenSignedIn(username, user_email);
                 }
                 else {
                     //user is signed out
@@ -197,8 +199,41 @@ public class Welcome extends AppCompatActivity {
     void whenSignedIn(String name, String email){
         Log.e(TAG, "whenSignedIn");
         Intent intent = new Intent(Welcome.this, NavDrawer.class);
-        intent.putExtra("email", email);
-        intent.putExtra("name", name);
+        String user_email = "";
+        firebaseUser = auth.getCurrentUser();
+        if (user != null) {
+            user_email = user.getEmail();
+            int croppedEmailIdLimit = user_email.length() - 4;
+            Log.e(TAG, "207 : default email length = " + croppedEmailIdLimit);
+            String emailID = user_email.substring(0, croppedEmailIdLimit);
+            DatabaseReference currentUserRef = studentsDatabaseReference.child(emailID);
+            if (currentUserRef != null) {
+                Log.e(TAG, "line 211: current user reference is - " + currentUserRef.toString());
+                DatabaseReference nameRef = currentUserRef.child("name");
+                nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        username = dataSnapshot.getValue(String.class);
+                        Log.e(TAG, "line 217: the current username from snapshot is = " + username);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e(TAG, "line 222: database error = " + databaseError.toString());
+                    }
+                });
+            } else {
+                Log.e(TAG, "line 226: current user reference is null");
+            }
+        }else {
+            Log.e(TAG, "line 229 : user is null");
+        }
+
+        if (user_email.isEmpty())
+            intent.putExtra("email", email);
+        else
+            intent.putExtra("email", user_email);
+        intent.putExtra("name", username);
         intent.putExtra("parent", "Welcome");
         intent.putExtra("role", selectedRole);
         startActivity(intent);
@@ -422,10 +457,10 @@ public class Welcome extends AppCompatActivity {
         //auth.signInWithEmailAndPassword(email, "student1");
         FirebaseUser user = auth.getCurrentUser();
         if (user==null)
-            Log.e(TAG, "postSignIng: current user is null");
+            Log.e(TAG, "line 458 / postSignIn: current user is null");
         else
-            Log.e(TAG, "postSignIn: current user is - "+user.getEmail());
-
+            Log.e(TAG, "line 460 / postSignIn: current user is - "+user.getEmail());
+        whenSignedIn(username, email);
         Intent intent = new Intent(Welcome.this, NavDrawer.class);
         intent.putExtra("username", username);
         Log.e(TAG, "postSignIn: username = "+username);
