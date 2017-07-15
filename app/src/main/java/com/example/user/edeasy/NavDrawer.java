@@ -75,8 +75,8 @@ public class NavDrawer extends AppCompatActivity
 
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        studentsDatabaseReference = databaseReference.child("students");
-        teachersDatabaseReference = databaseReference.child("teachers");
+        studentsDatabaseReference = databaseReference.child("users").child("students");
+        teachersDatabaseReference = databaseReference.child("users").child("teachers");
         storageReference = FirebaseStorage.getInstance().getReference();
         CSE_storageRef = storageReference.child("CSE");
         currentUser = auth.getCurrentUser();
@@ -84,10 +84,14 @@ public class NavDrawer extends AppCompatActivity
         Bundle bundle = getIntent().getExtras();
         if (bundle!=null){
             if (bundle.getString("parent")!=null) {
-                Log.e(TAG, "bundle is not null");
+                Log.e(TAG, "line 87: bundle is not null");
                 username = bundle.getString("name");
                 user_email = bundle.getString("email");
                 user_role = bundle.getString("role");
+                if (user_role!=null)
+                    Log.e(TAG, "line 92: user role received from bundle is - "+user_role);
+                else
+                    Log.e(TAG, "line 94: user role received from bundle is null");
                 //user_key = bundle.getString("key");
                 //setting drawer's header's name and email, but cannot get the header view
 //                if (drawer_header_name != null) {
@@ -103,7 +107,7 @@ public class NavDrawer extends AppCompatActivity
 //                    Log.e(TAG, "drawer header email textview is null");
 //                }
             }else{
-                Log.e(TAG, "bundle's parent is null");
+                Log.e(TAG, "bundle's parent key is null");
                 //cannot get the header views properly, always show null
 //                if (drawer_header_name != null && drawer_header_email != null) {
 //                    drawer_header_name.setText(username);
@@ -117,23 +121,32 @@ public class NavDrawer extends AppCompatActivity
         }
 
         if(currentUser != null){
+            Log.e(TAG, "line 120: current user is not null");
             user_id = currentUser.getUid();
-            Log.e(TAG, "current user ID = "+user_id);
+            Log.e(TAG, "line 122: current user ID = "+user_id);
             user_email = currentUser.getEmail();
-            Log.e(TAG, "current user email = " + user_email);
+            Log.e(TAG, "line 124: current user email = " + user_email);
+
             //GET THE USER KEY FROM THE USERS' DATABASE USING THIS EMAIL
 
-            user_key = studentsDatabaseReference.child("email").orderByValue().equalTo(user_email).toString();
-            Log.e(TAG, "current user key = "+user_key);
+//            user_key = studentsDatabaseReference.child("email").orderByValue().equalTo(user_email).toString();
+//            Log.e(TAG, "line 128: current user key = "+user_key);
 
             //if (user_role.equals("student")) {****USER ROLE NOT RECEIVED PROPERLY******
-                currentUserRef = studentsDatabaseReference.child(user_id);
+                int croppedEmailIdLimit = user_email.length() - 4;
+                String emailID = user_email.substring(0, croppedEmailIdLimit);
+                currentUserRef = studentsDatabaseReference.child(emailID);
+                if (currentUserRef != null){
+                    Log.e(TAG, "line 138: current user reference is - "+currentUserRef.toString());
+                }else{
+                    Log.e(TAG, "line 140: current user reference is null");
+                }
 //            }else if (user_role.equals("teacher")){
 //                currentUserRef = teachersDatabaseReference.child(user_id);
 //            }
             //username = currentUser.getDisplayName();
         }else{
-            Log.e(TAG, "current Firebase user is null");
+            Log.e(TAG, "line 149: current Firebase user is null");
         }
 
         Fragment fragment = new Dashboard();
