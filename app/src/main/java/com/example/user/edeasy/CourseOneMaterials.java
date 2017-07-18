@@ -209,18 +209,9 @@ public class CourseOneMaterials extends Fragment {
                             Log.e(TAG, "course = "+course);
                             Long section = postSnapshot.child("section").getValue(long.class);
                             Log.e(TAG, "section = "+String.valueOf(section));
-// DataSnapshot tempCourse = postSnapshot.child(String.valueOf(i)).child("course_code");
-//                            Log.e(TAG, "#203: course snapshot = "+tempCourse.toString());
-//                            String course = tempCourse.getValue(String.class);
-//                            Log.e(TAG, "#205: course value = "+course);
-//                            DataSnapshot tempSection = postSnapshot.child(String.valueOf(i)).child("section");
-//                            Log.e(TAG, "#207: section snapshot = "+tempSection.toString());
-//                            String section = tempSection.getValue(String.class);
-//                            Log.e(TAG, "#209 : section value = "+section);
                             i++;
                         }
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 

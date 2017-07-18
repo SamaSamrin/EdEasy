@@ -49,7 +49,8 @@ public class NavDrawer extends AppCompatActivity
     String user_department;
     String user_id;
     String user_key;
-    String[] courses = new String[5];
+    int numberOfCourses;
+    String[][] assignedCourses;
     User user;
 
     private View containerView;
@@ -145,6 +146,7 @@ public class NavDrawer extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.nav_drawer, menu);
         Log.e(TAG, "on create options menu");
+
         return true;
     }
 
@@ -300,61 +302,37 @@ public class NavDrawer extends AppCompatActivity
     void handleCurrentUserInfo(){//whole process of retrieving current user data
         if (bundle!=null){
             if (bundle.getString("parent")!=null) {
-                Log.e(TAG, "line 292: bundle is not null");
+                Log.e(TAG, "line 304: bundle is not null");
                 username = bundle.getString("name");
                 user_email = bundle.getString("email");
                 user_role = bundle.getString("role");
                 if (user_role!=null)
-                    Log.e(TAG, "line 297: user role received from bundle is - "+user_role);
+                    Log.e(TAG, "line 309: user role received from bundle is - "+user_role);
                 else
-                    Log.e(TAG, "line 299: user role received from bundle is null");
+                    Log.e(TAG, "line 310: user role received from bundle is null");
                 //user_key = bundle.getString("key");
-                //setting drawer's header's name and email, but cannot get the header view
-//                if (drawer_header_name != null) {
-//                    drawer_header_name.setText(username);
-//                    Log.e(TAG, "drawer header username = "+username);
-//                }else{
-//                    Log.e(TAG, "drawer header name textview is null");
-//                }
-//                if (drawer_header_email != null) {
-//                    drawer_header_email.setText(user_email);
-//                    Log.e(TAG, "drawer header email = "+user_email);
-//                }else{
-//                    Log.e(TAG, "drawer header email textview is null");
-//                }
             }else{
                 Log.e(TAG, "line 315: bundle's parent key is null");
-                //cannot get the header views properly, always show null
-//                if (drawer_header_name != null && drawer_header_email != null) {
-//                    drawer_header_name.setText(username);
-//                    drawer_header_email.setText(user_email);
-//                }else{
-//                    Log.e(TAG, "drawer header email and name both null");
-//                }
             }
         }else{
-            Log.e(TAG, "line 325: bundle is null");
+            Log.e(TAG, "line 317: bundle is null");
         }
 
         if(currentUser != null){
-            Log.e(TAG, "line 329: current user is not null");
+            Log.e(TAG, "line 321: current user is not null");
             user_id = currentUser.getUid();
-            Log.e(TAG, "line 331: current user ID = "+user_id);
+            Log.e(TAG, "line 323: current user ID = "+user_id);
             user_email = currentUser.getEmail();
-            Log.e(TAG, "line 333: current user email = " + user_email);
+            Log.e(TAG, "line 325: current user email = " + user_email);
 
-            //GET THE USER KEY FROM THE USERS' DATABASE USING THIS EMAIL
-
-//            user_key = studentsDatabaseReference.child("email").orderByValue().equalTo(user_email).toString();
-//            Log.e(TAG, "line 128: current user key = "+user_key);
-
-            //if (user_role.equals("student")) {****USER ROLE NOT RECEIVED PROPERLY******
-            //nav_user_email.setText(user_email);
+            //retrieving user's info from database
             int croppedEmailIdLimit = user_email.length() - 4;
             String emailID = user_email.substring(0, croppedEmailIdLimit);
+            //assuming the user is a student
             currentUserRef = studentsDatabaseReference.child(emailID);
             if (currentUserRef != null){
-                Log.e(TAG, "line 352: current user reference is - "+currentUserRef.toString());
+                Log.e(TAG, "line 338: current user reference is - "+currentUserRef.toString());
+                //****************NAME*****************
                 DatabaseReference nameRef = currentUserRef.child("name");
                 nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -367,18 +345,48 @@ public class NavDrawer extends AppCompatActivity
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.e(TAG, "line 364: database error = "+databaseError.toString());
+                        Log.e(TAG, "line 351: database error = "+databaseError.toString());
+                    }
+                });
+                //********************COURSES*******************
+                DatabaseReference coursesRef = currentUserRef.child("courses_assigned");
+                coursesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.e(TAG, "onDataChange : COURSES");
+                        long numberOfChildren = dataSnapshot.getChildrenCount();
+                        numberOfCourses = (int) numberOfChildren;
+                        Log.e(TAG, "#200 : number of courses = "+ String.valueOf(numberOfCourses));
+                        assignedCourses = new String[numberOfCourses][2];
+                        int i = 1;
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                            String key = postSnapshot.getKey();
+                            String course = postSnapshot.child("course_code").getValue(String.class);
+                            Log.e(TAG, "course = "+course);
+                            Long section = postSnapshot.child("section").getValue(long.class);
+                            Log.e(TAG, "section = "+String.valueOf(section));
+                            assignedCourses[i-1][0] = course;//courseID
+                            assignedCourses[i-1][1] = String.valueOf(section);//section
+                            i++;
+                        }
+                        //checking if assigned courses are retrieved correctly
+                        if (assignedCourses != null){
+                            for (int k=0; k<assignedCourses.length; k++){
+                                Log.e(TAG, "#403: course "+String.valueOf(k)+" : "+
+                                        assignedCourses[k][0]+" section "+assignedCourses[k][1]);
+                            }
+                        }else
+                            Log.e(TAG, "null assigned courses");
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
                     }
                 });
             }else{
-                Log.e(TAG, "line 368: current user reference is null");
+                Log.e(TAG, "line 392: current user reference is null");
             }
-//            }else if (user_role.equals("teacher")){
-//                currentUserRef = teachersDatabaseReference.child(user_id);
-//            }
-            //username = currentUser.getDisplayName();
         }else{
-            Log.e(TAG, "line 367: current Firebase user is null");
+            Log.e(TAG, "line 395: current Firebase user is null");
         }
     }
 
