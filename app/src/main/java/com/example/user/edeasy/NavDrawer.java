@@ -200,7 +200,7 @@ public class NavDrawer extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        //Log.e(TAG, "on Navigation Item Selected");
+        Log.e(TAG, "on Navigation Item Selected");
 
         int id = item.getItemId();
         Fragment fragment = new Dashboard();
@@ -229,22 +229,27 @@ public class NavDrawer extends AppCompatActivity
                 fragment = new CourseOneMaterials();
                 //Toolbar toolbar = (Toolbar) view.findViewById(R.id.dashboard_toolbar);
                 if(toolbar != null)
-                    toolbar.setTitle("CSE110");
+                    toolbar.setTitle(assignedCourses[0][0]);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
             case (R.id.course2_drawer_item) :
                 fragment = new CourseTwoMaterials();
-                toolbar.setTitle("MAT120");
+                toolbar.setTitle(assignedCourses[1][0]);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
             case (R.id.course3_drawer_item) :
                 fragment = new CourseThreeMaterials();
-                toolbar.setTitle("PHY111");
+                toolbar.setTitle(assignedCourses[2][0]);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
             case (R.id.course4_drawer_item) :
                 fragment = new CourseFourMaterials();
-                toolbar.setTitle("ENG101");
+                toolbar.setTitle(assignedCourses[3][0]);
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                break;
+            case (R.id.course5_drawer_item) :
+                fragment = new CourseFiveMaterials();
+                toolbar.setTitle(assignedCourses[4][0]);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
 //            case (R.id.settings_drawer_option) :

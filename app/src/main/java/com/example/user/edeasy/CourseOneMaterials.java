@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,10 +89,6 @@ public class CourseOneMaterials extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         Log.e(TAG, "onCreate");
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-////            mParam1 = getArguments().getString(course1Name);
-////            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
 
         username = "COURSE ONE USERNAME";
         //Log.e(TAG, "#92: username is "+username);
