@@ -360,8 +360,9 @@ public class NavDrawer extends AppCompatActivity
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         username = dataSnapshot.getValue(String.class);
-                        Log.e(TAG, "line 358: the current username from snapshot is = "+username);
+                        Log.e(TAG, "line 363: the current username from snapshot is = "+username);
                         nav_user.setText(username);
+                        setUsername(username);
                     }
 
                     @Override
@@ -379,6 +380,17 @@ public class NavDrawer extends AppCompatActivity
         }else{
             Log.e(TAG, "line 367: current Firebase user is null");
         }
+    }
+
+    private void setUsername(String newname){
+        username = newname;
+        Log.e(TAG, "line 387: setUsername: "+username);
+    }
+
+    public String getUsername(){
+        handleCurrentUserInfo();
+        Log.e(TAG, "line 392: returning username = "+username);
+        return username;
     }
 
 }
@@ -417,5 +429,12 @@ class DrawerItemClickListener implements ListView.OnItemClickListener {
     public void setTitle(CharSequence title) {
 //        mTitle = title;
 //        getActionBar().setTitle(mTitle);
+    }
+}
+
+class FragmentListener implements Dashboard.OnFragmentInteractionListener{
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
