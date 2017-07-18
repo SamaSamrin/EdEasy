@@ -22,23 +22,23 @@
             <item
                 android:id="@+id/course1_drawer_item"
                 android:icon="@drawable/one"
-                android:title="CSE110" />
+                android:title="Course 1" />
             <item
                 android:id="@+id/course2_drawer_item"
                 android:icon="@drawable/two"
-                android:title="MAT120" />
+                android:title="Course 2" />
             <item
                 android:id="@+id/course3_drawer_item"
                 android:icon="@drawable/three"
-                android:title="PHY111" />
+                android:title="Course 3" />
             <item
                 android:id="@+id/course4_drawer_item"
                 android:icon="@drawable/four"
-                android:title="ENG101" />
+                android:title="Course 4" />
             <item
                 android:id="@+id/course5_drawer_item"
                 android:icon="@drawable/five"
-                android:title="CSE110"
+                android:title="Course 5"
                 android:visible="false"/>
         </menu>
 

@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,10 +52,12 @@ public class NavDrawer extends AppCompatActivity
     String user_key;
     int numberOfCourses;
     String[][] assignedCourses;
+    MenuItem[] menuItems;
     User user;
 
     private View containerView;
     Toolbar toolbar;
+    Menu myMenu;
 
     FirebaseAuth auth;
     DatabaseReference databaseReference;
@@ -86,8 +89,10 @@ public class NavDrawer extends AppCompatActivity
         CSE_storageRef = storageReference.child("CSE");
         currentUser = auth.getCurrentUser();
 
+        //myMenu = (Menu)findViewById(R.id.top_drawer_menu);
+        menuItems = new MenuItem[5];
+
         bundle = getIntent().getExtras();
-        handleCurrentUserInfo();//whole process of retrieving current user data
 
         Fragment fragment = new Dashboard();
         FragmentManager manager = getSupportFragmentManager();
@@ -115,20 +120,11 @@ public class NavDrawer extends AppCompatActivity
         nav_user.setText(username);
         nav_user_email = (TextView) hView.findViewById(R.id.drawer_header_subtitle);
         nav_user_email.setText(user_email);
+        myMenu = navigationView.getMenu();
 
         navigationView.setNavigationItemSelectedListener(this);
-        //containerView = navigationView;
 
-
-        //cannot get the views properly
-//        TextView drawer_header_name = (TextView) navigationView.findViewById(R.id.drawer_header_title);
-//        if (drawer_header_name != null)
-//            Log.e(TAG, "drawer header name is - "+drawer_header_name.toString());
-//        else
-//            Log.e(TAG, "drawer header name is still null");
-        TextView drawer_header_email = (TextView) findViewById(R.id.drawer_header_subtitle);
-
-
+        handleCurrentUserInfo();//whole process of retrieving current user data
     }
 
     @Override
@@ -144,10 +140,38 @@ public class NavDrawer extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.nav_drawer, menu);
         Log.e(TAG, "on create options menu");
-
+        getMenuInflater().inflate(R.menu.activity_nav_drawer_drawer, menu);
         return true;
+    }
+
+    public void updateOptionsMenu(Menu menu){
+        if (assignedCourses!=null) {
+            MenuItem item = null;
+            for (int i=0; i<assignedCourses.length; i++) {
+                switch (i){
+                    case 0 :
+                        item = menu.findItem(R.id.course1_drawer_item);
+                        break;
+                    case 1 :
+                        item = menu.findItem(R.id.course2_drawer_item);
+                        break;
+                    case 2 :
+                        item = menu.findItem(R.id.course3_drawer_item);
+                        break;
+                    case 3 :
+                        item = menu.findItem(R.id.course4_drawer_item);
+                        break;
+                    case 4 :
+                        item = menu.findItem(R.id.course5_drawer_item);
+                        break;
+                }
+                if (item!=null)
+                    item.setTitle(assignedCourses[i][0]);
+                else
+                    Log.e(TAG, "#168, menu item is null");
+            }
+        }
     }
 
     @Override
@@ -349,14 +373,15 @@ public class NavDrawer extends AppCompatActivity
                     }
                 });
                 //********************COURSES*******************
+                MenuItem drawerCourseMenu = (MenuItem) findViewById(R.id.course_materials_section);
                 DatabaseReference coursesRef = currentUserRef.child("courses_assigned");
-                coursesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                coursesRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Log.e(TAG, "onDataChange : COURSES");
                         long numberOfChildren = dataSnapshot.getChildrenCount();
                         numberOfCourses = (int) numberOfChildren;
-                        Log.e(TAG, "#200 : number of courses = "+ String.valueOf(numberOfCourses));
+                        Log.e(TAG, "#366 : number of courses = "+ String.valueOf(numberOfCourses));
                         assignedCourses = new String[numberOfCourses][2];
                         int i = 1;
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()){
@@ -372,11 +397,13 @@ public class NavDrawer extends AppCompatActivity
                         //checking if assigned courses are retrieved correctly
                         if (assignedCourses != null){
                             for (int k=0; k<assignedCourses.length; k++){
-                                Log.e(TAG, "#403: course "+String.valueOf(k)+" : "+
+                                Log.e(TAG, "#382: course "+String.valueOf(k)+" : "+
                                         assignedCourses[k][0]+" section "+assignedCourses[k][1]);
                             }
                         }else
-                            Log.e(TAG, "null assigned courses");
+                            Log.e(TAG, "#386 : null assigned courses");
+                        //filling up the drawer options
+                        updateOptionsMenu(myMenu);
                     }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
