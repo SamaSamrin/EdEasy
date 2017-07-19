@@ -12,7 +12,7 @@ import android.widget.TableLayout;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
-class CurrentMarksheet extends Activity {
+public class CurrentMarksheet extends Activity {
 
     private static final String TAG = "**Current Marksheet**";
     TabHost tabHost;
@@ -23,6 +23,7 @@ class CurrentMarksheet extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_marksheet);
        // Log.e(TAG, "activity reached");
@@ -31,7 +32,7 @@ class CurrentMarksheet extends Activity {
         //courseNames = new String[numberOfCourses];
         courseNames = new String[]{"CSE110", "MAT110", "PHY111", "ENG101"};
 
-        setGestureDetector();
+        //setGestureDetector();
         flipper = new ViewFlipper(this);
         tabHost = (TabHost) findViewById(R.id.current_marksheet_tab_host);
         tabHost.setup();
@@ -74,39 +75,5 @@ class CurrentMarksheet extends Activity {
         });
 
         //tabHost.on
-    }
-
-    void setGestureDetector(){
-        gestureDetector = new GestureDetector(this, new GestureDetector.OnGestureListener() {
-            @Override
-            public boolean onDown(MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public void onShowPress(MotionEvent e) {
-
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-                return false;
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                return false;
-            }
-
-            @Override
-            public void onLongPress(MotionEvent e) {
-
-            }
-
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                return false;
-            }
-        });
     }
 }

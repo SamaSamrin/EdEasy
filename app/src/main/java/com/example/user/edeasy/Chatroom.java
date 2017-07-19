@@ -6,12 +6,15 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,9 +22,27 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class Chatroom extends AppCompatActivity {
 
+    private static final String TAG = "**CHAT ROOM**";
+
     GridView chatsGrid;
+
+    String user_email;
+    FirebaseUser currentUser;
+    String username;
+    String[][] current_courses;
+    int numberOfCourses;
+    DatabaseReference studentsRef;
+    DatabaseReference currentUserRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +51,14 @@ public class Chatroom extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_chatroom);
         setSupportActionBar(toolbar);
 
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        studentsRef = FirebaseDatabase.getInstance().getReference().child("users/students");
+
+        handleCurrentUserInfo();//includes set up chats grid
+
+    }
+
+    void setUpChatsGrid(){
         chatsGrid = (GridView) findViewById(R.id.chats_grid);
         chatsGrid.setAdapter(new GridAdapterForChat(this));
         chatsGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -53,26 +82,115 @@ public class Chatroom extends AppCompatActivity {
                         intent = new Intent(Chatroom.this, ChatroomCourse5.class);
                         break;
                 }
+                if (intent!=null) {
+                    intent.putExtra("from", username);
+                    Log.e(TAG, "#87 : username = "+username);
+                    intent.putExtra("courseName", current_courses[i][0]);
+                    Log.e(TAG, "#89 : course name = "+current_courses[i][0]);
+                    intent.putExtra("courseSection", current_courses[i][1]);
+                    Log.e(TAG, "#91 : course section = "+current_courses[i][1]);
+                }else
+                    Log.e(TAG, "intent null");
                 startActivity(intent);
             }
         });
+    }
+
+    void handleCurrentUserInfo(){//whole process of retrieving current user data
+
+        if(currentUser != null){
+            Log.e(TAG, "line 321: current user is not null");
+            user_email = currentUser.getEmail();
+            Log.e(TAG, "line 325: current user email = " + user_email);
+
+            //retrieving user's info from database
+            int croppedEmailIdLimit = user_email.length() - 4;
+            String emailID = user_email.substring(0, croppedEmailIdLimit);
+            //assuming the user is a student
+            currentUserRef = studentsRef.child(emailID);
+            if (currentUserRef != null){
+                Log.e(TAG, "line 338: current user reference is - "+currentUserRef.toString());
+                //****************NAME*****************
+                DatabaseReference nameRef = currentUserRef.child("name");
+                nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        username = dataSnapshot.getValue(String.class);
+                        Log.e(TAG, "line 363: the current username from snapshot is = "+username);
+                        setUpChatsGrid();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e(TAG, "line 351: database error = "+databaseError.toString());
+                    }
+                });
+                //********************COURSES*******************
+                MenuItem drawerCourseMenu = (MenuItem) findViewById(R.id.course_materials_section);
+                DatabaseReference coursesRef = currentUserRef.child("courses_assigned");
+                coursesRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.e(TAG, "onDataChange : COURSES");
+                        long numberOfChildren = dataSnapshot.getChildrenCount();
+                        numberOfCourses = (int) numberOfChildren;
+                        Log.e(TAG, "#366 : number of courses = "+ String.valueOf(numberOfCourses));
+                        current_courses = new String[numberOfCourses][2];
+                        int i = 1;
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                            String key = postSnapshot.getKey();
+                            String course = postSnapshot.child("course_code").getValue(String.class);
+                            Log.e(TAG, "course = "+course);
+                            Long section = postSnapshot.child("section").getValue(long.class);
+                            Log.e(TAG, "section = "+String.valueOf(section));
+                            current_courses[i-1][0] = course;//courseID
+                            current_courses[i-1][1] = String.valueOf(section);//section
+                            i++;
+                        }
+                        //checking if assigned courses are retrieved correctly
+                        if (current_courses != null){
+                            for (int k=0; k<current_courses.length; k++){
+                                Log.e(TAG, "#382: course "+String.valueOf(k)+" : "+
+                                        current_courses[k][0]+" section "+current_courses[k][1]);
+                            }
+                        }else
+                            Log.e(TAG, "#386 : null assigned courses");
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            }else{
+                Log.e(TAG, "line 392: current user reference is null");
+            }
+        }else{
+            Log.e(TAG, "line 395: current Firebase user is null");
+        }
     }
 
 }
 
 class GridAdapterForChat extends BaseAdapter {
 
+    private String TAG = "**CHAT ADAPTER**";
+
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    DatabaseReference studentsReference = FirebaseDatabase.getInstance().getReference().child("users").child("students");
+    DatabaseReference teachersReference = FirebaseDatabase.getInstance().getReference().child("users").child("teachers");
+    DatabaseReference currentUserRef;
+    String user_email;
+    String username;
+    String[][] courses = new String[5][2];
+    int numberOfCourses;
+    TextView[] gridViews = new TextView[5];
     Context context;
-    String[] chatrooms = {"CSE110", "MAT110", "PHY111", "ENG101"};
+    String[] chatrooms = {"CSE100", "MAT100", "PHY100", "ENG100"};
     String[] colorBacks = {"#FFEF00", "#76FF03", "#FF8F00", "#00C4FF", "#E040FB" };
-//    int[] colors = {Color.CYAN, Color.YELLOW, Color.GREEN, Color.MAGENTA, Color.RED, Color.BLACK};
-//    int[] colors2 = {R.color.previousResultsBackg, R.color.currentRoutineBackg,
-//                      R.color.currentMarksheetBackg, R.color.courseMaterialsBackg,
-//                      R.color.calendarBackg, R.color.notificationsBackg};
 
     GridAdapterForChat(Context context){
         super();
         this.context = context;
+        handleCurrentUserInfo();
     }
 
     @Override
@@ -105,9 +223,95 @@ class GridAdapterForChat extends BaseAdapter {
         }else{
             itemText = (TextView) view;
         }
-        itemText.setText(chatrooms[i]);
+        Log.e(TAG, "#226 : i="+String.valueOf(i));
+        Log.e(TAG, "#227 : itemText="+itemText.toString());
+        gridViews[i] = itemText;
+        if (courses[i][0] != null) {
+            itemText.setText(courses[i][0]);
+            Log.e(TAG, "#231 : course name="+courses[i][0]);
+        }else {
+            itemText.setText(chatrooms[i]);
+            Log.e(TAG, "#234 : course null");
+        }
         itemText.setBackgroundColor(Color.parseColor(colorBacks[i]));
         return itemText;
     }
+
+    void handleCurrentUserInfo(){//whole process of retrieving current user data
+        //currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser != null){
+            Log.e(TAG, "line 321: current user is not null");
+            user_email = currentUser.getEmail();
+            Log.e(TAG, "line 325: current user email = " + user_email);
+
+            //retrieving user's info from database
+            int croppedEmailIdLimit = user_email.length() - 4;
+            String emailID = user_email.substring(0, croppedEmailIdLimit);
+            //assuming the user is a student
+            currentUserRef = studentsReference.child(emailID);
+            if (currentUserRef != null){
+                Log.e(TAG, "line 338: current user reference is - "+currentUserRef.toString());
+                //****************NAME*****************
+                DatabaseReference nameRef = currentUserRef.child("name");
+                nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        username = dataSnapshot.getValue(String.class);
+                        Log.e(TAG, "line 363: the current username from snapshot is = "+username);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e(TAG, "line 351: database error = "+databaseError.toString());
+                    }
+                });
+                //********************COURSES*******************
+                DatabaseReference coursesRef = currentUserRef.child("courses_assigned");
+                coursesRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.e(TAG, "onDataChange : COURSES");
+                        long numberOfChildren = dataSnapshot.getChildrenCount();
+                        numberOfCourses = (int) numberOfChildren;
+                        Log.e(TAG, "#366 : number of courses = "+ String.valueOf(numberOfCourses));
+                        courses = new String[numberOfCourses][2];
+                        gridViews = new TextView[numberOfCourses];
+                        int i = 1;
+                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                            String key = postSnapshot.getKey();
+                            String course = postSnapshot.child("course_code").getValue(String.class);
+                            Log.e(TAG, "course = "+course);
+                            Long section = postSnapshot.child("section").getValue(long.class);
+                            Log.e(TAG, "section = "+String.valueOf(section));
+                            courses[i-1][0] = course;//courseID
+                            courses[i-1][1] = String.valueOf(section);//section
+                            i++;
+                        }
+                        //checking if assigned courses are retrieved correctly
+                        if (courses != null){
+                            for (int k=0; k<courses.length; k++){
+                                Log.e(TAG, "#382: course "+String.valueOf(k)+" : "+
+                                        courses[k][0]+" section "+courses[k][1]);
+                                if (gridViews[k]!=null)
+                                    gridViews[k].setText(courses[k][0]);
+                                else
+                                    Log.e(TAG, "#197 : grid textview array null");
+                            }
+                        }else
+                            Log.e(TAG, "#386 : null assigned courses");
+                        //filling up the drawer options
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            }else{
+                Log.e(TAG, "line 392: current user reference is null");
+            }
+        }else{
+            Log.e(TAG, "line 395: current Firebase user is null");
+        }
+    }
+
 }
 
