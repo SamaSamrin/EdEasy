@@ -22,16 +22,4 @@ public class ChatroomCourse1 extends Activity {
         //userFrom = getOnlyName(userFrom);
         Log.e(TAG, "#21 : user from = "+userFrom);
     }
-
-    private String getOnlyName(String emailID){
-        String name="";
-        if (emailID != null) {
-            int indexOfAt = emailID.indexOf('@');
-            Log.e(TAG, "#32 : emailID=" + emailID + " index=" + indexOfAt);
-            name = emailID.substring(0, indexOfAt);
-        }else
-            Log.e(TAG, "#36 : email ID is null");
-
-        return  name;
-    }
 }
