@@ -31,8 +31,7 @@
         android:layout_centerHorizontal="true"
         android:background="@color/colorAccentLight"
         android:padding="5dp"
-        android:layout_margin="5dp"
-        android:text="Upload" />
+        android:layout_margin="5dp"/>
 
 
     </RelativeLayout>

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AutoCompleteTextView;
 
 public class ChatroomCourse1 extends Activity {
 
@@ -22,4 +24,9 @@ public class ChatroomCourse1 extends Activity {
         //userFrom = getOnlyName(userFrom);
         Log.e(TAG, "#21 : user from = "+userFrom);
     }
+
+    public void sendMessage(View view){
+
+    }
+
 }

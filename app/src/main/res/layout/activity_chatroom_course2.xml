@@ -29,8 +29,9 @@
         android:id="@+id/course2_chat_send_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccentLight"
+        android:background="@color/colorAccent"
         android:text="Send"
+        android:layout_margin="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_alignParentBottom="true"
@@ -38,14 +39,15 @@
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="50dp"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/course2_chatroom_list"
+        android:layout_margin="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:background="@color/brightYellow"
-        app:srcCompat="@drawable/happy" />
+        android:background="@color/colorAccent"
+        android:src="@drawable/smile"  />
 
 </android.widget.RelativeLayout>

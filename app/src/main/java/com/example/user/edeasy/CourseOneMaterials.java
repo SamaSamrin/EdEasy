@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.user.edeasy.R;
@@ -123,7 +124,16 @@ public class CourseOneMaterials extends Fragment {
         Log.e(TAG, "onCreateView");
         // Inflate the layout for this fragment
         courseMaterialsView = (ListView) container.findViewById(R.id.course1_materials_listview);
-        return inflater.inflate(R.layout.fragment_course_one_materials, container, false);
+        View v = inflater.inflate(R.layout.fragment_course_one_materials, container, false);
+        Button uploadOneButton = (Button)v.findViewById(R.id.course1_upload_button);
+        //set onclick listener
+        uploadOneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: do click function
+            }
+        });
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -222,10 +232,12 @@ public class CourseOneMaterials extends Fragment {
         }
     }
 
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
+     * to the activity a    nd potentially other fragments contained in that
      * activity.
      * <p>
      * See the Android Training lesson <a href=

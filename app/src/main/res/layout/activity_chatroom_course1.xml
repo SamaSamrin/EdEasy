@@ -34,8 +34,9 @@
         android:layout_margin="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:background="@color/colorAccentLight"
-        android:text="Send" />
+        android:background="@color/colorAccent"
+        android:text="Send"
+        android:onClick="sendMessage"/>
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -47,7 +48,7 @@
         android:layout_margin="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:background="@color/brightYellow"
-        app:srcCompat="@drawable/happy" />
+        android:background="@color/colorAccent"
+        android:src="@drawable/smile" />
 
 </android.widget.RelativeLayout>

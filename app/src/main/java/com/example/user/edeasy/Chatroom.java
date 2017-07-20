@@ -43,7 +43,7 @@ public class Chatroom extends AppCompatActivity {
     int numberOfCourses;
     DatabaseReference studentsRef;
     DatabaseReference currentUserRef;
-
+    GridAdapterForChat adapterForChat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +60,7 @@ public class Chatroom extends AppCompatActivity {
 
     void setUpChatsGrid(){
         chatsGrid = (GridView) findViewById(R.id.chats_grid);
+        adapterForChat = new GridAdapterForChat(this);
         chatsGrid.setAdapter(new GridAdapterForChat(this));
         chatsGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -147,6 +148,10 @@ public class Chatroom extends AppCompatActivity {
                             current_courses[i-1][1] = String.valueOf(section);//section
                             i++;
                         }
+                        if (adapterForChat!=null)
+                        adapterForChat.notifyDataSetChanged();
+                        else
+                            Log.e(TAG, "#154 : adapter for chat is null");
                         //checking if assigned courses are retrieved correctly
                         if (current_courses != null){
                             for (int k=0; k<current_courses.length; k++){
