@@ -72,6 +72,9 @@ public class NavDrawer extends AppCompatActivity
     TextView nav_user;
     TextView nav_user_email;
 
+    String courseOneName;
+    String courseTwoName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -230,6 +233,11 @@ public class NavDrawer extends AppCompatActivity
                 //Toolbar toolbar = (Toolbar) view.findViewById(R.id.dashboard_toolbar);
                 if(toolbar != null)
                     toolbar.setTitle(assignedCourses[0][0]);
+                Bundle args = new Bundle();
+                args.putString("username", username);
+                args.putString("course", assignedCourses[1][0]);
+                args.putString("section", assignedCourses[1][1]);
+                fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
             case (R.id.course2_drawer_item) :
@@ -329,30 +337,11 @@ public class NavDrawer extends AppCompatActivity
     }
 
     void handleCurrentUserInfo(){//whole process of retrieving current user data
-        if (bundle!=null){
-            if (bundle.getString("parent")!=null) {
-                Log.e(TAG, "line 304: bundle is not null");
-                username = bundle.getString("name");
-                user_email = bundle.getString("email");
-                user_role = bundle.getString("role");
-                if (user_role!=null)
-                    Log.e(TAG, "line 309: user role received from bundle is - "+user_role);
-                else
-                    Log.e(TAG, "line 310: user role received from bundle is null");
-                //user_key = bundle.getString("key");
-            }else{
-                Log.e(TAG, "line 315: bundle's parent key is null");
-            }
-        }else{
-            Log.e(TAG, "line 317: bundle is null");
-        }
-
+        Log.e(TAG, "handleCurrentUserInfo");
         if(currentUser != null){
-            Log.e(TAG, "line 321: current user is not null");
-            user_id = currentUser.getUid();
-            Log.e(TAG, "line 323: current user ID = "+user_id);
+            Log.e(TAG, "line 334: current user is not null");
             user_email = currentUser.getEmail();
-            Log.e(TAG, "line 325: current user email = " + user_email);
+            Log.e(TAG, "line 336: current user email = " + user_email);
 
             //retrieving user's info from database
             int croppedEmailIdLimit = user_email.length() - 4;
@@ -360,14 +349,14 @@ public class NavDrawer extends AppCompatActivity
             //assuming the user is a student
             currentUserRef = studentsDatabaseReference.child(emailID);
             if (currentUserRef != null){
-                Log.e(TAG, "line 338: current user reference is - "+currentUserRef.toString());
+                Log.e(TAG, "line 344: current user reference is - "+currentUserRef.toString());
                 //****************NAME*****************
                 DatabaseReference nameRef = currentUserRef.child("name");
                 nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         username = dataSnapshot.getValue(String.class);
-                        Log.e(TAG, "line 363: the current username from snapshot is = "+username);
+                        Log.e(TAG, "line 351: the current username from snapshot is = "+username);
                         nav_user.setText(username);
                         setUsername(username);
                     }
@@ -399,6 +388,7 @@ public class NavDrawer extends AppCompatActivity
                             assignedCourses[i-1][1] = String.valueOf(section);//section
                             i++;
                         }
+                        //NavDrawer.this.notifyAll();
                         //checking if assigned courses are retrieved correctly
                         if (assignedCourses != null){
                             for (int k=0; k<assignedCourses.length; k++){

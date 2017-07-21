@@ -91,27 +91,23 @@ public class CourseOneMaterials extends Fragment {
         Log.e(TAG, "onCreate");
         super.onCreate(savedInstanceState);
 
+        Bundle args = getArguments();
+        if (args!=null) {
+            courseName = args.getString("course");
+            Log.e(TAG, "#97 : course name = "+courseName);
+            sectionNumber = args.getString("section");
+            Log.e(TAG, "#99 : section number = "+sectionNumber);
+            username = args.getString("username");
+            Log.e(TAG, "#101 : username = "+username);
+        }else
+            Log.e(TAG, "#99 : received args is null");
+
         username = "COURSE ONE USERNAME";
         //Log.e(TAG, "#92: username is "+username);
 
         auth = FirebaseAuth.getInstance();
         currentUser = auth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        //Log.e(TAG, "#107 : database ref = "+databaseReference.toString());
-        String user_email;
-        if (currentUser!=null) {
-            user_email = currentUser.getEmail();
-            Log.e(TAG, "#95: current user email = "+user_email);
-            if (user_email!=null){
-                handleCurrentUserInfo(user_email);
-            }else{
-                Log.e(TAG, "user email null");
-            }
-        }else
-            Log.e(TAG, "#105: current user null");
-
-        courseName = "CSE110";
-        sectionNumber = "1";
         storageReference = FirebaseStorage.getInstance().getReference();
         courseOneFilesRef = storageReference.child("CSE").child(courseName).child(sectionNumber);
         Log.e(TAG, "#111: course reference = "+courseOneFilesRef.toString());
@@ -130,7 +126,7 @@ public class CourseOneMaterials extends Fragment {
         uploadOneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: do click function
+
             }
         });
         return v;
@@ -163,76 +159,6 @@ public class CourseOneMaterials extends Fragment {
         super.onDetach();
         mListener = null;
     }
-
-    void handleCurrentUserInfo(String user_email){//whole process of retrieving current user data
-
-        if (roleOfUser!=null)
-            Log.e(TAG, "#157: user role is - "+roleOfUser);
-        else
-            Log.e(TAG, "#159: user role is null");
-
-        if(currentUser != null){
-            Log.e(TAG, "#162: current user is not null");
-            user_email = currentUser.getEmail();
-            Log.e(TAG, "#164: current user email = " + user_email);
-            if (user_email!=null) {
-                int croppedEmailIdLimit = user_email.length() - 4;
-                String emailID = user_email.substring(0, croppedEmailIdLimit);
-                Log.e(TAG, "cropped email ID = "+emailID);
-                currentUserRef = databaseReference.child("users").child("students").child(emailID);
-                Log.e(TAG, " #170 : current user reference = "+currentUserRef.toString());
-            }else {
-                Log.e(TAG, "#172: user email is null");
-            }
-
-            if (currentUserRef != null){
-                DatabaseReference nameRef = currentUserRef.child("name");
-                nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        username = dataSnapshot.getValue(String.class);
-                        Log.e(TAG, "#181: the current username from snapshot is = "+username);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.e(TAG, "#186: database error = "+databaseError.toString());
-                    }
-                });
-
-                DatabaseReference coursesRef = currentUserRef.child("courses_assigned");
-                coursesRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        long numberOfChildren = dataSnapshot.getChildrenCount();
-                        numberOfCourses = (int) numberOfChildren;
-                        Log.e(TAG, "#200 : number of courses = "+ String.valueOf(numberOfCourses));
-                        assignedCourses = new String[numberOfCourses][2];
-                        int i = 1;
-                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()){
-                            //Log.e(TAG, "#206: i="+String.valueOf(i)+" , "+postSnapshot.child(String.valueOf(i)).child("section").toString());
-                            String key = postSnapshot.getKey();
-                            String course = postSnapshot.child("course_code").getValue(String.class);
-                            Log.e(TAG, "course = "+course);
-                            Long section = postSnapshot.child("section").getValue(long.class);
-                            Log.e(TAG, "section = "+String.valueOf(section));
-                            i++;
-                        }
-                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-            }else{
-                Log.e(TAG, "#190: current user reference is null");
-            }
-        }else{
-            Log.e(TAG, "#193: current Firebase user is null");
-        }
-    }
-
-
 
     /**
      * This interface must be implemented by activities that contain this

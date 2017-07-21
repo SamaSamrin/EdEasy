@@ -23,15 +23,18 @@
         android:layout_above="@+id/course1_upload_button"
         android:layout_alignEnd="@+id/course1_upload_button" />
 
-    <Button
-        android:id="@+id/course1_upload_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/colorAccentLight"
-        android:padding="5dp"
-        android:layout_margin="5dp"/>
+        <Button
+            android:id="@+id/course1_upload_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:background="@color/colorAccent"
+            android:padding="5dp"
+            android:text="Upload"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
 
     </RelativeLayout>
