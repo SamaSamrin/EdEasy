@@ -111,10 +111,9 @@ class ChatMessageAdapter extends BaseAdapter{
                 if (previousMessagesNumber>0){
                     for (DataSnapshot snap : dataSnapshot.getChildren()){
                         if (!snap.getKey().equals("description")){
-//                            HashMap<String, String> msg = (HashMap<String, String>)  snap.getValue();
-//                            Log.e(TAG, "#110: previous msg = "+msg);
-//                            if (msg!=null)
-//                                messages.add(msg.get(snap.getKey()));
+                            String key = snap.getKey();
+                            Log.e(TAG, "#115: key= "+key);
+                            messages.add(snap.getValue(String.class));
                         }
                     }
                     notifyDataSetChanged();
