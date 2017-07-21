@@ -13,6 +13,11 @@ class FriendlyMessage {
     public FriendlyMessage() {
     }
 
+    public FriendlyMessage(String text, String name) {
+        this.text = text;
+        this.name = name;
+    }
+
     public FriendlyMessage(String text, String name, String photoUrl) {
         this.text = text;
         this.name = name;
@@ -41,6 +46,10 @@ class FriendlyMessage {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public String toString(){
+        return "userfrom = "+name+" text = "+text;
     }
 }
 
