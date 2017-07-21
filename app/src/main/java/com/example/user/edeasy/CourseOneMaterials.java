@@ -1,8 +1,13 @@
 package com.example.user.edeasy;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,6 +18,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.user.edeasy.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,10 +29,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,9 +49,8 @@ import java.util.Map;
 public class CourseOneMaterials extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-
     private static final String TAG = "Course 1 Fragment";
+    final int RC_FILE_PICKER = 101;
     ListView courseMaterialsView;
 
     FirebaseAuth auth;
@@ -54,8 +64,15 @@ public class CourseOneMaterials extends Fragment {
     String courseName;
     String username;
     String sectionNumber;
-    int numberOfCourses = 0;
-    String[][] assignedCourses;
+//    int numberOfCourses = 0;
+//    String[][] assignedCourses;
+
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -102,9 +119,6 @@ public class CourseOneMaterials extends Fragment {
         }else
             Log.e(TAG, "#99 : received args is null");
 
-        username = "COURSE ONE USERNAME";
-        //Log.e(TAG, "#92: username is "+username);
-
         auth = FirebaseAuth.getInstance();
         currentUser = auth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -126,10 +140,54 @@ public class CourseOneMaterials extends Fragment {
         uploadOneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //open the storage on phone
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                startActivityForResult(Intent.createChooser(intent, "Choose a file"), RC_FILE_PICKER);
             }
         });
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==RC_FILE_PICKER){
+            if (resultCode == RESULT_OK){
+                Log.e(TAG, "file received - "+data.getData().getLastPathSegment());
+                Uri uri = data.getData();
+                //Uri file = Uri.fromFile(new File("path/to/images/rivers.jpg"));
+                String lastpath = uri.getLastPathSegment();
+               if (lastpath.contains("/")) {
+                   int begin = lastpath.indexOf('/');
+                   int length = lastpath.length();
+                   Log.e(TAG, "begin = "+String.valueOf(begin)+" length="+String.valueOf(length));
+                   lastpath = lastpath.substring(begin+1, length);
+               }
+               Log.e(TAG, "#151: last path segment = "+lastpath);
+                StorageReference newDocRef = courseOneFilesRef.child(lastpath);
+                UploadTask task = newDocRef.putFile(uri);
+                task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Uri uri = taskSnapshot.getDownloadUrl();
+                        if (uri!=null) {
+                            Log.e(TAG, "#155 : download url of doc = " + uri.toString());
+                            Log.e(TAG, "#156 : metadata of the doc = "+ taskSnapshot.getMetadata());
+                        }
+                    }
+                });
+                task.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "#167: upload failed due to: "+e.toString());
+                    }
+                });
+            }else if (resultCode == RESULT_CANCELED){
+                Log.e(TAG, "file not received");
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -158,6 +216,21 @@ public class CourseOneMaterials extends Fragment {
         Log.e(TAG, "onDetach");
         super.onDetach();
         mListener = null;
+    }
+
+    public static void verifyStoragePermissions(Activity activity) {
+        Log.e(TAG, "verifyStorage: activity name = "+activity.getLocalClassName());
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
     }
 
     /**

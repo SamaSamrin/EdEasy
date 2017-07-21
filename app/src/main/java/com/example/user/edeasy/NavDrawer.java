@@ -235,8 +235,8 @@ public class NavDrawer extends AppCompatActivity
                     toolbar.setTitle(assignedCourses[0][0]);
                 Bundle args = new Bundle();
                 args.putString("username", username);
-                args.putString("course", assignedCourses[1][0]);
-                args.putString("section", assignedCourses[1][1]);
+                args.putString("course", assignedCourses[0][0]);
+                args.putString("section", assignedCourses[0][1]);
                 fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
