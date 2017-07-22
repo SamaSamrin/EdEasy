@@ -13,16 +13,15 @@
 
         <ListView
             android:id="@+id/course1_materials_listview"
-            style="@android:style/Widget.ListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/course1_upload_button"
             android:layout_alignEnd="@+id/course1_upload_button"
             android:layout_alignParentTop="true"
-            android:layout_below="@+id/course1_upload_button"
+            android:layout_alignStart="@+id/course1_upload_button"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="@dimen/action_bar_height"
             android:padding="10dp" />
 
         <Button
