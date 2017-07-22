@@ -2,6 +2,7 @@ package com.example.user.edeasy;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -9,11 +10,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
@@ -29,10 +32,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,9 +71,10 @@ public class CourseOneMaterials extends Fragment {
     String courseName;
     String username;
     String sectionNumber;
-    int numberOfFiles;
-    String[][] files;
+    static int numberOfFiles;
     String[] fileNames;
+    String[] fileTypes;
+    int fileTypeEmptyIndex;
     String[] fileDownloadUrls;
     ListView courseMaterialsView;
     String lastpath; //the last part of the file you're going to upload
@@ -118,6 +124,8 @@ public class CourseOneMaterials extends Fragment {
         fileNames = new String[1];
         fileNames[0] = "Demo";
         fileDownloadUrls = new String[1];
+        fileTypes = new String[5];
+        fileTypeEmptyIndex = 0;
 
         Bundle args = getArguments();
         if (args!=null) {
@@ -134,7 +142,7 @@ public class CourseOneMaterials extends Fragment {
         currentUser = auth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         courseFileDownloadUrls = databaseReference.child("departments/CSE/courses").child(courseName).child("sections").child(sectionNumber).child("file_urls");
-        Log.e(TAG, "#127: file download urls referece = "+courseFileDownloadUrls.toString());
+        Log.e(TAG, "#127: file info reference = "+courseFileDownloadUrls.toString());
         storageReference = FirebaseStorage.getInstance().getReference();
         courseOneFilesRef = storageReference.child("CSE").child(courseName).child(sectionNumber);
         Log.e(TAG, "#111: course reference = "+courseOneFilesRef.toString());
@@ -153,6 +161,7 @@ public class CourseOneMaterials extends Fragment {
         adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, fileNames);
         courseMaterialsView.setAdapter(adapter);
         displayFiles();
+        setOnItemClickListener();//downloading files on click
 
         //upload button
         Button uploadOneButton = (Button)v.findViewById(R.id.course1_upload_button);
@@ -192,12 +201,15 @@ public class CourseOneMaterials extends Fragment {
                         Uri uri = taskSnapshot.getDownloadUrl();
                         if (uri!=null) {
                             Log.e(TAG, "#196");
-                            lastpath = lastpath.substring(0, lastpath.indexOf('.'));
+                            String name = lastpath.substring(0, lastpath.indexOf('.'));
+                            String type = lastpath.substring(lastpath.indexOf('.'), lastpath.length());
                             //Log.e(TAG, "#182 : download url of doc = " + uri.toString());
-                            DatabaseReference newRef = courseFileDownloadUrls.child(lastpath);
-                            //Log.e(TAG, "#184 : new ref in db = "+newRef.toString());
-                            newRef.setValue(uri.toString());
-                            //Log.e(TAG, "#156 : metadata url of the doc = "+ taskSnapshot.getMetadata());
+                            DatabaseReference newRef = courseFileDownloadUrls.push();
+                            Log.e(TAG, "#208 : new ref in db = "+newRef.toString());
+                            newRef.child("name").setValue(name);
+                            newRef.child("type").setValue(type);
+                            Log.e(TAG, "#211 : name & type of the doc = "+ name+type);
+                            displayFiles();
                         }
                     }
                 });
@@ -224,14 +236,19 @@ public class CourseOneMaterials extends Fragment {
                 numberOfFiles = (int) filesNumber;
                 Log.e(TAG, "#208: files number = "+numberOfFiles);
                 fileNames = new String[numberOfFiles];
-                fileDownloadUrls = new String[numberOfFiles];
+                fileTypes = new String[numberOfFiles];
                 int i = 0;
                 for (DataSnapshot snap : dataSnapshot.getChildren()){
-                    String key = snap.getKey();
-                    Log.e(TAG, "#214 : key="+key);
-                    fileNames[i] = key;
-                    String downloadUrl = snap.getValue(String.class);
-                    fileDownloadUrls[i] = downloadUrl;
+                    Log.e(TAG, "#242: children count = "+String.valueOf(dataSnapshot.getChildrenCount()));
+                    fileNames[i] = snap.child("name").getValue(String.class);
+                    String type = snap.child("type").getValue(String.class);
+                    fileNames[i] = fileNames[i]+"."+type;
+                    Log.e(TAG, "#243 : file name and type = "+fileNames[i]);
+//                    String key = snap.getKey();
+//                    Log.e(TAG, "#214 : key="+key);
+//                    fileNames[i] = key;
+//                    String downloadUrl = snap.getValue(String.class);
+//                    fileDownloadUrls[i] = downloadUrl;
                     i++;
                 }
                 updateListView(fileNames);
@@ -249,6 +266,39 @@ public class CourseOneMaterials extends Fragment {
         Log.e(TAG, "#247 : filenames 2 = "+fileNames[1] );
         adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, fileNames);
         courseMaterialsView.setAdapter(adapter);
+    }
+
+    void setOnItemClickListener(){
+        Log.e(TAG, "setOnItemClickListener");
+        courseMaterialsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                Log.e(TAG, "#265 : clicked position = "+String.valueOf(position));
+                // 1. Instantiate an AlertDialog.Builder with its constructor
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                // 2. Chain together various setter methods to set the dialog characteristics
+                builder.setMessage("Download?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+//                        Uri uri = Uri.parse(fileDownloadUrls[position]);
+//                        FileDownloadTask fileDownloadTask = courseOneFilesRef.getFile(uri);
+                        StorageReference fileRef = courseOneFilesRef.child(fileNames[position]);
+                        Log.e(TAG, "#275: file to download ref = "+fileRef.toString());
+                        //File file = new File(fileN);
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do nothing
+                    }
+                });
+                // 3. Get the AlertDialog from create()
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
