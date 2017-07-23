@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -38,12 +39,17 @@ public class ChatroomCourse1 extends Activity {
     String message;
     ListView conversationList;
     ListAdapter messageListAdapter;
-    ArrayList<String> messages;
+    //ArrayList<String> messages;
+    String[] messages;
+    String[] userFroms;
+    //DatabaseReference chatsRef;
+    int previousMessagesNumber;
 
     DatabaseReference chatsReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatroom_course1);
 
@@ -67,12 +73,59 @@ public class ChatroomCourse1 extends Activity {
         //initializing all views
         messageInput = (EditText) findViewById(R.id.course1_message_input);
         conversationList = (ListView) findViewById(R.id.course1_chatroom_list);
-        messages = new ArrayList<String>(0);
-        messageListAdapter = new ChatMessageAdapter(this, chatsReference);
+        messages = new String[1];
+        userFroms = new String[1];
+        messages[0] = "Hey";
+        userFroms[0] = userFrom;
+        getAllMessage();
+//        messageListAdapter = new ArrayAdapter<>(ChatroomCourse1.this,
+//                android.R.layout.simple_list_item_1, messages);
+        messageListAdapter = new ChatMessageAdapter(this, chatsReference,
+                messages, userFroms, userFrom);
         conversationList.setAdapter(messageListAdapter);
     }
 
+    void getAllMessage(){
+        Log.e(TAG, "getAllMessage");
+        chatsReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e(TAG, "Activity: onDataChange");
+                long messageNumber = dataSnapshot.getChildrenCount() - 1;
+                previousMessagesNumber = (int) messageNumber;
+                messages = new String[previousMessagesNumber];
+                //Log.e(TAG, "#105: number of previous messages = "+previousMessagesNumber);
+                if (previousMessagesNumber>0){
+                    int messageCounter = 0;
+                    for (DataSnapshot snap : dataSnapshot.getChildren()){
+                        if (!snap.getKey().equals("description")){
+                            String key = snap.getKey();
+                            String message = snap.child("text").getValue(String.class);
+                            String senderName = snap.child("name").getValue(String.class);
+                            //Log.e(TAG, "#115: key= "+key+" | message= "+message);
+                            if (senderName!=null){
+                                if (senderName.equals(userFrom)){}
+                                    //rightmost
+                                else{}
+                                    //leftmost
+                            }
+                            messages[messageCounter] = message;
+                            //messages.add(snap.child("message").getValue(String.class));
+                            //Toast.makeText(ChatroomCourse1.this, "message="+message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    ((BaseAdapter) messageListAdapter).notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void sendMessage(View view){
+        Log.e(TAG, "sendMessage");
         message = messageInput.getText().toString();
         Log.e(TAG, "#53 : message = "+message);
         messageInput.setText("");
@@ -82,7 +135,9 @@ public class ChatroomCourse1 extends Activity {
         FriendlyMessage friendlyMessage = new FriendlyMessage(message, userFrom );
         Log.e(TAG, "#85 : friendly message object = "+friendlyMessage.toString());
         newMsgRef.setValue(friendlyMessage);
+        getAllMessage();
     }
+
 
 }
 
@@ -91,72 +146,99 @@ class ChatMessageAdapter extends BaseAdapter{
     private final String TAG = "**MESSAGE ADAPTER**";
 
     Context context;
-    ArrayList<String> messages = new ArrayList<String>(0);
+//    ArrayList<String> messages = new ArrayList<String>(0);
+    String[] messages;
+    String[] senders;
+    String username;
     DatabaseReference chatsRef;
     int previousMessagesNumber;
+    private static LayoutInflater inflater = null;
 
-    ChatMessageAdapter(Context context, DatabaseReference chatsRef){
+    ChatMessageAdapter(Context context, DatabaseReference chatsRef,
+                       String[] messages, String[] senders, String username){
         super();
         this.context = context;
         this.chatsRef = chatsRef;
+        this.messages = messages;
+        this.senders = senders;
+        this.username = username;
         getAllMessage();
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-     void getAllMessage(){
-        chatsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                long messageNumber = dataSnapshot.getChildrenCount() - 1;
-                previousMessagesNumber = (int) messageNumber;
-                Log.e(TAG, "#105: number of previous messages = "+previousMessagesNumber);
-                if (previousMessagesNumber>0){
-                    for (DataSnapshot snap : dataSnapshot.getChildren()){
-                        if (!snap.getKey().equals("description")){
-                            String key = snap.getKey();
-                            String message = snap.child("text").getValue(String.class);
-                            Log.e(TAG, "#115: key= "+key+" | message= "+message);
-                            messages.add(snap.child("message").getValue(String.class));
-                            Toast.makeText(context, "message="+message, Toast.LENGTH_SHORT).show();
-                        }
-                    }
+     void getAllMessage() {
+         chatsRef.addValueEventListener(new ValueEventListener() {
+             @Override
+             public void onDataChange(DataSnapshot dataSnapshot) {
+                 Log.e(TAG, "Adapter: onDataChange");
+                 long messageNumber = dataSnapshot.getChildrenCount() - 1;
+                 previousMessagesNumber = (int) messageNumber;
+                 messages = new String[previousMessagesNumber];
+                 Log.e(TAG, "#105: number of previous messages = " + previousMessagesNumber);
+                 if (previousMessagesNumber > 0) {
+                     int messageCounter = 0;
+                     for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                         if (!snap.getKey().equals("description")) {
+                             String key = snap.getKey();
+                             String message = snap.child("text").getValue(String.class);
+                             String senderName = snap.child("name").getValue(String.class);
+                             Log.e(TAG, "#115: key= " + key + " | message= " + message);
+                             if (senderName != null) {
+                                 if (senderName.equals(username)) {
+                                 }
+                                 //rightmost
+                                 else {
+                                 }
+                                 //leftmost
+                             }
+                             Log.e(TAG, "message counter = "+String.valueOf(messageCounter));
+                             messages[messageCounter] = message;
+                             //messages.add(snap.child("message").getValue(String.class));
+                             //Toast.makeText(ChatroomCourse1.this, "message="+message, Toast.LENGTH_SHORT).show();
+                         }
+                         messageCounter++;
+                     }
                     notifyDataSetChanged();
-                }
-            }
+                 }
+             }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+             @Override
+             public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-    }
+             }
+         });
+     }
 
     @Override
     public int getCount() {
-        return 0;
+        if (messages!=null)
+            return messages.length;
+        else
+            return  0;
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return messages[position];
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        TextView messageView = (TextView) parent.findViewById(R.id.messageTextView);
-        TextView nameTextView;
-        if (convertView==null){
-            Activity activity = (Activity) context;
-            convertView = activity.getLayoutInflater().inflate(R.layout.item_message, parent, false);
-        }else{
-            nameTextView = (TextView) convertView.findViewById(R.id.nameTextView);
+        Log.e(TAG, "position="+position);
+        View vi = convertView;
+        if (vi == null)
+            vi = inflater.inflate(R.layout.list_item, null);
+        TextView text = (TextView) vi.findViewById(R.id.messageView);
+        if (messages[position]!=null) {
+            text.setText(messages[position]);
+            Log.e(TAG, "message at this position = " + messages[position]);
         }
-        EditText inputMessage = (EditText) parent.findViewById(R.id.course1_message_input);
-        messageView.setText(inputMessage.getText().toString());
-        return messageView;
+        //notifyDataSetChanged();
+        return vi;
     }
 }
