@@ -3,9 +3,12 @@ package com.example.user.edeasy;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.ActionBar;
+import android.widget.Toolbar;
 import android.text.Layout;
 import android.util.Log;
 import android.view.Gravity;
@@ -65,6 +68,12 @@ public class ChatroomCourse1 extends Activity {
         Log.e(TAG, "#34 : course name = "+courseName);
         section = intent.getStringExtra("section");
         Log.e(TAG, "#36 : section = "+section);
+
+        if (Build.VERSION.SDK_INT>=21) {
+            Toolbar toolbar = new Toolbar(this);
+            if (getActionBar()!=null)
+            getActionBar().setTitle(courseName+" Section "+section);
+        }
 
         //getting database reference to the respective chatroom
         if (courseName!=null & section != null) {
