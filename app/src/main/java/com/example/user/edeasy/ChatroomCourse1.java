@@ -5,7 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.constraint.ConstraintLayout;
+import android.text.Layout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -162,6 +166,7 @@ class ChatMessageAdapter extends BaseAdapter{
         this.messages = messages;
         this.senders = senders;
         this.username = username;
+        Log.e(TAG,"username="+username);
         getAllMessage();
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -174,6 +179,7 @@ class ChatMessageAdapter extends BaseAdapter{
                  long messageNumber = dataSnapshot.getChildrenCount() - 1;
                  previousMessagesNumber = (int) messageNumber;
                  messages = new String[previousMessagesNumber];
+                 senders = new String[previousMessagesNumber];
                  Log.e(TAG, "#105: number of previous messages = " + previousMessagesNumber);
                  if (previousMessagesNumber > 0) {
                      int messageCounter = 0;
@@ -182,16 +188,10 @@ class ChatMessageAdapter extends BaseAdapter{
                              String key = snap.getKey();
                              String message = snap.child("text").getValue(String.class);
                              String senderName = snap.child("name").getValue(String.class);
-                             Log.e(TAG, "#115: key= " + key + " | message= " + message);
-                             if (senderName != null) {
-                                 if (senderName.equals(username)) {
-                                 }
-                                 //rightmost
-                                 else {
-                                 }
-                                 //leftmost
-                             }
-                             Log.e(TAG, "message counter = "+String.valueOf(messageCounter));
+                             //Log.e(TAG, "#115: key= " + key + " | message= " + message);
+                             if (senderName != null)
+                                 senders[messageCounter] = senderName;
+                             //Log.e(TAG, "message counter = "+String.valueOf(messageCounter));
                              messages[messageCounter] = message;
                              //messages.add(snap.child("message").getValue(String.class));
                              //Toast.makeText(ChatroomCourse1.this, "message="+message, Toast.LENGTH_SHORT).show();
@@ -231,12 +231,23 @@ class ChatMessageAdapter extends BaseAdapter{
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.e(TAG, "position="+position);
         View vi = convertView;
-        if (vi == null)
-            vi = inflater.inflate(R.layout.list_item, null);
+        if (vi == null ) {
+            if (!senders[position].equals(username))
+               vi = inflater.inflate(R.layout.list_item_receiver, null);
+            else
+               vi = inflater.inflate(R.layout.list_item, null);
+        }
         TextView text = (TextView) vi.findViewById(R.id.messageView);
         if (messages[position]!=null) {
             text.setText(messages[position]);
             Log.e(TAG, "message at this position = " + messages[position]);
+            Log.e(TAG, "sender of this message = "+senders[position]);
+//            if (!senders[position].equals(username)){
+//                Log.e(TAG, "sender is not username");
+//                ((ConstraintLayout.LayoutParams)text.getLayoutParams()).setLayoutDirection(Layout.DIR_RIGHT_TO_LEFT);
+//            }else
+//                ((ConstraintLayout.LayoutParams)text.getLayoutParams()).setLayoutDirection(Layout.DIR_LEFT_TO_RIGHT);
+//            //((GridLayout.LayoutParams)button.getLayoutParams()).setGravity(int)
         }
         //notifyDataSetChanged();
         return vi;
