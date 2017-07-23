@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -38,6 +39,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +70,7 @@ public class CourseOneMaterials extends Fragment {
     FirebaseUser currentUser;
 
     String roleOfUser;
+    String departmentName;
     String courseName;
     String username;
     String sectionNumber;
@@ -129,6 +132,8 @@ public class CourseOneMaterials extends Fragment {
 
         Bundle args = getArguments();
         if (args!=null) {
+            departmentName = args.getString("department");
+            Log.e(TAG, "#136 : department = "+departmentName);
             courseName = args.getString("course");
             Log.e(TAG, "#97 : course name = "+courseName);
             sectionNumber = args.getString("section");
@@ -144,7 +149,7 @@ public class CourseOneMaterials extends Fragment {
         courseFileDownloadUrls = databaseReference.child("departments/CSE/courses").child(courseName).child("sections").child(sectionNumber).child("file_urls");
         Log.e(TAG, "#127: file info reference = "+courseFileDownloadUrls.toString());
         storageReference = FirebaseStorage.getInstance().getReference();
-        courseOneFilesRef = storageReference.child("CSE").child(courseName).child(sectionNumber);
+        courseOneFilesRef = storageReference.child(departmentName).child(courseName).child(sectionNumber);
         Log.e(TAG, "#111: course reference = "+courseOneFilesRef.toString());
     }
 
@@ -239,16 +244,10 @@ public class CourseOneMaterials extends Fragment {
                 fileTypes = new String[numberOfFiles];
                 int i = 0;
                 for (DataSnapshot snap : dataSnapshot.getChildren()){
-                    Log.e(TAG, "#242: children count = "+String.valueOf(dataSnapshot.getChildrenCount()));
                     fileNames[i] = snap.child("name").getValue(String.class);
                     String type = snap.child("type").getValue(String.class);
                     fileNames[i] = fileNames[i]+"."+type;
                     Log.e(TAG, "#243 : file name and type = "+fileNames[i]);
-//                    String key = snap.getKey();
-//                    Log.e(TAG, "#214 : key="+key);
-//                    fileNames[i] = key;
-//                    String downloadUrl = snap.getValue(String.class);
-//                    fileDownloadUrls[i] = downloadUrl;
                     i++;
                 }
                 updateListView(fileNames);
@@ -262,8 +261,6 @@ public class CourseOneMaterials extends Fragment {
     }
 
     void updateListView(String[] fileNames){
-        Log.e(TAG, "#247 : filenames 1 = "+fileNames[0] );
-        Log.e(TAG, "#247 : filenames 2 = "+fileNames[1] );
         adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, fileNames);
         courseMaterialsView.setAdapter(adapter);
     }
@@ -285,7 +282,28 @@ public class CourseOneMaterials extends Fragment {
 //                        FileDownloadTask fileDownloadTask = courseOneFilesRef.getFile(uri);
                         StorageReference fileRef = courseOneFilesRef.child(fileNames[position]);
                         Log.e(TAG, "#275: file to download ref = "+fileRef.toString());
-                        //File file = new File(fileN);
+                        String prefix = fileNames[position].substring(0, fileNames[position].indexOf('.'));
+                        String suffix = fileNames[position].substring(fileNames[position].indexOf('.'), fileNames[position].length());
+                        try {
+                            //getContext().getFilesDir()
+                            Log.e(TAG, "#286 : "+getContext().getExternalCacheDir().toString());
+                            File rootPath = new File(getContext().getExternalCacheDir()+"/Firebase", fileNames[position]);
+                            if(!rootPath.exists()) {
+                                boolean x = rootPath.mkdirs();
+                                if (!x)
+                                    Log.e(TAG, "#289 : make directories failed");
+                            }
+                            Log.e(TAG, "#291 : directory = "+rootPath);
+                            File file = new File(rootPath, fileNames[position]);
+                            fileRef.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                                    Log.e(TAG, "#296 : file download success");
+                                }
+                            });
+                        } catch (Exception e) {
+                            Log.e(TAG, "#300 : file creating error = "+e.toString());
+                        }
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {

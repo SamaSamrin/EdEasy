@@ -235,6 +235,7 @@ public class NavDrawer extends AppCompatActivity
                     toolbar.setTitle(assignedCourses[0][0]);
                 Bundle args = new Bundle();
                 args.putString("username", username);
+                args.putString("department", assignedCourses[0][0].substring(0,3));
                 args.putString("course", assignedCourses[0][0]);
                 args.putString("section", assignedCourses[0][1]);
                 fragment.setArguments(args);
@@ -242,22 +243,50 @@ public class NavDrawer extends AppCompatActivity
                 break;
             case (R.id.course2_drawer_item) :
                 fragment = new CourseTwoMaterials();
-                toolbar.setTitle(assignedCourses[1][0]);
+                if(toolbar != null)
+                    toolbar.setTitle(assignedCourses[1][0]);
+                args = new Bundle();
+                args.putString("username", username);
+                args.putString("department", assignedCourses[1][0].substring(0,3));
+                args.putString("course", assignedCourses[1][0]);
+                args.putString("section", assignedCourses[1][1]);
+                fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
             case (R.id.course3_drawer_item) :
                 fragment = new CourseThreeMaterials();
-                toolbar.setTitle(assignedCourses[2][0]);
+                if(toolbar != null)
+                    toolbar.setTitle(assignedCourses[2][0]);
+                args = new Bundle();
+                args.putString("username", username);
+                args.putString("department", assignedCourses[2][0].substring(0,3));
+                args.putString("course", assignedCourses[2][0]);
+                args.putString("section", assignedCourses[2][1]);
+                fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
             case (R.id.course4_drawer_item) :
                 fragment = new CourseFourMaterials();
-                toolbar.setTitle(assignedCourses[3][0]);
+                if(toolbar != null)
+                    toolbar.setTitle(assignedCourses[3][0]);
+                args = new Bundle();
+                args.putString("username", username);
+                args.putString("department", assignedCourses[3][0].substring(0,3));
+                args.putString("course", assignedCourses[3][0]);
+                args.putString("section", assignedCourses[3][1]);
+                fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
             case (R.id.course5_drawer_item) :
                 fragment = new CourseFiveMaterials();
-                toolbar.setTitle(assignedCourses[4][0]);
+                if(toolbar != null)
+                    toolbar.setTitle(assignedCourses[4][0]);
+                args = new Bundle();
+                args.putString("username", username);
+                args.putString("department", assignedCourses[4][0].substring(0,3));
+                args.putString("course", assignedCourses[4][0]);
+                args.putString("section", assignedCourses[4][1]);
+                fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
 //            case (R.id.settings_drawer_option) :

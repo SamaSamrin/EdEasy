@@ -17,7 +17,7 @@
             android:padding="10dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="@dimen/action_bar_height"
             android:layout_alignParentTop="true"
             android:layout_above="@+id/course5_upload_button"
             android:layout_alignEnd="@+id/course5_upload_button" />
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:background="@color/colorAccentLight"
+            android:background="@color/colorAccent"
             android:padding="5dp"
             android:layout_margin="5dp"
             android:text="Upload" />
