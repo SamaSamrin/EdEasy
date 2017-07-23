@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -112,8 +113,10 @@ class ChatMessageAdapter extends BaseAdapter{
                     for (DataSnapshot snap : dataSnapshot.getChildren()){
                         if (!snap.getKey().equals("description")){
                             String key = snap.getKey();
-                            Log.e(TAG, "#115: key= "+key);
-                            messages.add(snap.getValue(String.class));
+                            String message = snap.child("text").getValue(String.class);
+                            Log.e(TAG, "#115: key= "+key+" | message= "+message);
+                            messages.add(snap.child("message").getValue(String.class));
+                            Toast.makeText(context, "message="+message, Toast.LENGTH_SHORT).show();
                         }
                     }
                     notifyDataSetChanged();

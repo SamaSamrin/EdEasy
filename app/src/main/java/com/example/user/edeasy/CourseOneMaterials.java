@@ -22,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.user.edeasy.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -214,7 +215,7 @@ public class CourseOneMaterials extends Fragment {
                             newRef.child("name").setValue(name);
                             newRef.child("type").setValue(type);
                             Log.e(TAG, "#211 : name & type of the doc = "+ name+type);
-                            displayFiles();
+                            displayFiles();//to show the updated list
                         }
                     }
                 });
@@ -246,7 +247,7 @@ public class CourseOneMaterials extends Fragment {
                 for (DataSnapshot snap : dataSnapshot.getChildren()){
                     fileNames[i] = snap.child("name").getValue(String.class);
                     String type = snap.child("type").getValue(String.class);
-                    fileNames[i] = fileNames[i]+"."+type;
+                    fileNames[i] = fileNames[i]+type;
                     Log.e(TAG, "#243 : file name and type = "+fileNames[i]);
                     i++;
                 }
@@ -267,6 +268,7 @@ public class CourseOneMaterials extends Fragment {
 
     void setOnItemClickListener(){
         Log.e(TAG, "setOnItemClickListener");
+        //to download on click
         courseMaterialsView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -299,6 +301,8 @@ public class CourseOneMaterials extends Fragment {
                                 @Override
                                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                     Log.e(TAG, "#296 : file download success");
+                                    Toast.makeText(getContext(), "Download successful!", Toast.LENGTH_SHORT).show();
+                                    //taskSnapshot.
                                 }
                             });
                         } catch (Exception e) {
