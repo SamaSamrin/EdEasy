@@ -70,9 +70,8 @@ public class ChatroomCourse1 extends Activity {
         Log.e(TAG, "#36 : section = "+section);
 
         if (Build.VERSION.SDK_INT>=21) {
-            Toolbar toolbar = new Toolbar(this);
             if (getActionBar()!=null)
-            getActionBar().setTitle(courseName+" Section "+section);
+                getActionBar().setTitle(courseName+" Section "+section);//working :D
         }
 
         //getting database reference to the respective chatroom
@@ -249,8 +248,7 @@ class ChatMessageAdapter extends BaseAdapter{
         TextView text = (TextView) vi.findViewById(R.id.messageView);
         if (messages[position]!=null) {
             text.setText(messages[position]);
-            Log.e(TAG, "message at this position = " + messages[position]);
-            Log.e(TAG, "sender of this message = "+senders[position]);
+            Log.e(TAG, "message at this position = " + messages[position]+"sent by "+senders[position]);
 //            if (!senders[position].equals(username)){
 //                Log.e(TAG, "sender is not username");
 //                ((ConstraintLayout.LayoutParams)text.getLayoutParams()).setLayoutDirection(Layout.DIR_RIGHT_TO_LEFT);

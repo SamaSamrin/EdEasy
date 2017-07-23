@@ -52,6 +52,7 @@ public class NavDrawer extends AppCompatActivity
     String user_key;
     int numberOfCourses;
     String[][] assignedCourses;
+    String[] departments;
     MenuItem[] menuItems;
     User user;
 
@@ -235,7 +236,7 @@ public class NavDrawer extends AppCompatActivity
                     toolbar.setTitle(assignedCourses[0][0]);
                 Bundle args = new Bundle();
                 args.putString("username", username);
-                args.putString("department", assignedCourses[0][0].substring(0,3));
+                args.putString("department", departments[0]);
                 args.putString("course", assignedCourses[0][0]);
                 args.putString("section", assignedCourses[0][1]);
                 fragment.setArguments(args);
@@ -247,7 +248,7 @@ public class NavDrawer extends AppCompatActivity
                     toolbar.setTitle(assignedCourses[1][0]);
                 args = new Bundle();
                 args.putString("username", username);
-                args.putString("department", assignedCourses[1][0].substring(0,3));
+                args.putString("department", departments[1]);//assignedCourses[1][0].substring(0,3)
                 args.putString("course", assignedCourses[1][0]);
                 args.putString("section", assignedCourses[1][1]);
                 fragment.setArguments(args);
@@ -259,7 +260,7 @@ public class NavDrawer extends AppCompatActivity
                     toolbar.setTitle(assignedCourses[2][0]);
                 args = new Bundle();
                 args.putString("username", username);
-                args.putString("department", assignedCourses[2][0].substring(0,3));
+                args.putString("department", departments[2]);
                 args.putString("course", assignedCourses[2][0]);
                 args.putString("section", assignedCourses[2][1]);
                 fragment.setArguments(args);
@@ -271,7 +272,7 @@ public class NavDrawer extends AppCompatActivity
                     toolbar.setTitle(assignedCourses[3][0]);
                 args = new Bundle();
                 args.putString("username", username);
-                args.putString("department", assignedCourses[3][0].substring(0,3));
+                args.putString("department", departments[3]);
                 args.putString("course", assignedCourses[3][0]);
                 args.putString("section", assignedCourses[3][1]);
                 fragment.setArguments(args);
@@ -283,7 +284,7 @@ public class NavDrawer extends AppCompatActivity
                     toolbar.setTitle(assignedCourses[4][0]);
                 args = new Bundle();
                 args.putString("username", username);
-                args.putString("department", assignedCourses[4][0].substring(0,3));
+                args.putString("department", departments[4]);
                 args.putString("course", assignedCourses[4][0]);
                 args.putString("section", assignedCourses[4][1]);
                 fragment.setArguments(args);
@@ -388,6 +389,7 @@ public class NavDrawer extends AppCompatActivity
                         Log.e(TAG, "line 351: the current username from snapshot is = "+username);
                         nav_user.setText(username);
                         setUsername(username);
+                        nav_user_email.setText(user_email);
                     }
 
                     @Override
@@ -406,6 +408,7 @@ public class NavDrawer extends AppCompatActivity
                         numberOfCourses = (int) numberOfChildren;
                         Log.e(TAG, "#366 : number of courses = "+ String.valueOf(numberOfCourses));
                         assignedCourses = new String[numberOfCourses][2];
+                        departments = new String[numberOfCourses];
                         int i = 1;
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                             String key = postSnapshot.getKey();
@@ -415,6 +418,9 @@ public class NavDrawer extends AppCompatActivity
                             Log.e(TAG, "section = "+String.valueOf(section));
                             assignedCourses[i-1][0] = course;//courseID
                             assignedCourses[i-1][1] = String.valueOf(section);//section
+                            String department = postSnapshot.child("department").getValue(String.class);
+                            Log.e(TAG, "department = "+department);
+                            departments[i-1] = department;
                             i++;
                         }
                         //NavDrawer.this.notifyAll();
