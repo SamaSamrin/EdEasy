@@ -45,6 +45,7 @@ public class Welcome extends AppCompatActivity {
     String selectedRole = "";
     String username = "ANONYMOUS";
     String email;
+    String user_email = "";
     String password;
     String studentID;
     String department;
@@ -74,6 +75,7 @@ public class Welcome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        auth = FirebaseAuth.getInstance();
         databaseInitialization();
         authenticationInitialization();
         storageInitialization();
@@ -123,8 +125,9 @@ public class Welcome extends AppCompatActivity {
     void databaseInitialization() {
         Log.e(TAG, "databaseInitialization");
         database = FirebaseDatabase.getInstance();
-        Log.e(TAG, "database reference = "+database.getReference().toString());
+        //Log.e(TAG, "database reference = "+database.getReference().toString());
         studentsDatabaseReference = database.getReference("users").child("students");
+        Log.e(TAG, "students db ref = "+studentsDatabaseReference.toString());
         teachersDatabaseReference = database.getReference("users").child("teachers");
 
         attachStudentDatabaseListener();
@@ -133,10 +136,10 @@ public class Welcome extends AppCompatActivity {
 
     void authenticationInitialization(){
         Log.e(TAG, "authenticationInitialization");
-        auth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                Log.e(TAG, "onAuthStateChanged");
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user!=null) {
                     //user is signed in
@@ -152,19 +155,12 @@ public class Welcome extends AppCompatActivity {
                 }
                 else {
                     //user is signed out
-                    Log.e(TAG, "user signed out");
-                    //onSignedOut();
-//                    startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder()
-//                            .setIsSmartLockEnabled(false)
-//                            .setProviders(Arrays.asList(
-//                                    new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build(),
-//                                    new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()
-//                            ))
-//                            .build(), RC_SIGN_IN);
+                    Log.e(TAG, "#158: no current user");
+                    //whenSignedIn(username, email);
                 }
             }
         };
-
+        auth.addAuthStateListener(authStateListener);
     }
 
     void storageInitialization(){
@@ -199,7 +195,6 @@ public class Welcome extends AppCompatActivity {
     void whenSignedIn(String name, String email){
         Log.e(TAG, "whenSignedIn");
         Intent intent = new Intent(Welcome.this, NavDrawer.class);
-        String user_email = "";
         firebaseUser = auth.getCurrentUser();
         if (user != null) {
             user_email = user.getEmail();
@@ -210,10 +205,11 @@ public class Welcome extends AppCompatActivity {
             if (currentUserRef != null) {
                 Log.e(TAG, "line 211: current user reference is - " + currentUserRef.toString());
                 DatabaseReference nameRef = currentUserRef.child("name");
-                nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        username = dataSnapshot.getValue(String.class);
+                        username = dataSnapshot.child("name").getValue(String.class);
+                        user_email = dataSnapshot.child("email").getValue(String.class);
                         Log.e(TAG, "line 217: the current username from snapshot is = " + username);
                     }
 
@@ -269,15 +265,15 @@ public class Welcome extends AppCompatActivity {
     protected void onStart() {
         Log.e(TAG, "onStart");
         super.onStart();
-        auth.addAuthStateListener(authStateListener);
+        //auth.addAuthStateListener(authStateListener);
     }
 
     @Override
     protected void onStop() {
         Log.e(TAG, "onStop");
         super.onStop();
-        if(authStateListener != null)
-            auth.removeAuthStateListener(authStateListener);
+//        if(authStateListener != null)
+//            auth.removeAuthStateListener(authStateListener);
         detachDatabaseListeners();
     }
 
@@ -347,10 +343,12 @@ public class Welcome extends AppCompatActivity {
         studentsChildEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                user = dataSnapshot.getValue(User.class);
-                Log.e(TAG, "on child added, s="+s);
-                if(username!=null) username = user.getFull_name();
-                Log.e(TAG, "new student : username = "+username);
+               Log.e(TAG, "on child added, s="+s);
+                //if(username!=null)
+                    username = dataSnapshot.child("name").getValue(String.class);
+                user_email = dataSnapshot.child("email").getValue(String.class);
+                Log.e(TAG, "new student : username = "+username+" email="+user_email);
+
                 Toast.makeText(Welcome.this, "username is = "+username, Toast.LENGTH_SHORT).show();
             }
 
@@ -375,6 +373,28 @@ public class Welcome extends AppCompatActivity {
             }
         };
         studentsDatabaseReference.addChildEventListener(studentsChildEventListener);
+        studentsDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e(TAG, "valueEventListener : onDataChange");
+                if (auth.getCurrentUser()!=null)
+                    email = auth.getCurrentUser().getEmail();
+                else
+                    Log.e(TAG, "no current user");
+                //datasnapshot - whole students branch
+                Log.e(TAG, "email = "+email);
+                String user_key = "";
+                if (email!=null && !email.equals("")) {
+                    user_key = email.substring(0, email.indexOf('.'));
+                    Log.e(TAG, "username = " + dataSnapshot.child(user_key).child("name").getValue(String.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     void attachTeachersDatabaseListener(){
@@ -424,9 +444,11 @@ public class Welcome extends AppCompatActivity {
     void signIn(){
         //roleSelection();
         Log.e(TAG, "signIn");
-        Log.e(TAG, "selected role = "+selectedRole);
+        Log.e(TAG, "#435 : selected role = "+selectedRole);
         if (email!=null && password!=null ) {
             if (email.length()!=0 && password.length()!=0) {
+                Log.e(TAG, "#450 : AUTH SIGN IN email="+email+" pass="+password);
+                Log.e(TAG, "#451 : auth = "+auth.toString());
                 auth.signInWithEmailAndPassword(email, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
@@ -457,17 +479,22 @@ public class Welcome extends AppCompatActivity {
         //auth.signInWithEmailAndPassword(email, "student1");
         FirebaseUser user = auth.getCurrentUser();
         if (user==null)
-            Log.e(TAG, "line 458 / postSignIn: current user is null");
+            Log.e(TAG, "line 469 : postSignIn: current user is null");
         else
-            Log.e(TAG, "line 460 / postSignIn: current user is - "+user.getEmail());
+            Log.e(TAG, "line 471 : postSignIn: current user is - "+user.getEmail());
         whenSignedIn(username, email);
         Intent intent = new Intent(Welcome.this, NavDrawer.class);
         intent.putExtra("username", username);
         Log.e(TAG, "postSignIn: username = "+username);
         intent.putExtra("role", selectedRole);
         Log.e(TAG, "postSignIn: role = "+selectedRole);
-        intent.putExtra("email", email);
-        Log.e(TAG, "postSignIn: email = "+email);
+        if (user_email!=null) {
+            intent.putExtra("email", user_email);
+            Log.e("email", user_email);
+        }else {
+            intent.putExtra("email", email);
+            Log.e(TAG, "postSignIn: email = " + email);
+        }
         intent.putExtra("parent", "Welcome");
 //        if (user_key != null) {
 //            intent.putExtra("key", user_key);

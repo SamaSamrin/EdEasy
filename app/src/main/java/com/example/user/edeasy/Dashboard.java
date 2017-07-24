@@ -51,11 +51,11 @@ public class Dashboard extends Fragment {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_nav_drawer);
 
-        //Log.e(TAG, "Dashboard reached");
-//
-//        Intent intent = getIntent();
-//        username = intent.getStringExtra("username");
-//        email = intent.getStringExtra("email");
+        Log.e(TAG, "Dashboard reached");
+
+        Intent intent = getActivity().getIntent();
+        username = intent.getStringExtra("username");
+        email = intent.getStringExtra("email");
     }
 
     @Nullable
@@ -66,22 +66,8 @@ public class Dashboard extends Fragment {
 
         View view = inflater.inflate(R.layout.activity_dashboard, container, false);
 
-        //Log.e(TAG, "view = "+view.getId());
-
-//        Toolbar toolbar = (Toolbar) view.findViewById(R.id.dashboard_toolbar);
-//
-//        if(Build.VERSION.SDK_INT >= 21) {
-//            if(toolbar != null)
-//                getActivity().setActionBar(toolbar);
-//        }
-        //else
-            //actio(toolbar);
-
         dashboard_gv = (GridView) view.findViewById(R.id.dashboard_gridview);
 
-        //Log.e(TAG, "gridview id = "+dashboard_gv.getId());
-
-        //Log.e(TAG, "current API="+Build.VERSION.SDK_INT);
         if(Build.VERSION.SDK_INT >= 23)
             dashboard_gv.setAdapter(new GridAdapter(getContext()));
         else
