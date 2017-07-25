@@ -73,13 +73,14 @@ public class NavDrawer extends AppCompatActivity
     TextView nav_user;
     TextView nav_user_email;
 
-    String courseOneName;
-    String courseTwoName;
+    Fragment fragment;
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer);
+        Log.e(TAG, "onCreate");
         //containerView = (View) findViewById(R.id.nav_view);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -100,15 +101,8 @@ public class NavDrawer extends AppCompatActivity
 
         Fragment fragment = new Dashboard();
         FragmentManager manager = getSupportFragmentManager();
+        Bundle args = new Bundle();
         manager.beginTransaction().add(R.id.fragment_container,fragment).commit();
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -133,6 +127,7 @@ public class NavDrawer extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        Log.e(TAG, "onBackPressed");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -150,6 +145,7 @@ public class NavDrawer extends AppCompatActivity
     }
 
     public void updateOptionsMenu(Menu menu){
+        Log.e(TAG, "upateOptionsMenu");
         if (assignedCourses!=null) {
             MenuItem item = null;
             for (int i=0; i<assignedCourses.length; i++) {
@@ -184,7 +180,7 @@ public class NavDrawer extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        //Log.e(TAG, "on Options Item Selected");
+        Log.e(TAG, "on Options Item Selected");
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -209,6 +205,7 @@ public class NavDrawer extends AppCompatActivity
         int id = item.getItemId();
         Fragment fragment = new Dashboard();
         FragmentManager fragmentManager = getSupportFragmentManager();
+        Bundle args;
         //fragmentManager.beginTransaction().add(containerView.getId(), fragment).commit();
 
         Intent i = null;
@@ -217,10 +214,19 @@ public class NavDrawer extends AppCompatActivity
                 //loads dashboard activity
                 Log.e(TAG, "dashboard drawer");
                 fragment = new Dashboard();
-               // fragmentManager.beginTransaction().commit();//.addToBackStack(null).commit()
+                args = new Bundle();
+                if (currentUser!=null) {//always null
+                    Log.e(TAG, "#221 : current user is not null");
+                    args.putString("email", currentUser.getEmail());
+                    args.putString("username", username);
+                    args.putStringArray("departments", departments);
+                    args.putInt("numberOfCourses", numberOfCourses);
+                    for (int j=0; j<numberOfCourses; j++)
+                        args.putStringArray("course"+ String.valueOf(j+1),
+                                assignedCourses[j]);
+                    fragment.setArguments(args);
+                }
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                //i = new Intent(NavDrawer.this, Dashboard_Activity.class);
-//                startActivity(i);
                 break;
             case  (R.id.account_drawer_option) :
                 //loads account activity
@@ -234,7 +240,7 @@ public class NavDrawer extends AppCompatActivity
                 //Toolbar toolbar = (Toolbar) view.findViewById(R.id.dashboard_toolbar);
                 if(toolbar != null)
                     toolbar.setTitle(assignedCourses[0][0]);
-                Bundle args = new Bundle();
+                args = new Bundle();
                 args.putString("username", username);
                 args.putString("department", departments[0]);
                 args.putString("course", assignedCourses[0][0]);
@@ -313,6 +319,7 @@ public class NavDrawer extends AppCompatActivity
     }
 
     public void logOut(){
+        Log.e(TAG, "logOut");
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Log out")
                 .setMessage("Do you want to log out?")
@@ -353,6 +360,7 @@ public class NavDrawer extends AppCompatActivity
     }
 
     void databaseSingleEventListener(){
+        Log.e(TAG, "database single event listener");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -369,9 +377,9 @@ public class NavDrawer extends AppCompatActivity
     void handleCurrentUserInfo(){//whole process of retrieving current user data
         Log.e(TAG, "handleCurrentUserInfo");
         if(currentUser != null){
-            Log.e(TAG, "line 334: current user is not null");
+            Log.e(TAG, "line 377: current user is not null");
             user_email = currentUser.getEmail();
-            Log.e(TAG, "line 336: current user email = " + user_email);
+            Log.e(TAG, "line 379: current user email = " + user_email);
 
             //retrieving user's info from database
             int croppedEmailIdLimit = user_email.length() - 4;
@@ -385,8 +393,9 @@ public class NavDrawer extends AppCompatActivity
                 nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.e(TAG, "#392 : onDataChange");
                         username = dataSnapshot.getValue(String.class);
-                        Log.e(TAG, "line 351: the current username from snapshot is = "+username);
+                        Log.e(TAG, "#394: the current username from snapshot is = "+username);
                         nav_user.setText(username);
                         setUsername(username);
                         nav_user_email.setText(user_email);
@@ -394,7 +403,7 @@ public class NavDrawer extends AppCompatActivity
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.e(TAG, "line 351: database error = "+databaseError.toString());
+                        Log.e(TAG, "#402: database error = "+databaseError.toString());
                     }
                 });
                 //********************COURSES*******************
@@ -406,28 +415,26 @@ public class NavDrawer extends AppCompatActivity
                         Log.e(TAG, "onDataChange : COURSES");
                         long numberOfChildren = dataSnapshot.getChildrenCount();
                         numberOfCourses = (int) numberOfChildren;
-                        Log.e(TAG, "#366 : number of courses = "+ String.valueOf(numberOfCourses));
+                        Log.e(TAG, "#412 : number of courses = "+ String.valueOf(numberOfCourses));
                         assignedCourses = new String[numberOfCourses][2];
                         departments = new String[numberOfCourses];
                         int i = 1;
                         for (DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                             String key = postSnapshot.getKey();
                             String course = postSnapshot.child("course_code").getValue(String.class);
-                            Log.e(TAG, "course = "+course);
                             Long section = postSnapshot.child("section").getValue(long.class);
-                            Log.e(TAG, "section = "+String.valueOf(section));
                             assignedCourses[i-1][0] = course;//courseID
                             assignedCourses[i-1][1] = String.valueOf(section);//section
                             String department = postSnapshot.child("department").getValue(String.class);
-                            Log.e(TAG, "department = "+department);
                             departments[i-1] = department;
                             i++;
                         }
+
                         //NavDrawer.this.notifyAll();
                         //checking if assigned courses are retrieved correctly
                         if (assignedCourses != null){
                             for (int k=0; k<assignedCourses.length; k++){
-                                Log.e(TAG, "#382: course "+String.valueOf(k)+" : "+
+                                Log.e(TAG, "#382: department="+departments[k]+" course "+String.valueOf(k)+" : "+
                                         assignedCourses[k][0]+" section "+assignedCourses[k][1]);
                             }
                         }else
@@ -449,12 +456,12 @@ public class NavDrawer extends AppCompatActivity
 
     private void setUsername(String newname){
         username = newname;
-        Log.e(TAG, "line 387: setUsername: "+username);
+        Log.e(TAG, "line 468: setUsername: "+username);
     }
 
     public String getUsername(){
         handleCurrentUserInfo();
-        Log.e(TAG, "line 392: returning username = "+username);
+        Log.e(TAG, "line 473: returning username = "+username);
         return username;
     }
 
