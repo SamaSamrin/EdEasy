@@ -88,9 +88,13 @@ public class Dashboard extends Fragment {
         username = intent.getStringExtra("username");
         user_email = intent.getStringExtra("email");
         Log.e(TAG, "username="+username+" user_email="+user_email);
+        user_role = intent.getStringExtra("role");
+        Log.e(TAG, "#92 : role = "+user_role);
 
         Bundle args = getArguments();
         if (args!=null) {
+            user_role = args.getString("role");
+            Log.e(TAG, "#95 : role = "+user_role);
             departments = args.getStringArray("departments");
             if (departments!=null){
                 for (int i=0; i<departments.length; i++)
@@ -142,8 +146,11 @@ public class Dashboard extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //Toast.makeText(Dashboard.this, ""+String.valueOf(i+1), Toast.LENGTH_LONG).show();
                 Intent intent = null;
-                if(i==0){//done
+                if(i==0){
                     intent = new Intent(getContext(), PreviousResults.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("email", user_email);
+                    intent.putExtra("role", user_role);
                     startActivity(intent);
                 }else if(i==1){
                     intent = new Intent(getContext(), CurrentRoutine.class);

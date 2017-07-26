@@ -98,6 +98,10 @@ public class NavDrawer extends AppCompatActivity
         menuItems = new MenuItem[5];
 
         bundle = getIntent().getExtras();
+        if (bundle!=null) {
+            user_role = bundle.getString("role");
+            Log.e(TAG, "#103 : received role = "+user_role);
+        }
 
         Fragment fragment = new Dashboard();
         FragmentManager manager = getSupportFragmentManager();
@@ -219,6 +223,7 @@ public class NavDrawer extends AppCompatActivity
                     Log.e(TAG, "#221 : current user is not null");
                     args.putString("email", currentUser.getEmail());
                     args.putString("username", username);
+                    args.putString("role", user_role);
                     args.putStringArray("departments", departments);
                     args.putInt("numberOfCourses", numberOfCourses);
                     for (int j=0; j<numberOfCourses; j++)

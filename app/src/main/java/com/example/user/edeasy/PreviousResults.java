@@ -12,9 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CalendarView;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,10 +31,37 @@ import java.util.List;
 
 public class PreviousResults extends Activity {
 
+    private static final String TAG = "**Previous Results**";
+
     ExpandableListView previous_results_list ;
     List<String> semester_headers;
     HashMap<String, List<String>> semester_result_details;
     ExpandableListViewAdapterDemo adapter;
+
+    String username;
+    String user_email;
+    String user_role;
+
+    int numberOfCourses;
+    String[][] assignedCourses;
+    String[][] events;
+    String[] departments;
+    String course;
+    String section;
+    ListAdapter calendarAdapter;
+    int index = 1;
+    CalendarView calendarView;
+
+    FirebaseAuth auth;
+    DatabaseReference databaseReference;
+    DatabaseReference studentsDatabaseReference;
+    DatabaseReference teachersDatabaseReference;
+    StorageReference storageReference;
+    DatabaseReference allDepartmentsRef;
+    //DatabaseReference departmentRef;
+    FirebaseUser currentUser;
+    DatabaseReference currentUserRef;
+    DatabaseReference previousResultsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,21 +70,37 @@ public class PreviousResults extends Activity {
 
         previous_results_list = (ExpandableListView) findViewById(R.id.previous_results_semesterwise);
 
+        //getting all values from Dashboard Intent
+        Bundle bundle = getIntent().getExtras();
+        if (bundle!=null){
+            username = bundle.getString("username");
+            Log.e(TAG, "username = "+username);
+            user_email = bundle.getString("email");
+            Log.e(TAG, "email = "+user_email);
+            user_role = bundle.getString("role");
+            Log.e(TAG, "role = "+user_role);
+        }else
+            Log.e(TAG, "#49 : received bundle is null");
+
+        int croppedEmailIdLimit = user_email.length() - 4;
+        String emailID = user_email.substring(0, croppedEmailIdLimit);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        studentsDatabaseReference = databaseReference.child("users").child("students");
+        teachersDatabaseReference = databaseReference.child("users").child("teachers");
+
+        if (user_role.equals("student"))
+            currentUserRef = studentsDatabaseReference.child(emailID);
+        else if (user_role.equals("teacher"))
+            currentUserRef = teachersDatabaseReference.child(emailID);
+        Log.e(TAG, "current user ref = "+currentUserRef.toString());
+
+        storageReference = FirebaseStorage.getInstance().getReference();
+
         populateLists();
 
         adapter = new ExpandableListViewAdapterDemo(this, semester_headers, semester_result_details);
         previous_results_list.setAdapter(adapter);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
     }
 
     private void populateLists(){
@@ -110,8 +162,8 @@ public class PreviousResults extends Activity {
 class ExpandableListViewAdapterDemo extends BaseExpandableListAdapter{
 
     Context context = null;
-    private List<String> headersList;
-    private HashMap<String, List<String>> tableList;
+    private List<String> headersList;//semester's name and year
+    private HashMap<String, List<String>> tableList;//course names with its grades and gpa
 
     static final String TAG = "**Adapter Demo**";
 

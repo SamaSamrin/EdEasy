@@ -112,7 +112,7 @@ public class Welcome extends AppCompatActivity {
                     if (roleFromSignup.equals("teacher"))
                         attachTeachersDatabaseListener();
                     else if (roleFromSignup.equals("student"))
-                        attachTeachersDatabaseListener();
+                        attachStudentDatabaseListener();
                 }
                 createAccount();
                 //Toast.makeText(Welcome.this, "received password match? " + String.valueOf(passwordMatched), Toast.LENGTH_SHORT).show();
@@ -225,12 +225,26 @@ public class Welcome extends AppCompatActivity {
             Log.e(TAG, "line 229 : user is null");
         }
 
-        if (user_email.isEmpty())
+        if (user_email.isEmpty()) {
             intent.putExtra("email", email);
-        else
+            int croppedEmailIdLimit = email.length() - 4;
+            String emailID = email.substring(0, croppedEmailIdLimit);
+            if (studentsDatabaseReference.child(emailID) != null)
+                selectedRole = "student";
+            else if (teachersDatabaseReference.child(emailID) != null)
+                selectedRole = "teacher";
+        }else {
             intent.putExtra("email", user_email);
+            int croppedEmailIdLimit = user_email.length() - 4;
+            String emailID = user_email.substring(0, croppedEmailIdLimit);
+            if (studentsDatabaseReference.child(emailID) != null)
+                selectedRole = "student";
+            else if (teachersDatabaseReference.child(emailID) != null)
+                selectedRole = "teacher";
+        }
         intent.putExtra("name", username);
         intent.putExtra("parent", "Welcome");
+        Log.e(TAG, "#234 : selected role = "+selectedRole);
         intent.putExtra("role", selectedRole);
         startActivity(intent);
     }

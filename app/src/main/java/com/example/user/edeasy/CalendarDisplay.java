@@ -53,11 +53,9 @@ public class CalendarDisplay extends AppCompatActivity {
     DatabaseReference databaseReference;
     DatabaseReference studentsDatabaseReference;
     DatabaseReference teachersDatabaseReference;
-    DatabaseReference currentUserRef;
     StorageReference storageReference;
-    StorageReference CSE_storageRef;
     DatabaseReference allDepartmentsRef;
-    DatabaseReference departmentRef;
+    //DatabaseReference departmentRef;
     FirebaseUser currentUser;
 
 
@@ -91,7 +89,6 @@ public class CalendarDisplay extends AppCompatActivity {
         studentsDatabaseReference = databaseReference.child("users").child("students");
         teachersDatabaseReference = databaseReference.child("users").child("teachers");
         storageReference = FirebaseStorage.getInstance().getReference();
-        //CSE_storageRef = storageReference.child("CSE");
         allDepartmentsRef = databaseReference.child("departments");
         currentUser = auth.getCurrentUser();
 
