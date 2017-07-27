@@ -70,7 +70,7 @@ public class CourseOneMaterials extends Fragment {
     StorageReference courseOneFilesRef;
     FirebaseUser currentUser;
 
-    String roleOfUser;
+    String user_role;
     String departmentName;
     String courseName;
     String username;
@@ -134,20 +134,23 @@ public class CourseOneMaterials extends Fragment {
         Bundle args = getArguments();
         if (args!=null) {
             departmentName = args.getString("department");
-            Log.e(TAG, "#136 : department = "+departmentName);
+            Log.e(TAG, "#137 : department = "+departmentName);
             courseName = args.getString("course");
-            Log.e(TAG, "#97 : course name = "+courseName);
+            Log.e(TAG, "#139 : course name = "+courseName);
             sectionNumber = args.getString("section");
-            Log.e(TAG, "#99 : section number = "+sectionNumber);
+            Log.e(TAG, "#141 : section number = "+sectionNumber);
             username = args.getString("username");
-            Log.e(TAG, "#101 : username = "+username);
+            Log.e(TAG, "#143 : username = "+username);
+            user_role = args.getString("role");
+            Log.e(TAG, "#145 : role = "+user_role);
         }else
             Log.e(TAG, "#99 : received args is null");
 
         auth = FirebaseAuth.getInstance();
         currentUser = auth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        courseFileDownloadUrls = databaseReference.child("departments/CSE/courses").child(courseName).child("sections").child(sectionNumber).child("file_urls");
+        courseFileDownloadUrls = databaseReference.child("departments").child(departmentName)
+                .child("courses").child(courseName).child("sections").child(sectionNumber).child("file_urls");
         Log.e(TAG, "#127: file info reference = "+courseFileDownloadUrls.toString());
         storageReference = FirebaseStorage.getInstance().getReference();
         courseOneFilesRef = storageReference.child(departmentName).child(courseName).child(sectionNumber);
@@ -159,6 +162,12 @@ public class CourseOneMaterials extends Fragment {
                              Bundle savedInstanceState) {
         Log.e(TAG, "onCreateView");
         View v = inflater.inflate(R.layout.fragment_course_one_materials, container, false);
+        Button uploadButton = (Button) v.findViewById(R.id.course1_upload_button);
+
+        if (user_role.equals("student")){
+            uploadButton.setVisibility(View.VISIBLE);
+            Toast.makeText(getContext(), "You are allowed to upload in this folder", Toast.LENGTH_LONG).show();
+        }
 
         //displaying the files in ListView
         courseMaterialsView = (ListView) v.findViewById(R.id.course1_materials_listview);
@@ -170,8 +179,7 @@ public class CourseOneMaterials extends Fragment {
         setOnItemClickListener();//downloading files on click
 
         //upload button
-        Button uploadOneButton = (Button)v.findViewById(R.id.course1_upload_button);
-        uploadOneButton.setOnClickListener(new View.OnClickListener() {
+        uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -189,16 +197,13 @@ public class CourseOneMaterials extends Fragment {
         //uploading files
         if (requestCode==RC_UPLOAD_FILES){
             if (resultCode == RESULT_OK){
-                Log.e(TAG, "file received - "+data.getData().getLastPathSegment());
                 Uri uri = data.getData();
                 lastpath = uri.getLastPathSegment();
                if (lastpath.contains("/")) {
                    int begin = lastpath.indexOf('/');
                    int length = lastpath.length();
-                   Log.e(TAG, "begin = "+String.valueOf(begin)+" length="+String.valueOf(length));
                    lastpath = lastpath.substring(begin+1, length);
                }
-               Log.e(TAG, "#174: last path segment = "+lastpath);
                 StorageReference newDocRef = courseOneFilesRef.child(lastpath);
                 UploadTask task = newDocRef.putFile(uri);
                 task.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -209,7 +214,6 @@ public class CourseOneMaterials extends Fragment {
                             Log.e(TAG, "#196");
                             String name = lastpath.substring(0, lastpath.indexOf('.'));
                             String type = lastpath.substring(lastpath.indexOf('.'), lastpath.length());
-                            //Log.e(TAG, "#182 : download url of doc = " + uri.toString());
                             DatabaseReference newRef = courseFileDownloadUrls.push();
                             Log.e(TAG, "#208 : new ref in db = "+newRef.toString());
                             newRef.child("name").setValue(name);
@@ -245,9 +249,11 @@ public class CourseOneMaterials extends Fragment {
                 fileTypes = new String[numberOfFiles];
                 int i = 0;
                 for (DataSnapshot snap : dataSnapshot.getChildren()){
-                    fileNames[i] = snap.child("name").getValue(String.class);
+                    String name = snap.child("name").getValue(String.class);
                     String type = snap.child("type").getValue(String.class);
-                    fileNames[i] = fileNames[i]+type;
+                    fileNames[i] = name+type;
+                    if (!fileNames[i].contains("."))
+                        fileNames[i] = name+"."+type;
                     Log.e(TAG, "#243 : file name and type = "+fileNames[i]);
                     i++;
                 }
@@ -273,26 +279,21 @@ public class CourseOneMaterials extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 Log.e(TAG, "#265 : clicked position = "+String.valueOf(position));
-                // 1. Instantiate an AlertDialog.Builder with its constructor
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                // 2. Chain together various setter methods to set the dialog characteristics
                 builder.setMessage("Download?");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        Uri uri = Uri.parse(fileDownloadUrls[position]);
-//                        FileDownloadTask fileDownloadTask = courseOneFilesRef.getFile(uri);
                         StorageReference fileRef = courseOneFilesRef.child(fileNames[position]);
                         Log.e(TAG, "#275: file to download ref = "+fileRef.toString());
                         String prefix = fileNames[position].substring(0, fileNames[position].indexOf('.'));
                         String suffix = fileNames[position].substring(fileNames[position].indexOf('.'), fileNames[position].length());
                         try {
-                            //getContext().getFilesDir()
                             Log.e(TAG, "#286 : "+getContext().getExternalCacheDir().toString());
                             File rootPath = new File(getContext().getExternalCacheDir()+"/Firebase", fileNames[position]);
                             if(!rootPath.exists()) {
-                                boolean x = rootPath.mkdirs();
-                                if (!x)
+                                boolean dir = rootPath.mkdirs();
+                                if (!dir)
                                     Log.e(TAG, "#289 : make directories failed");
                             }
                             Log.e(TAG, "#291 : directory = "+rootPath);
@@ -302,7 +303,6 @@ public class CourseOneMaterials extends Fragment {
                                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                                     Log.e(TAG, "#296 : file download success");
                                     Toast.makeText(getContext(), "Download successful!", Toast.LENGTH_SHORT).show();
-                                    //taskSnapshot.
                                 }
                             });
                         } catch (Exception e) {

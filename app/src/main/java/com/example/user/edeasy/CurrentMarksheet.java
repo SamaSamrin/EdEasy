@@ -30,7 +30,7 @@ public class CurrentMarksheet extends Activity {
 
         numberOfCourses = 4;
         //courseNames = new String[numberOfCourses];
-        courseNames = new String[]{"CSE110", "MAT110", "PHY111", "ENG101"};
+        courseNames = new String[]{"CSE220", "STA201", "CSE251", "ECO101"};
 
         //setGestureDetector();
         flipper = new ViewFlipper(this);

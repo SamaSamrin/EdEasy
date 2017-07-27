@@ -250,6 +250,7 @@ public class NavDrawer extends AppCompatActivity
                 args.putString("department", departments[0]);
                 args.putString("course", assignedCourses[0][0]);
                 args.putString("section", assignedCourses[0][1]);
+                args.putString("role", user_role);
                 fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
@@ -262,6 +263,7 @@ public class NavDrawer extends AppCompatActivity
                 args.putString("department", departments[1]);//assignedCourses[1][0].substring(0,3)
                 args.putString("course", assignedCourses[1][0]);
                 args.putString("section", assignedCourses[1][1]);
+                args.putString("role", user_role);
                 fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
@@ -274,6 +276,7 @@ public class NavDrawer extends AppCompatActivity
                 args.putString("department", departments[2]);
                 args.putString("course", assignedCourses[2][0]);
                 args.putString("section", assignedCourses[2][1]);
+                args.putString("role", user_role);
                 fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
@@ -286,6 +289,7 @@ public class NavDrawer extends AppCompatActivity
                 args.putString("department", departments[3]);
                 args.putString("course", assignedCourses[3][0]);
                 args.putString("section", assignedCourses[3][1]);
+                args.putString("role", user_role);
                 fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
@@ -298,6 +302,7 @@ public class NavDrawer extends AppCompatActivity
                 args.putString("department", departments[4]);
                 args.putString("course", assignedCourses[4][0]);
                 args.putString("section", assignedCourses[4][1]);
+                args.putString("role", user_role);
                 fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
@@ -434,16 +439,6 @@ public class NavDrawer extends AppCompatActivity
                             departments[i-1] = department;
                             i++;
                         }
-
-                        //NavDrawer.this.notifyAll();
-                        //checking if assigned courses are retrieved correctly
-                        if (assignedCourses != null){
-                            for (int k=0; k<assignedCourses.length; k++){
-                                Log.e(TAG, "#382: department="+departments[k]+" course "+String.valueOf(k)+" : "+
-                                        assignedCourses[k][0]+" section "+assignedCourses[k][1]);
-                            }
-                        }else
-                            Log.e(TAG, "#386 : null assigned courses");
                         //filling up the drawer options
                         updateOptionsMenu(myMenu);
                     }

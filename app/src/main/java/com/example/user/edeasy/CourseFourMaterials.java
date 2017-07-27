@@ -19,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -131,13 +132,16 @@ public class CourseFourMaterials extends Fragment {
             Log.e(TAG, "#99 : section number = "+sectionNumber);
             username = args.getString("username");
             Log.e(TAG, "#101 : username = "+username);
+            roleOfUser = args.getString("role");
+            Log.e(TAG, "#135 : role = "+roleOfUser);
         }else
             Log.e(TAG, "#99 : received args is null");
 
         auth = FirebaseAuth.getInstance();
         currentUser = auth.getCurrentUser();
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        courseFileDownloadUrls = databaseReference.child("departments/CSE/courses").child(courseName).child("sections").child(sectionNumber).child("file_urls");
+        courseFileDownloadUrls = databaseReference.child("departments").child(departmentName)
+                .child("courses").child(courseName).child("sections").child(sectionNumber).child("file_urls");
         Log.e(TAG, "#127: file info reference = "+courseFileDownloadUrls.toString());
         storageReference = FirebaseStorage.getInstance().getReference();
         courseOneFilesRef = storageReference.child(departmentName).child(courseName).child(sectionNumber);
@@ -148,10 +152,16 @@ public class CourseFourMaterials extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Log.e(TAG, "onCreateView");
-        View v = inflater.inflate(R.layout.fragment_course_three_materials, container, false);
+        View v = inflater.inflate(R.layout.fragment_course_four_materials, container, false);
+        Button uploadButton = (Button) v.findViewById(R.id.course4_upload_button);
+
+        if (roleOfUser.equals("student")){
+            uploadButton.setVisibility(View.VISIBLE);
+            Toast.makeText(getContext(), "You are allowed to upload in this folder", Toast.LENGTH_LONG).show();
+        }
 
         //displaying the files in ListView
-        courseMaterialsView = (ListView) v.findViewById(R.id.course3_materials_listview);
+        courseMaterialsView = (ListView) v.findViewById(R.id.course4_materials_listview);
         if (courseMaterialsView==null)
             Log.e(TAG, "course listview is null");
         adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, fileNames);
@@ -160,8 +170,7 @@ public class CourseFourMaterials extends Fragment {
         setOnItemClickListener();//downloading files on click
 
         //upload button
-        Button uploadOneButton = (Button)v.findViewById(R.id.course3_upload_button);
-        uploadOneButton.setOnClickListener(new View.OnClickListener() {
+        uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);

@@ -113,28 +113,34 @@ public class CalendarDisplay extends AppCompatActivity {
         allDepartmentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (int i=0; i<numberOfCourses; i++) {
-                    DataSnapshot ds = dataSnapshot.child(departments[i])
-                            .child("courses").child(assignedCourses[i][0])
-                            .child("sections").child(assignedCourses[i][1])
-                            .child("events");
+                //retrieving events from dataSnapshot
+                DataSnapshot ds = dataSnapshot.child("CSE")
+                        .child("courses").child("CSE220")
+                        .child("sections").child(assignedCourses[0][1])
+                        .child("events");
+                int i = 0;
+                //for (int i=0; i<numberOfCourses; i++) {
+//                    DataSnapshot ds = dataSnapshot.child(departments[i])
+//                            .child("courses").child(assignedCourses[i][0])
+//                            .child("sections").child(assignedCourses[i][1])
+//                            .child("events");
                     long eventsCount = ds.getChildrenCount();
                     int numberOfEvents = (int) eventsCount;
                     Log.e(TAG, "#104 : " + String.valueOf(numberOfEvents));
                     for (DataSnapshot snap : ds.getChildren()) {
-                        //Log.e(TAG, "index=" + String.valueOf(i));
                         events[i][0] = snap.child("name").getValue(String.class);
                         Log.e(TAG, "#106 : event name = " + events[i][0]);
                         events[i][1] = snap.child("due date").getValue(String.class);
                         Log.e(TAG, "#110 : due date = " + events[i][1]);
+                        i++;
                     }
+
+                    //applying it on the CalendarView Adapter
                     calendarAdapter = new CalendarEventsAdapter(CalendarDisplay.this,
                             events, calendarView);
                     eventsView.setAdapter(calendarAdapter);
-                    //index++;
-
                 }
-            }
+            //}
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -187,6 +193,7 @@ class CalendarEventsAdapter extends BaseAdapter{
                 String month = convertToMonthName(sections[1]);
                 String year = sections[2];
                 dateInWords = month + " " + day + "," + year;
+                Log.e(TAG, "date in words = "+dateInWords);
             }else {
                 Log.e(TAG, "splitted array length is zero ");
                 dateInWords = date;
@@ -341,7 +348,10 @@ class CalendarEventsAdapter extends BaseAdapter{
 //                event_tv.setText("");
 //                date_tv.setText("");
 //            }
-        }
+        }else{
+                event_tv.setText("");
+                date_tv.setText("");
+            }
         return view;
     }
 }

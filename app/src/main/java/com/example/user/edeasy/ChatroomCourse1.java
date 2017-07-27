@@ -49,6 +49,7 @@ public class ChatroomCourse1 extends Activity {
     //ArrayList<String> messages;
     String[] messages;
     String[] userFroms;
+    String[] senders;
     //DatabaseReference chatsRef;
     int previousMessagesNumber;
 
@@ -106,24 +107,15 @@ public class ChatroomCourse1 extends Activity {
                 long messageNumber = dataSnapshot.getChildrenCount() - 1;
                 previousMessagesNumber = (int) messageNumber;
                 messages = new String[previousMessagesNumber];
-                //Log.e(TAG, "#105: number of previous messages = "+previousMessagesNumber);
+                senders = new String[previousMessagesNumber];
                 if (previousMessagesNumber>0){
                     int messageCounter = 0;
                     for (DataSnapshot snap : dataSnapshot.getChildren()){
                         if (!snap.getKey().equals("description")){
-                            String key = snap.getKey();
                             String message = snap.child("text").getValue(String.class);
                             String senderName = snap.child("name").getValue(String.class);
-                            //Log.e(TAG, "#115: key= "+key+" | message= "+message);
-                            if (senderName!=null){
-                                if (senderName.equals(userFrom)){}
-                                    //rightmost
-                                else{}
-                                    //leftmost
-                            }
                             messages[messageCounter] = message;
-                            //messages.add(snap.child("message").getValue(String.class));
-                            //Toast.makeText(ChatroomCourse1.this, "message="+message, Toast.LENGTH_SHORT).show();
+                            senders[messageCounter] = senderName;
                         }
                     }
                     ((BaseAdapter) messageListAdapter).notifyDataSetChanged();
@@ -139,13 +131,10 @@ public class ChatroomCourse1 extends Activity {
     public void sendMessage(View view){
         Log.e(TAG, "sendMessage");
         message = messageInput.getText().toString();
-        Log.e(TAG, "#53 : message = "+message);
         messageInput.setText("");
         messageInput.setHint("");
         DatabaseReference newMsgRef = chatsReference.push();
-        Log.e(TAG, "#83: new message ref = "+newMsgRef.toString());
         FriendlyMessage friendlyMessage = new FriendlyMessage(message, userFrom );
-        Log.e(TAG, "#85 : friendly message object = "+friendlyMessage.toString());
         newMsgRef.setValue(friendlyMessage);
         getAllMessage();
     }
@@ -192,18 +181,14 @@ class ChatMessageAdapter extends BaseAdapter{
                  if (previousMessagesNumber > 0) {
                      int messageCounter = 0;
                      for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                         if (!snap.getKey().equals("description")) {
+                         if (!snap.getKey().equals("description") && messageCounter<previousMessagesNumber) {
                              String key = snap.getKey();
                              String message = snap.child("text").getValue(String.class);
                              String senderName = snap.child("name").getValue(String.class);
-                             //Log.e(TAG, "#115: key= " + key + " | message= " + message);
                              if (senderName != null)
                                  senders[messageCounter] = senderName;
-                             //Log.e(TAG, "message counter = "+String.valueOf(messageCounter));
                              messages[messageCounter] = message;
-                             //messages.add(snap.child("message").getValue(String.class));
-                             //Toast.makeText(ChatroomCourse1.this, "message="+message, Toast.LENGTH_SHORT).show();
-                         }
+                            }
                          messageCounter++;
                      }
                     notifyDataSetChanged();

@@ -34,7 +34,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:layout_toStartOf="@+id/user_chat_icon"
-        android:gravity="center_horizontal"
+        android:maxLines="5"
         android:padding="3dp"
         android:text="Hi! Hello! "
         android:textColor="@color/blackTextColor"

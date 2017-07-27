@@ -131,6 +131,8 @@ public class CourseFiveMaterials extends Fragment {
             Log.e(TAG, "#99 : section number = "+sectionNumber);
             username = args.getString("username");
             Log.e(TAG, "#101 : username = "+username);
+            roleOfUser = args.getString("role");
+            Log.e(TAG, "#135 : role = "+roleOfUser);
         }else
             Log.e(TAG, "#99 : received args is null");
 
