@@ -50,11 +50,10 @@ public class PreviousResults extends Activity {
     int numberOfCompletedCourses;//of a particular previous semester
     int numberOfPreviousSemester;
     String[] departments;
-    List [] resultLists;
+    int[] numberOfCoursesDone;
+    List<String> resultList;
     String course;
     String section;
-    int index = 1;
-    int resultIndex = 0;
 
     FirebaseAuth auth;
     DatabaseReference databaseReference;
@@ -99,123 +98,140 @@ public class PreviousResults extends Activity {
 
         semester_headers = new ArrayList<String>();
         semester_result_details = new HashMap<String, List<String>>();
+        numberOfCoursesDone = new int[4];
 
         populateLists();
 
-        Log.e(TAG, "details size = "+semester_result_details.size()+" headers size = "+semester_headers.size());
+        //Log.e(TAG, "details size = "+semester_result_details.size()+" headers size = "+semester_headers.size());
 
-        adapter = new ExpandableListViewAdapterDemo(this, semester_headers, semester_result_details);
+        adapter = new ExpandableListViewAdapterDemo(this, semester_headers, semester_result_details, numberOfCoursesDone);
         previous_results_list.setAdapter(adapter);
     }
 
     private void populateLists(){
 
-//        previousResultsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                long count = dataSnapshot.getChildrenCount();
-//                numberOfPreviousSemester = (int) count;
-//                resultLists = new List[numberOfPreviousSemester];
-//                Log.e(TAG, "number of previous semesters = "+numberOfPreviousSemester);
-//                for (DataSnapshot snap : dataSnapshot.getChildren()) {
-//                    String semester = snap.getKey();
-//                    semester = reverseName(semester);
-//                    //semester_headers.add(semester);//semester's name
-//                    long c = snap.getChildrenCount();
-//                    numberOfCompletedCourses = (int) c;
-//                    int index = 0;
-//                    resultLists[resultIndex] = new ArrayList();
-//                    String[] courses = new String[numberOfCompletedCourses];
-//                    String[] grades = new String[numberOfCompletedCourses];
-//                    Double[] gpas = new Double[numberOfCompletedCourses];
-//                    for (DataSnapshot snapChild : snap.getChildren()){
-//                        courses[index] = snapChild.getKey();//coursename
-//                        if(snapChild.child("gpa").getValue(Double.class)!=null) {
-//                            gpas[index] = snapChild.child("gpa").getValue(Double.class);//gpa
-//                        }
-//                        grades[index] = String.valueOf(snapChild.child("grade").getValue(String.class));//grade
-//                        index++;
-//                    }
+        previousResultsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long count = dataSnapshot.getChildrenCount();
+                numberOfPreviousSemester = (int) count;
+                numberOfCoursesDone = new int[numberOfPreviousSemester];
+                resultList = new ArrayList<String>();
+                Log.e(TAG, "number of previous semesters = "+numberOfPreviousSemester);
+                int semesterCount = 0;
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
+                    String semester = snap.getKey();
+                    semester = reverseName(semester);
+                    semester_headers.add(semester);//semester's name
+                    long c = snap.getChildrenCount();
+                    numberOfCompletedCourses = (int) c;
+                    Log.e(TAG, "semester # "+semesterCount+", courses number = "+numberOfCompletedCourses);
+                    numberOfCoursesDone[semesterCount] = numberOfCompletedCourses;
+                    int index = 0;
+                    //resultLists[resultIndex] = new ArrayList<String>();
+                    String[] courses = new String[numberOfCompletedCourses];
+                    String[] grades = new String[numberOfCompletedCourses];
+                    Double[] gpas = new Double[numberOfCompletedCourses];
+                    for (DataSnapshot snapChild : snap.getChildren()){
+                        //courses[index] = snapChild.getKey();//coursename
+                        Log.e(TAG, "#136 : course name = "+snapChild.getKey());
+                        resultList.add(snapChild.getKey());
+                        if(snapChild.child("gpa").getValue(Double.class)!=null) {
+                            gpas[index] = snapChild.child("gpa").getValue(Double.class);//gpa
+                        }
+                        //Log.e(TAG, "#141 : gpa = "+String.valueOf(gpas[index]));
+                        resultList.add(String.valueOf(gpas[index]));
+                        //Log.e(TAG, "#143 : grade = "+snapChild.child("grade").getValue(String.class));
+                        resultList.add(snapChild.child("grade").getValue(String.class));
+                        //grades[index] = String.valueOf(snapChild.child("grade").getValue(String.class));//grade
+                        index++;
+                        semester_result_details.put(semester, resultList);
+                        adapter.notifyDataSetChanged();
+                    }
+                    semesterCount++;
+                    Log.e(TAG, "#151 : details size = "+semester_result_details.size());
+                    adapter = new ExpandableListViewAdapterDemo(PreviousResults.this,
+                            semester_headers, semester_result_details, numberOfCoursesDone);
+                    previous_results_list.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
 //                    resultLists[resultIndex] = addAllToList(resultLists[resultIndex], courses);//first all course names
 //                    resultLists[resultIndex] = addAllToList(resultLists[resultIndex], gpas);//second all corresponding gpas
 //                    resultLists[resultIndex] = addAllToList(resultLists[resultIndex], grades);//lastly all corresponding grades
 //                    //semester_result_details.put(semester, resultLists[resultIndex]);
-//                }
-//                printAll();
-//               // adapter.notifyDataSetChanged();
-//            }
+                }
+                //printAll();
+               // adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 //
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
+//        semester_headers.add("Spring 2016");
+//        semester_headers.add("Summer 2016");
+//        semester_headers.add("Fall 2016");
+//        semester_headers.add("Spring 2017");
 //
-//            }
-//        });
-
-        semester_headers.add("Spring 2016");
-        semester_headers.add("Summer 2016");
-        semester_headers.add("Fall 2016");
-        semester_headers.add("Spring 2017");
-
-        List<String> spring14 = new ArrayList<String>();
-        spring14.add("CSE110");
-        spring14.add("4.0");
-        spring14.add("A");
-        spring14.add("MAT110");
-        spring14.add("3.7");
-        spring14.add("A-");
-        spring14.add("PHY111");
-        spring14.add("3.0");
-        spring14.add("B");
-        spring14.add("ENG101");
-        spring14.add("3.3");
-        spring14.add("B+");
-
-        List<String> summer14 = new ArrayList<String>();
-        summer14.add("CSE111");
-        summer14.add("4.0");
-        summer14.add("A");
-        summer14.add("MAT120");
-        summer14.add("3.0");
-        summer14.add("B");
-        summer14.add("PHY112");
-        summer14.add("3.3");
-        summer14.add("B+");
-        summer14.add("BUS101");
-        summer14.add("3.3");
-        summer14.add("B=");
-
-        List<String> fall2014 = new ArrayList<String>();
-        fall2014.add("DEV101");
-        fall2014.add("4.0");
-        fall2014.add("A");
-        fall2014.add("HUM103");
-        fall2014.add("3.7");
-        fall2014.add("A-");
-        fall2014.add("ENG102");
-        fall2014.add("3.7");
-        fall2014.add("A-");
-
-        List<String> spring17 = new ArrayList<String>();
-        spring17.add("CSE260");
-        spring17.add("4.0");
-        spring17.add("A");
-        spring17.add("CSE230");
-        spring17.add("3.7");
-        spring17.add("A-");
-        spring17.add("ENV103");
-        spring17.add("3.7");
-        spring17.add("A-");
-        spring17.add("MAT215");
-        spring17.add("3.3");
-        spring17.add("B+");
-
-        semester_result_details.put(semester_headers.get(0), spring14);
-        semester_result_details.put(semester_headers.get(1), fall2014);
-        semester_result_details.put(semester_headers.get(2), summer14);
-        semester_result_details.put(semester_headers.get(3), spring17);
+//        List<String> spring14 = new ArrayList<String>();
+//        spring14.add("CSE110");
+//        spring14.add("4.0");
+//        spring14.add("A");
+//        spring14.add("MAT110");
+//        spring14.add("3.7");
+//        spring14.add("A-");
+//        spring14.add("PHY111");
+//        spring14.add("3.0");
+//        spring14.add("B");
+//        spring14.add("ENG101");
+//        spring14.add("3.3");
+//        spring14.add("B+");
+//
+//        List<String> summer14 = new ArrayList<String>();
+//        summer14.add("CSE111");
+//        summer14.add("4.0");
+//        summer14.add("A");
+//        summer14.add("MAT120");
+//        summer14.add("3.0");
+//        summer14.add("B");
+//        summer14.add("PHY112");
+//        summer14.add("3.3");
+//        summer14.add("B+");
+//        summer14.add("BUS101");
+//        summer14.add("3.3");
+//        summer14.add("B=");
+//
+//        List<String> fall2014 = new ArrayList<String>();
+//        fall2014.add("DEV101");
+//        fall2014.add("4.0");
+//        fall2014.add("A");
+//        fall2014.add("HUM103");
+//        fall2014.add("3.7");
+//        fall2014.add("A-");
+//        fall2014.add("ENG102");
+//        fall2014.add("3.7");
+//        fall2014.add("A-");
+//
+//        List<String> spring17 = new ArrayList<String>();
+//        spring17.add("CSE260");
+//        spring17.add("4.0");
+//        spring17.add("A");
+//        spring17.add("CSE230");
+//        spring17.add("3.7");
+//        spring17.add("A-");
+//        spring17.add("ENV103");
+//        spring17.add("3.7");
+//        spring17.add("A-");
+//        spring17.add("MAT215");
+//        spring17.add("3.3");
+//        spring17.add("B+");
+//
+//        semester_result_details.put(semester_headers.get(0), spring14);
+//        semester_result_details.put(semester_headers.get(1), fall2014);
+//        semester_result_details.put(semester_headers.get(2), summer14);
+//        semester_result_details.put(semester_headers.get(3), spring17);
         //adapter.notifyDataSetChanged();
-
-        Log.e(TAG, "details size = "+semester_result_details.size());
     }
 
     String reverseName(String semesterName){
@@ -240,15 +256,15 @@ public class PreviousResults extends Activity {
         for (int i = 0; i < semester_headers.size() ; i++) {
             Log.e(TAG, "header at i="+i+" ,"+semester_headers.get(i));
         }
-        printMap(semester_result_details);
+        //printMap(semester_result_details);
     }
 
     private static void printMap(HashMap mp) {
         Iterator it = mp.entrySet().iterator();
         while (it.hasNext()) {
             HashMap.Entry pair = (HashMap.Entry)it.next();
-            Log.e(TAG, "#237 : "+pair.getKey() + " = " + pair.getValue());
-            it.remove(); // avoids a ConcurrentModificationException
+            //Log.e(TAG, "#237 : "+pair.getKey() + " = " + pair.getValue());
+            //it.remove(); // avoids a ConcurrentModificationException
         }
     }
 
@@ -259,21 +275,27 @@ class ExpandableListViewAdapterDemo extends BaseExpandableListAdapter{
     Context context = null;
     List<String> headersList;//semester's name and year
     HashMap<String, List<String>> tableList;//course names with its grades and gpa
+    int[] numberOfCoursesDone;
 
     static final String TAG = "**Adapter Demo**";
 
     ExpandableListViewAdapterDemo(Context context, List<String> list,
-                                  HashMap<String, List<String>> hashMap){
+                                  HashMap<String, List<String>> hashMap, int[] coursesDoneCount){
         this.context = context;
         headersList = list;
         tableList = hashMap;
+        numberOfCoursesDone = coursesDoneCount;
+        if (numberOfCoursesDone==null)
+            Log.e(TAG, "# of courses array null");
+        for (int i = 0; i < coursesDoneCount.length; i++) {
+            Log.e(TAG, "#288 : courses in semester "+i+" = "+numberOfCoursesDone[i]);
+        }
         //notifyDataSetChanged();
-        Log.e(TAG, "hashmap list value = "+hashMap.get("Spring 2016"));
-        Log.e(TAG, "initial table list value = "+tableList.get("Spring 2016"));
+        //Log.e(TAG, "hashmap list value = "+hashMap.get("Spring 2016"));
+        //Log.e(TAG, "initial table list value = "+tableList.get("Spring 2016"));
         //printMap(tableList);
-        //printAll();
+        printAll();
         Log.e(TAG, "groupCount = "+getGroupCount());
-
     }
 
     void printAll(){
@@ -314,8 +336,10 @@ class ExpandableListViewAdapterDemo extends BaseExpandableListAdapter{
 //        if (returns>tosubtract)
 //            returns = returns - tosubtract - 2;
         //returns = returns/3;
-        Log.e(TAG, "child count returns = "+String.valueOf(returns) );
-        return returns/3;
+        if (numberOfCoursesDone!=null)
+            returns = numberOfCoursesDone[i];
+        Log.e(TAG, "child count returns = "+String.valueOf(returns) );//45
+        return returns;
     }
 
     @Override
@@ -326,7 +350,7 @@ class ExpandableListViewAdapterDemo extends BaseExpandableListAdapter{
 
     @Override
     public Object getChild(int i, int i1) {
-        Log.e(TAG, "#329 : getChild = "+tableList.get(headersList.get(i)).get(i1));
+        //Log.e(TAG, "#329 : getChild = "+tableList.get(headersList.get(i)).get(i1));
         return tableList.get(headersList.get(i)).get(i1);
     }
 
@@ -373,63 +397,110 @@ class ExpandableListViewAdapterDemo extends BaseExpandableListAdapter{
         TextView gradeValue = (TextView) view.findViewById(R.id.grade_column_value);
         TextView gpaValue = (TextView) view.findViewById(R.id.gpa_column_value);
 
-        Log.e(TAG, "#372 : number of children = "+getChildrenCount(i));
+        //Log.e(TAG, "#397 : number of children = "+getChildrenCount(i));
             int courseNumber = getChildrenCount(i);
-            Log.e(TAG, "#375 : course numbers = "+courseNumber);
+            //Log.e(TAG, "#399 : course numbers = "+numberOfCoursesDone[i]);
 //            int index = 0;
 //            for (int k = 0; k < courseNumber; k++) {
+        int totalNumberOfCoursesDone = 0;
+        if (i>0){
+            for (int j = 0; j < i ; j++) {
+                totalNumberOfCoursesDone = totalNumberOfCoursesDone + numberOfCoursesDone[j];
+            }
+            totalNumberOfCoursesDone = 3 * totalNumberOfCoursesDone;
+        }
+        Log.e(TAG, "total number of courses done = "+totalNumberOfCoursesDone);
+        //i1 = totalNumberOfCoursesDone;
+
         if (i1==0) {
-            String courseIdTitle = (String) getChild(i, i1);
-            Log.e(TAG, "course id = " + courseIdTitle + " at k=" + i1);
-            String gpa = (String) getChild(i, i1 + 1);//previously i1+4
-            Log.e(TAG, "gpa = " + gpa + " at k=" + String.valueOf(i1 + 1));
-            String grade = (String) getChild(i, i1 + 2);
-            Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1 + 2));
+            i1=totalNumberOfCoursesDone;
+            String course1IdTitle = (String) getChild(i, i1);
+            Log.e(TAG, "course id = " + course1IdTitle + " at i1=" + i1);
+            String gpa1 = (String) getChild(i, i1 + 1);//previously i1+4
+            //Log.e(TAG, "gpa = " + gpa + " at k=" + String.valueOf(i1 + 1));
+            String grade1 = (String) getChild(i, i1 + 2);
+            // Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1 + 2));
 
-            courseIdValue.setText(courseIdTitle);
-            gradeValue.setText(grade);
-            gpaValue.setText(gpa);
+            courseIdValue.setText(course1IdTitle);
+            gradeValue.setText(grade1);
+            gpaValue.setText(gpa1);
+        }else if (i1==1) {
+            i1=totalNumberOfCoursesDone;
+            String course2IdTitle = (String) getChild(i, i1+3);
+            Log.e(TAG, "course id = " + course2IdTitle + " at i1=" + i1);
+            String gpa2 = (String) getChild(i, i1+4);//previously i1+4
+            //Log.e(TAG, "gpa = " + gpa + " at k=" + String.valueOf(i1 + 1));
+            String grade2 = (String) getChild(i, i1+5);
+            // Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1 + 2));
+
+            courseIdValue.setText(course2IdTitle);
+            gradeValue.setText(grade2);
+            gpaValue.setText(gpa2);
+        }else if (i1==2) {
+            i1=totalNumberOfCoursesDone;
+            String course3IdTitle = (String) getChild(i, i1 + 6);
+            Log.e(TAG, "course id = " + course3IdTitle + " at i1=" + i1);
+            String gpa3 = (String) getChild(i, i1 + 7);//previously i1+4
+            //Log.e(TAG, "gpa = " + gpa + " at k=" + String.valueOf(i1 + 1));
+            String grade3 = (String) getChild(i, i1 + 8);
+            // Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1 + 2));
+
+            courseIdValue.setText(course3IdTitle);
+            gradeValue.setText(grade3);
+            gpaValue.setText(gpa3);
+        }else if(i1==3){
+            i1=totalNumberOfCoursesDone;
+            String course4IdTitle = (String) getChild(i, i1 + 9);
+            Log.e(TAG, "course id = " + course4IdTitle + " at i1=" + i1);
+            String gpa4 = (String) getChild(i, i1 + 10);//previously i1+4
+            //Log.e(TAG, "gpa = " + gpa + " at k=" + String.valueOf(i1 + 1));
+            String grade4 = (String) getChild(i, i1 + 11);
+            // Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1 + 2));
+
+            courseIdValue.setText(course4IdTitle);
+            gradeValue.setText(grade4);
+            gpaValue.setText(gpa4);
         }
-        else if (i1==1){//|| (i1-1)%3==0
-            String courseIdTitle = (String) getChild(i, i1+2);
-            Log.e(TAG, "course id = " + courseIdTitle + " at k=" + String.valueOf(i1+2));
-            String gpa = (String) getChild(i, i1+3);//previously i1+4
-            Log.e(TAG, "gpa = " + gpa + " at k=" + String.valueOf(i1+3));
-            String grade = (String) getChild(i, i1 + 4);
-            Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1 + 4));
-
-            courseIdValue.setText(courseIdTitle);
-            gradeValue.setText(grade);
-            gpaValue.setText(gpa);
-        }else if (i1==2 ){//|| (i1-2)%3==0
-            String courseIdTitle = (String) getChild(i, i1+4);
-            Log.e(TAG, "course id = " + courseIdTitle + " at k=" + String.valueOf(i1+4));
-            String gpa = (String) getChild(i, i1+5);//previously i1+4
-            Log.e(TAG, "gpa = " + gpa + " at k=" + String.valueOf(i1+5));
-            String grade = (String) getChild(i, i1+6);
-            Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1+6));
-
-            courseIdValue.setText(courseIdTitle);
-            gradeValue.setText(grade);
-            gpaValue.setText(gpa);
+//        else if (i1==1 || i1==totalNumberOfCoursesDone+1){//|| (i1-1)%3==0
+//            String courseIdTitle = (String) getChild(i, i1+2);
+//            Log.e(TAG, "course id = " + courseIdTitle + " at k=" + String.valueOf(i1+2));
+//            String gpa = (String) getChild(i, i1+3);//previously i1+4
+//           // Log.e(TAG, "gpa = " + gpa + " at k=" + String.valueOf(i1+3));
+//            String grade = (String) getChild(i, i1+4);
+//           // Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1 + 4));
+//
+//            courseIdValue.setText(courseIdTitle);
+//            gradeValue.setText(grade);
+//            gpaValue.setText(gpa);
+//        }else if (i1==2 || i1==totalNumberOfCoursesDone+2){//|| (i1-2)%3==0
+//            String courseIdTitle = (String) getChild(i, i1+4);
+//            Log.e(TAG, "course id = " + courseIdTitle + " at k=" + String.valueOf(i1+4));
+//            String gpa = (String) getChild(i, i1+5);//previously i1+4
+//           // Log.e(TAG, "gpa = " + gpa + " at k=" + String.valueOf(i1+5));
+//            String grade = (String) getChild(i, i1+6);
+           // Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1+6));
+//
+//            courseIdValue.setText(courseIdTitle);
+//            gradeValue.setText(grade);
+//            gpaValue.setText(gpa);
 //            String grade = (String) getChild(i, i1);//previously i1+4
 //            Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1));
 //            gradeValue.setText(grade);
-        }else if (i1==3 ){//|| (i1-2)%3==0
-            String courseIdTitle = (String) getChild(i, i1+6);
-            Log.e(TAG, "course id = " + courseIdTitle + " at k=" + String.valueOf(i1+6));
-            String gpa = (String) getChild(i, i1+7);//previously i1+4
-            Log.e(TAG, "gpa = " + gpa + " at k=" + String.valueOf(i1+7));
-            String grade = (String) getChild(i, i1+8);
-            Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1+8));
-
-            courseIdValue.setText(courseIdTitle);
-            gradeValue.setText(grade);
-            gpaValue.setText(gpa);
+//        }else if (i1==3 || i1==totalNumberOfCoursesDone+3){//|| (i1-2)%3==0
+//            String courseIdTitle = (String) getChild(i, i1+6);
+//            Log.e(TAG, "course id = " + courseIdTitle + " at k=" + String.valueOf(i1+6));
+//            String gpa = (String) getChild(i, i1+7);//previously i1+4
+//           // Log.e(TAG, "gpa = " + gpa + " at k=" + String.valueOf(i1+7));
+//            String grade = (String) getChild(i, i1+8);
+//           // Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1+8));
+//
+//            courseIdValue.setText(courseIdTitle);
+//            gradeValue.setText(grade);
+//            gpaValue.setText(gpa);
 //            String grade = (String) getChild(i, i1);//previously i1+4
 //            Log.e(TAG, "grade = " + grade + " at k=" + String.valueOf(i1));
 //            gradeValue.setText(grade);
-        }
+        //}
 //
 //                index = index + 3;
 //            }
