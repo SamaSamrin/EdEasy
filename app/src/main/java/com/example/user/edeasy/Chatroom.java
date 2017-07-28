@@ -41,6 +41,12 @@ public class Chatroom extends AppCompatActivity {
     String username;
     String[][] current_courses;
     int numberOfCourses;
+    String[][] assignedCourses;
+    String[][] events;
+    String[] departments;
+    String course;
+    String section;
+
     DatabaseReference studentsRef;
     DatabaseReference currentUserRef;
     GridAdapterForChat adapterForChat;
@@ -53,17 +59,36 @@ public class Chatroom extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_chatroom);
         setSupportActionBar(toolbar);
 
+        Bundle bundle = getIntent().getExtras();
+        if (bundle!=null){
+            username = bundle.getString("username");
+            Log.e(TAG, "#65 : username = "+username);
+            numberOfCourses = bundle.getInt("number");
+            Log.e(TAG, "#65 : number of courses = "+numberOfCourses);
+            departments = new String[numberOfCourses];
+            departments = bundle.getStringArray("departments");
+            for (int i=0; i<numberOfCourses; i++)
+                Log.e(TAG, "#69 : department "+String.valueOf(i+1)+" = "+departments[i]);
+            assignedCourses = new String[numberOfCourses][2];
+            for (int i=0; i<numberOfCourses; i++){
+                assignedCourses[i] = bundle.getStringArray("course"+String.valueOf(i+1));
+                Log.e(TAG, "course "+String.valueOf(i+1)+" = "+assignedCourses[i][0]);
+                Log.e(TAG, "section = "+assignedCourses[i][1]);
+            }
+        }else
+            Log.e(TAG, "received bundle is null");
+
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         studentsRef = FirebaseDatabase.getInstance().getReference().child("users/students");
 
-        handleCurrentUserInfo();//includes set up chats grid
-        //setUpChatsGrid();
+        //handleCurrentUserInfo();//includes set up chats grid
+        setUpChatsGrid();
     }
 
     void setUpChatsGrid(){
         Log.e(TAG, "set up chats grid");
         chatsGrid = (GridView) findViewById(R.id.chats_grid);
-        adapterForChat = new GridAdapterForChat(this);
+        adapterForChat = new GridAdapterForChat(this, assignedCourses, departments);
         chatsGrid.setAdapter(adapterForChat);
         chatsGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,10 +114,16 @@ public class Chatroom extends AppCompatActivity {
                 if (intent!=null) {
                     intent.putExtra("from", username);
                     Log.e(TAG, "#87 : username = "+username);
-                    intent.putExtra("courseName", current_courses[i][0]);
-                    Log.e(TAG, "#89 : course name = "+current_courses[i][0]);
-                    intent.putExtra("section", current_courses[i][1]);
-                    Log.e(TAG, "#91 : course section = "+current_courses[i][1]);
+                    intent.putExtra("courseName", assignedCourses[i][0]);
+                    Log.e(TAG, "#89 : course name = "+assignedCourses[i][0]);
+                    intent.putExtra("section", assignedCourses[i][1]);
+                    Log.e(TAG, "#91 : course section = "+assignedCourses[i][1]);
+                    intent.putExtra("department", departments[i]);
+                    Log.e(TAG, "#120 : deparment = "+departments[i]);
+//                    intent.putExtra("courseName", current_courses[i][0]);
+//                    Log.e(TAG, "#89 : course name = "+current_courses[i][0]);
+//                    intent.putExtra("section", current_courses[i][1]);
+//                    Log.e(TAG, "#91 : course section = "+current_courses[i][1]);
                 }else
                     Log.e(TAG, "intent null");
                 startActivity(intent);
@@ -190,18 +221,27 @@ class GridAdapterForChat extends BaseAdapter {
     DatabaseReference currentUserRef;
     String user_email;
     String username;
-    String[][] courses = new String[5][2];
+    String[] departments;
+    String[][] courses;// = new String[5][2]
     int numberOfCourses;
     TextView[] gridViews = new TextView[5];
     Context context;
     String[] chatrooms = {"CSE100", "MAT100", "PHY100", "ENG100"};
     String[] colorBacks = {"#FFEF00", "#76FF03", "#FF8F00", "#00C4FF", "#E040FB" };
 
-    GridAdapterForChat(Context context){
+    GridAdapterForChat(Context context, String[][] courses, String[] departments){
         super();
         Log.e(TAG, "adapter constructor");
         this.context = context;
-        handleCurrentUserInfo();
+        this.courses = courses;
+        this.departments = departments;
+        //Log.e(TAG, "department's length = "+departments.length);
+        for (int j = 0; j <departments.length ; j++) {
+            //Log.e(TAG, "#238 : department of course "+j+" = "+departments[j]);
+        }
+        numberOfCourses = departments.length;
+        Log.e(TAG, "number of courses = "+numberOfCourses);
+        //handleCurrentUserInfo();
     }
 
     @Override
@@ -239,11 +279,11 @@ class GridAdapterForChat extends BaseAdapter {
             itemText = (TextView) view;
         }
         Log.e(TAG, "#226 : i="+String.valueOf(i));
-        Log.e(TAG, "#227 : itemText="+itemText.toString());
+        //Log.e(TAG, "#227 : itemText="+itemText.toString());
         gridViews[i] = itemText;
         if (courses[i][0] != null) {
             itemText.setText(courses[i][0]);
-            Log.e(TAG, "#246 : course name="+courses[i][0]);
+            Log.e(TAG, "#246 : department = "+departments[i]+" course name="+courses[i][0]);
         }else {
             itemText.setText(chatrooms[i]);
             Log.e(TAG, "#249 : course null");

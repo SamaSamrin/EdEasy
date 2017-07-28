@@ -40,17 +40,16 @@ public class ChatroomCourse1 extends Activity {
     private final String TAG = "** Chatroom Course 1**";
 
     String userFrom;
+    String department;
     String courseName;
     String section;
     EditText messageInput;
     String message;
     ListView conversationList;
     ListAdapter messageListAdapter;
-    //ArrayList<String> messages;
     String[] messages;
     String[] userFroms;
     String[] senders;
-    //DatabaseReference chatsRef;
     int previousMessagesNumber;
 
     DatabaseReference chatsReference;
@@ -64,11 +63,13 @@ public class ChatroomCourse1 extends Activity {
         //getting values from intent
         Intent intent = getIntent();
         userFrom = intent.getStringExtra("from");
-        Log.e(TAG, "#32 : user from = "+userFrom);
+        //Log.e(TAG, "#32 : user from = "+userFrom);
         courseName = intent.getStringExtra("courseName");
         Log.e(TAG, "#34 : course name = "+courseName);
         section = intent.getStringExtra("section");
         Log.e(TAG, "#36 : section = "+section);
+        department = intent.getStringExtra("department");
+        Log.e(TAG, "#72 : department = "+department);
 
         if (Build.VERSION.SDK_INT>=21) {
             if (getActionBar()!=null)
@@ -78,9 +79,10 @@ public class ChatroomCourse1 extends Activity {
         //getting database reference to the respective chatroom
         if (courseName!=null & section != null) {
             chatsReference = FirebaseDatabase.getInstance().getReference()
-                    .child("departments/CSE/courses").child(courseName).child("sections").
-                            child(section).child("chatroom");
-            Log.e(TAG, "chats reference is "+chatsReference.toString());
+                    .child("departments").child(department)
+                    .child("courses").child(courseName)
+                    .child("sections").child(section).child("chatroom");
+            Log.e(TAG, "#85 : chats reference is "+chatsReference.toString());
         }
 
         //initializing all views
@@ -91,8 +93,6 @@ public class ChatroomCourse1 extends Activity {
         messages[0] = "Hey";
         userFroms[0] = userFrom;
         getAllMessage();
-//        messageListAdapter = new ArrayAdapter<>(ChatroomCourse1.this,
-//                android.R.layout.simple_list_item_1, messages);
         messageListAdapter = new ChatMessageAdapter(this, chatsReference,
                 messages, userFroms, userFrom);
         conversationList.setAdapter(messageListAdapter);
@@ -147,10 +147,10 @@ class ChatMessageAdapter extends BaseAdapter{
     private final String TAG = "**MESSAGE ADAPTER**";
 
     Context context;
-//    ArrayList<String> messages = new ArrayList<String>(0);
     String[] messages;
     String[] senders;
     String username;
+    String department;
     DatabaseReference chatsRef;
     int previousMessagesNumber;
     private static LayoutInflater inflater = null;
@@ -160,10 +160,10 @@ class ChatMessageAdapter extends BaseAdapter{
         super();
         this.context = context;
         this.chatsRef = chatsRef;
+        Log.e(TAG, "#163 : chats ref = "+chatsRef.toString());
         this.messages = messages;
         this.senders = senders;
         this.username = username;
-        Log.e(TAG,"username="+username);
         getAllMessage();
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -175,9 +175,13 @@ class ChatMessageAdapter extends BaseAdapter{
                  Log.e(TAG, "Adapter: onDataChange");
                  long messageNumber = dataSnapshot.getChildrenCount() - 1;
                  previousMessagesNumber = (int) messageNumber;
+                 if (previousMessagesNumber<0)
+                     previousMessagesNumber=0;
+                 else if (previousMessagesNumber==0)
+                     previousMessagesNumber=1;
+                 Log.e(TAG, "#181: number of previous messages = " + previousMessagesNumber);
                  messages = new String[previousMessagesNumber];
                  senders = new String[previousMessagesNumber];
-                 Log.e(TAG, "#105: number of previous messages = " + previousMessagesNumber);
                  if (previousMessagesNumber > 0) {
                      int messageCounter = 0;
                      for (DataSnapshot snap : dataSnapshot.getChildren()) {
@@ -222,7 +226,7 @@ class ChatMessageAdapter extends BaseAdapter{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.e(TAG, "position="+position);
+        //Log.e(TAG, "position="+position);
         View vi = convertView;
         if (vi == null ) {
             if (!senders[position].equals(username))
@@ -233,13 +237,8 @@ class ChatMessageAdapter extends BaseAdapter{
         TextView text = (TextView) vi.findViewById(R.id.messageView);
         if (messages[position]!=null) {
             text.setText(messages[position]);
-            Log.e(TAG, "message at this position = " + messages[position]+"sent by "+senders[position]);
-//            if (!senders[position].equals(username)){
-//                Log.e(TAG, "sender is not username");
-//                ((ConstraintLayout.LayoutParams)text.getLayoutParams()).setLayoutDirection(Layout.DIR_RIGHT_TO_LEFT);
-//            }else
-//                ((ConstraintLayout.LayoutParams)text.getLayoutParams()).setLayoutDirection(Layout.DIR_LEFT_TO_RIGHT);
-//            //((GridLayout.LayoutParams)button.getLayoutParams()).setGravity(int)
+            Log.e(TAG, "message at this position = "+position+" : " +
+                    messages[position]+" sent by "+senders[position]);
         }
         //notifyDataSetChanged();
         return vi;

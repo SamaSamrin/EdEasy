@@ -160,6 +160,18 @@ public class Dashboard extends Fragment {
                     startActivity(intent);
                 }else if (i==3){
                     intent = new Intent(getContext(), Chatroom.class);
+                    intent.putExtra("username", username);
+                    Log.e(TAG, "#164 : username = "+username);
+                    Log.e(TAG, "department's length = "+departments.length);
+                    for (int j = 0; j <departments.length ; j++) {
+                        Log.e(TAG, "#165 : department of course "+j+" = "+departments[j]);
+                    }
+                    intent.putExtra("departments", departments);
+                    intent.putExtra("number", numberOfCourses);
+                    for (int j=0; j<numberOfCourses; j++){
+                        intent.putExtra("course"+String.valueOf(j+1),
+                                assignedCourses[j]);
+                    }
                     startActivity(intent);
                 }else if (i==4){
                     intent = new Intent(getContext(), CalendarDisplay.class);
