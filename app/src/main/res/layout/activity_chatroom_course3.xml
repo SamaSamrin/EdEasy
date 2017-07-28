@@ -9,7 +9,7 @@
     <ListView
         android:id="@+id/course3_chatroom_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@+id/course3_message_input"
         android:layout_alignParentEnd="true" />
 
