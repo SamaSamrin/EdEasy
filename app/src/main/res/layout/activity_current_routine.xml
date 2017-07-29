@@ -6,19 +6,18 @@
     android:layout_height="match_parent"
     tools:context="com.example.user.edeasy.CurrentRoutine">
 
-
-    <Button
-        android:id="@+id/see_full_routine_button"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_current_routine"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccentLight"
-        android:text="View full routine"
-        android:textStyle="bold"
-        android:onClick="viewFullRoutine"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_below="@+id/todays_routine"
-        android:layout_alignEnd="@+id/todays_routine" />
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:title="Current Routine"
+        app:titleTextColor="@color/whiteTextColor"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/current_routine_day_name"
@@ -36,228 +35,233 @@
         android:layout_below="@+id/toolbar_current_routine"
         android:layout_alignParentStart="true" />
 
-    <ScrollView
-        android:id="@+id/current_routine_scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </ScrollView>
-
-    <TableLayout
-        android:id="@+id/todays_routine"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:padding="5dp"
-        android:stretchColumns="*"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="76dp"
-        android:layout_below="@+id/current_routine_day_name"
-        android:layout_alignStart="@+id/current_routine_day_name">
-
-
-        <TableRow
-            android:id="@+id/current_routine_first_class"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/current_routine_first_class_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="8:00am-9:30am"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/current_routine_first_class_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="CSE110 LAB - ABC - UB20301"
-                android:textAlignment="center"
-                android:textSize="18sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/current_routine_second_class"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/current_routine_second_class_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="9:30am-11:00am"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/current_routine_second_class_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="CSE110 LAB - ABC - UB20301"
-                android:textAlignment="center"
-                android:textSize="18sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/current_routine_third_class"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/current_routine_third_class_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="11:00am-12:30pm"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/current_routine_third_class_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text=""
-                android:textAlignment="center"
-                android:textSize="18sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/current_routine_fourth_class"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/current_routine_fourth_class_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="12:30pm-2:00pm"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/current_routine_fourth_class_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="MAT120 - JFK - UB10202"
-                android:textAlignment="center"
-                android:textSize="18sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/current_routine_fifth_class"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/current_routine_fifth_class_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="2:00pm-3:30pm"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/current_routine_fifth_class_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text=""
-                android:textAlignment="center"
-                android:textSize="18sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/current_routine_sixth_class"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/current_routine_sixth_class_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="3:30pm-5:00pm"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/current_routine_sixth_class_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="ENG101 - FYK - UB20901"
-                android:textAlignment="center"
-                android:textSize="18sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:id="@+id/current_routine_seventh_class"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp"
-            android:padding="10dp">
-
-            <TextView
-                android:id="@+id/current_routine_seventh_class_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="5:00pm-6:30pm"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/current_routine_seventh_class_details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="CSE110 - ABC - UB20301"
-                android:textAlignment="center"
-                android:textSize="18sp" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableLayout>
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_current_routine"
+    <Button
+        android:id="@+id/see_full_routine_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:title="Current Routine"
-        app:titleTextColor="@color/whiteTextColor"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:background="@color/colorAccentLight"
+        android:text="View full routine"
+        android:textStyle="bold"
+        android:onClick="viewFullRoutine"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <ListView
+        android:id="@+id/todays_routine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/see_full_routine_button"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/current_routine_day_name"
+        android:layout_alignParentStart="true" />
+
+    <!--</ScrollView>-->
+
+    <!--<TableLayout-->
+        <!--android:id="@+id/todays_routine"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="400dp"-->
+        <!--android:layout_marginLeft="5dp"-->
+        <!--android:layout_marginRight="5dp"-->
+        <!--android:padding="5dp"-->
+        <!--android:stretchColumns="*"-->
+        <!--tools:layout_editor_absoluteX="8dp"-->
+        <!--tools:layout_editor_absoluteY="76dp"-->
+        <!--android:layout_below="@+id/current_routine_day_name"-->
+        <!--android:layout_alignStart="@+id/current_routine_day_name">-->
+
+
+        <!--<TableRow-->
+            <!--android:id="@+id/current_routine_first_class"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:padding="10dp">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_first_class_time"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="8:00am-9:30am"-->
+                <!--android:textSize="18sp" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_first_class_details"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="CSE110 LAB - ABC - UB20301"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textSize="18sp" />-->
+
+        <!--</TableRow>-->
+
+        <!--<TableRow-->
+            <!--android:id="@+id/current_routine_second_class"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:padding="10dp">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_second_class_time"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="9:30am-11:00am"-->
+                <!--android:textSize="18sp" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_second_class_details"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="CSE110 LAB - ABC - UB20301"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textSize="18sp" />-->
+
+        <!--</TableRow>-->
+
+        <!--<TableRow-->
+            <!--android:id="@+id/current_routine_third_class"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:padding="10dp">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_third_class_time"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="11:00am-12:30pm"-->
+                <!--android:textSize="18sp" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_third_class_details"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text=""-->
+                <!--android:textAlignment="center"-->
+                <!--android:textSize="18sp" />-->
+
+        <!--</TableRow>-->
+
+        <!--<TableRow-->
+            <!--android:id="@+id/current_routine_fourth_class"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:padding="10dp">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_fourth_class_time"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="12:30pm-2:00pm"-->
+                <!--android:textSize="18sp" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_fourth_class_details"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="MAT120 - JFK - UB10202"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textSize="18sp" />-->
+
+        <!--</TableRow>-->
+
+        <!--<TableRow-->
+            <!--android:id="@+id/current_routine_fifth_class"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:padding="10dp">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_fifth_class_time"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="2:00pm-3:30pm"-->
+                <!--android:textSize="18sp" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_fifth_class_details"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text=""-->
+                <!--android:textAlignment="center"-->
+                <!--android:textSize="18sp" />-->
+
+        <!--</TableRow>-->
+
+        <!--<TableRow-->
+            <!--android:id="@+id/current_routine_sixth_class"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:padding="10dp">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_sixth_class_time"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="3:30pm-5:00pm"-->
+                <!--android:textSize="18sp" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_sixth_class_details"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="ENG101 - FYK - UB20901"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textSize="18sp" />-->
+
+        <!--</TableRow>-->
+
+        <!--<TableRow-->
+            <!--android:id="@+id/current_routine_seventh_class"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:padding="10dp">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_seventh_class_time"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="5:00pm-6:30pm"-->
+                <!--android:textSize="18sp" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/current_routine_seventh_class_details"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="CSE110 - ABC - UB20301"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textSize="18sp" />-->
+
+        <!--</TableRow>-->
+
+        <!--<TableRow-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
+
+        <!--<TableRow-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
+    <!--</TableLayout>-->
+
 </android.widget.RelativeLayout>

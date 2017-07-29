@@ -154,6 +154,16 @@ public class Dashboard extends Fragment {
                     startActivity(intent);
                 }else if(i==1){
                     intent = new Intent(getContext(), CurrentRoutine.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("email", user_email);
+                    intent.putExtra("role", user_role);
+                    intent.putExtra("number", numberOfCourses);
+                    intent.putExtra("departments", departments);
+                    intent.putExtra("number", numberOfCourses);
+                    for (int j=0; j<numberOfCourses; j++){
+                        intent.putExtra("course"+String.valueOf(j+1),
+                                assignedCourses[j]);
+                    }
                     startActivity(intent);
                 }else if(i==2){//done
                     intent = new Intent(getContext(), CurrentMarksheet.class);

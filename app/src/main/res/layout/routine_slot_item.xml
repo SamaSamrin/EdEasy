@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/slot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="13dp"
+        android:padding="5dp"
+        android:text="08:00AM-09:30AM"
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/colorAccentFaded"/>
+
+    <TextView
+        android:id="@+id/course_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/slot"
+        android:layout_alignTop="@+id/slot"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="CSE110"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:background="@color/colorAccent"
+        android:padding="5dp"/>
+
+    <TextView
+        android:id="@+id/section_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/course_name"
+        android:layout_alignTop="@+id/course_name"
+        android:layout_toEndOf="@+id/course_name"
+        android:gravity="center"
+        android:text="Section 1"
+        android:textSize="16sp"
+        android:textColor="@color/blackTextColor"
+        android:background="@color/colorAccent"
+        android:padding="5dp"/>
+
+    <TextView
+        android:id="@+id/faculty_initial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/section_number"
+        android:layout_alignTop="@+id/section_number"
+        android:layout_toEndOf="@+id/section_number"
+        android:gravity="center"
+        android:text="TBA"
+        android:textSize="16sp"
+        android:textColor="@color/blackTextColor"
+        android:background="@color/colorAccentFaded"
+        android:padding="5dp"/>
+</RelativeLayout>
