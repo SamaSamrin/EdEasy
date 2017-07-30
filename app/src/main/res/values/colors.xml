@@ -15,7 +15,7 @@
     <color name="notificationsBackg">#FF3D00</color>
 
     <color name="courseIdBack">#004BA0</color>
-    <color name="gradeBack">#63A4FF</color>
+    <color name="gradeBack">#63a4ff</color>
     <color name="gpaBack">#1976D2</color>
 
     <color name="courseIdValueBack">#FFFF00</color>
@@ -36,7 +36,7 @@
     <color name="pastelGreen">#69F0AE</color>
     <color name="lightPink">#FFCDD2</color>
     <color name="coolGray">#B0BEC5</color>
-    <color name="lightGray">#EFEBE9</color>
+    <color name="lightGray">#efebe9</color>
     <color name="colorAccentFaded">#fee66a</color>
     <!-- DARK COLORS -->
     <color name="darkerGreen">#1B5E20</color>

@@ -8,56 +8,60 @@
         android:id="@+id/slot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="3dp"
         android:layout_marginStart="13dp"
         android:layout_marginTop="13dp"
+        android:background="@color/colorPrimary"
         android:padding="5dp"
         android:text="08:00AM-09:30AM"
         android:textAlignment="viewStart"
+        android:textColor="@color/whiteTextColor"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:background="@color/colorAccentFaded"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/course_name"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/slot"
-        android:layout_alignTop="@+id/slot"
-        android:layout_centerHorizontal="true"
+        android:layout_alignStart="@+id/slot"
+        android:layout_below="@+id/slot"
+        android:layout_toStartOf="@+id/section_number"
+        android:background="@color/colorAccent"
         android:gravity="center"
+        android:padding="5dp"
         android:text="CSE110"
         android:textSize="16sp"
-        android:textStyle="bold"
-        android:background="@color/colorAccent"
-        android:padding="5dp"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/section_number"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/course_name"
         android:layout_alignBottom="@+id/course_name"
-        android:layout_alignTop="@+id/course_name"
-        android:layout_toEndOf="@+id/course_name"
+        android:layout_toEndOf="@+id/slot"
+        android:background="@color/colorAccentFaded"
         android:gravity="center"
+        android:padding="5dp"
         android:text="Section 1"
-        android:textSize="16sp"
         android:textColor="@color/blackTextColor"
-        android:background="@color/colorAccent"
-        android:padding="5dp"/>
+        android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/faculty_initial"
+        android:id="@+id/room_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/section_number"
         android:layout_alignBottom="@+id/section_number"
-        android:layout_alignTop="@+id/section_number"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="11dp"
         android:layout_toEndOf="@+id/section_number"
+        android:background="@color/colorAccent"
         android:gravity="center"
-        android:text="TBA"
-        android:textSize="16sp"
+        android:padding="5dp"
+        android:text="UB30301"
         android:textColor="@color/blackTextColor"
-        android:background="@color/colorAccentFaded"
-        android:padding="5dp"/>
+        android:textSize="16sp" />
 </RelativeLayout>
