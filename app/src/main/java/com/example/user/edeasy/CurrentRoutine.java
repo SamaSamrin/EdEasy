@@ -270,6 +270,9 @@ public class CurrentRoutine extends Activity {
         Intent intent = new Intent(CurrentRoutine.this, FullRoutine.class);
         intent.putExtra("sunday", sundayRoutine);
         intent.putExtra("monday", mondayRoutine);
+        intent.putExtra("tuesday", tuesdayRoutine);
+        intent.putExtra("wednesday", wednesdayRoutine);
+        intent.putExtra("thursday", thursdayRoutine);
         startActivity(intent);
     }
 }
@@ -386,7 +389,8 @@ class RoutineAdapter extends BaseAdapter{
         courseText.setText(course);
         String section = routine.get(slot).get(1);
         Log.e(TAG, "section = "+section);
-        sectionText.setText(" Section "+section);
+        section = " Section "+section;
+        sectionText.setText(section);
 
         return view;
     }
