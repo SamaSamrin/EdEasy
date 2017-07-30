@@ -2,6 +2,7 @@ package com.example.user.edeasy;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -76,7 +78,7 @@ public class CurrentRoutine extends Activity {
             //Log.e(TAG, "role = "+role);
             numberOfCourses = bundle.getInt("number");
             //Log.e(TAG, "#64 : number of courses = "+numberOfCourses);
-            routine = new String[numberOfCourses][3];
+            //routine = new String[numberOfCourses][3];
             departments = new String[numberOfCourses];
             departments = bundle.getStringArray("departments");
             for (int i=0; i<numberOfCourses; i++)
@@ -84,8 +86,8 @@ public class CurrentRoutine extends Activity {
             assignedCourses = new String[numberOfCourses][2];
             for (int i=0; i<numberOfCourses; i++){
                 assignedCourses[i] = bundle.getStringArray("course"+String.valueOf(i+1));
-                //Log.e(TAG, "course "+String.valueOf(i+1)+" = "+assignedCourses[i][0]);
-                //Log.e(TAG, "section = "+assignedCourses[i][1]);
+                Log.e(TAG, "course "+String.valueOf(i+1)+" = "+assignedCourses[i][0]);
+                Log.e(TAG, "section = "+assignedCourses[i][1]);
             }
         }else
             Log.e(TAG, "#76 : received bundle is null");
@@ -130,11 +132,13 @@ public class CurrentRoutine extends Activity {
         allDepartmentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e(TAG, "number of courses = "+numberOfCourses);
                 //retrieving events from dataSnapshot
                 for (int i=0; i<numberOfCourses; i++) {
                     DataSnapshot sectionSnap = dataSnapshot.child(departments[i])
                             .child("courses").child(assignedCourses[i][0])
                             .child("sections").child(assignedCourses[i][1]);
+                    Log.e(TAG, "reference = "+sectionSnap.getRef().toString());
                     String faculty = sectionSnap.child("faculty").getValue(String.class);
                     DataSnapshot routineRef = sectionSnap.child("routine");
                     //List<String> details = new ArrayList<String>();
@@ -182,10 +186,8 @@ public class CurrentRoutine extends Activity {
                         details.add(section);
                         setDetailsByDay(day, time, details);
                     }
-                    i++;
                     long classCount = theoryClassCount + labClassCount;
                     int courseClassesNumber = (int) classCount;
-                    //slot_details.put(course, details);
                     numberOfClasses = numberOfClasses + courseClassesNumber;
                     Log.e(TAG, "#190 : course's number of classes" + String.valueOf(courseClassesNumber));
                 }
@@ -265,7 +267,10 @@ public class CurrentRoutine extends Activity {
     }
 
     public void viewFullRoutine(View view){
-
+        Intent intent = new Intent(CurrentRoutine.this, FullRoutine.class);
+        intent.putExtra("sunday", sundayRoutine);
+        intent.putExtra("monday", mondayRoutine);
+        startActivity(intent);
     }
 }
 
@@ -297,8 +302,54 @@ class RoutineAdapter extends BaseAdapter{
                 i++;
                 //it.remove(); // avoids a ConcurrentModificationException
             }
+            sort();
         }
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    void sort(){
+        String[] tempArray = slotTitles;
+        slotTitles = new String[tempArray.length];
+        int emptyIndex = 0;
+        //checking for AM-AM
+        for (int i = 0; i < tempArray.length; i++) {
+            String[] ampms = tempArray[i].split("-");
+            if (ampms[0].endsWith("AM") && ampms[1].endsWith("AM")){
+                Log.e(TAG, "index = "+emptyIndex);
+                slotTitles[emptyIndex] = tempArray[i];
+                emptyIndex++;
+            }
+        }
+//        if (emptyIndex>0)
+//            Arrays.sort(slotTitles);
+        //checking for AM-PM
+        for (int i = 0; i < tempArray.length; i++) {
+            String[] ampms = tempArray[i].split("-");
+            if (ampms[0].endsWith("AM") && ampms[1].endsWith("PM")){
+                slotTitles[emptyIndex] = tempArray[i];
+                Log.e(TAG, "index = "+emptyIndex);
+                emptyIndex++;
+            }
+        }
+        //checking for PM-PM
+        String[] tempPMs = new String[4];
+        int tempPMindex = 0;
+        for (int i = 0; i < tempArray.length; i++) {
+            String[] ampms = tempArray[i].split("-");
+            if (ampms[0].endsWith("PM") && ampms[1].endsWith("PM")){
+                tempPMs[tempPMindex] = tempArray[i];
+                tempPMindex++;
+            }
+        }
+        if (tempPMindex!=0) {
+            //Arrays.sort(tempPMs);
+            //copy the last checked and sorted array to main slot array
+            for (int i = 0; i < tempPMindex; i++) {
+                slotTitles[emptyIndex] = tempPMs[i];
+                Log.e(TAG, "index = "+emptyIndex);
+                emptyIndex++;
+            }
+        }
     }
 
     @Override
