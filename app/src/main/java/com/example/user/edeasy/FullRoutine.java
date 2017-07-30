@@ -1,6 +1,7 @@
 package com.example.user.edeasy;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ public class FullRoutine extends Activity {
     @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_full_routine);
 
         //getting all necessary values from Current Routine
@@ -46,7 +48,7 @@ public class FullRoutine extends Activity {
         //setting the toolbar title
         if (Build.VERSION.SDK_INT>=21) {
             if (getActionBar()!=null)
-                getActionBar().setTitle("Full Routine");//working :D
+                getActionBar().setTitle("Full Routine");
         }
     }
 

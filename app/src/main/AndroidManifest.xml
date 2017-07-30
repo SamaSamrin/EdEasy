@@ -76,7 +76,8 @@
         <activity android:name=".ChatroomCourse3" />
         <activity android:name=".ChatroomCourse4" />
         <activity android:name=".ChatroomCourse5" />
-        <activity android:name=".FullRoutine"></activity>
+        <activity android:name=".FullRoutine"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>

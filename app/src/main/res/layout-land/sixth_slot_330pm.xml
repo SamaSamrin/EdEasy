@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/sunday_330pm_class"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:text="CSE110 - 1 - TBA - UB30301"
+        android:background="@color/colorAccent"
+        android:textColor="@color/blackTextColor"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_marginEnd="3dp"
+        android:layout_marginStart="105dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="3dp" />
+
+    <TextView
+        android:id="@+id/monday_330pm_class"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:text="-"
+        android:background="@color/colorAccentFaded"
+        android:textColor="@color/blackTextColor"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_alignTop="@+id/sunday_330pm_class"
+        android:layout_toEndOf="@+id/sunday_330pm_class" />
+
+    <TextView
+        android:id="@+id/tuesday_330pm_class"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:text="-"
+        android:background="@color/colorAccent"
+        android:textColor="@color/blackTextColor"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_alignBottom="@+id/monday_330pm_class"
+        android:layout_toEndOf="@+id/monday_330pm_class"
+        android:layout_alignTop="@+id/monday_330pm_class" />
+
+    <TextView
+        android:id="@+id/wednesday_330pm_class"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:layout_alignTop="@+id/tuesday_330pm_class"
+        android:layout_toEndOf="@+id/tuesday_330pm_class"
+        android:text="-"
+        android:background="@color/colorAccentFaded"
+        android:textColor="@color/blackTextColor"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"/>
+
+    <TextView
+        android:id="@+id/thursay_330pm_class"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
+        android:text="-"
+        android:layout_alignTop="@+id/wednesday_330pm_class"
+        android:layout_toEndOf="@+id/wednesday_330pm_class"
+        android:background="@color/colorAccent"
+        android:textColor="@color/blackTextColor"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_marginStart="3dp"
+        android:layout_marginEnd="3dp"/>
+
+    <TextView
+        android:id="@+id/slots_title_330pm"
+        android:layout_width="90dp"
+        android:layout_height="70dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/sunday_330pm_class"
+        android:layout_marginStart="10dp"
+        android:text="3:30PM - 5PM"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/whiteTextColor"
+        android:padding="5dp"
+        android:gravity="center"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
+
+</RelativeLayout>

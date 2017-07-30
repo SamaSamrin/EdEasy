@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,4 +7,75 @@
     android:orientation="horizontal"
     tools:context="com.example.user.edeasy.FullRoutine">
 
-</android.support.constraint.ConstraintLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true">
+
+        <TableLayout
+            android:id="@+id/full_routine_table"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:stretchColumns="7">
+
+            <TableRow
+                android:id="@+id/days_names"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include layout="@layout/weekdays_names_row_content"/>
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/slot_8am"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+                <include layout="@layout/first_slot_8am"/>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/slot_930am"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <include layout="@layout/second_slot_930am" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/slot_11am"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <include layout="@layout/third_slot_11am"/>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/slot_1230pm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <include layout="@layout/fourth_slot_1230"/>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/slot_2pm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <include layout="@layout/fifth_slot_2pm"/>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/slot_330pm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <include layout="@layout/sixth_slot_330pm"/>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/slot_5pm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <include layout="@layout/seventh_slot_5pm"/>
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</android.widget.RelativeLayout>
