@@ -9,6 +9,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.storage.StorageReference;
 
 
 /**
@@ -29,6 +36,24 @@ public class AccountProfile extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    FirebaseAuth auth;
+    DatabaseReference databaseReference;
+    DatabaseReference courseFileDownloadUrls;
+    StorageReference storageReference;
+    StorageReference courseOneFilesRef;
+    FirebaseUser currentUser;
+
+    String user_role;
+    String user_department;
+    String username;
+    String user_email;
+    String student_id;
+    String credits_completed;
+    int numberOfCourses;
+    String[][] assignedCourses;
+    String[] departments;
+    DatabaseReference userRef;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,13 +87,58 @@ public class AccountProfile extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         //Intent intent = new Intent(getContext() , )
+
+        Bundle args = getArguments();
+        if (args!=null) {
+            username = args.getString("username");
+            //Log.e(TAG, "#92 : username = "+username);
+            user_role = args.getString("role");
+            Log.e(TAG, "#94 : role = "+user_role);
+            user_email = args.getString("email");
+            //Log.e(TAG, "email = "+user_email);
+            user_department = args.getString("department");
+            Log.e(TAG, "department = "+user_department);
+            student_id = args.getString("student id");
+            credits_completed = args.getString("credits");
+            numberOfCourses = args.getInt("numberOfCourses");
+            //Log.e(TAG, "number of courses = "+numberOfCourses);
+            departments = new String[numberOfCourses];
+            departments = args.getStringArray("departments");
+            for (int i=0; i<numberOfCourses; i++)
+                Log.e(TAG, "department "+String.valueOf(i+1)+" = "+departments[i]);
+            assignedCourses = new String[numberOfCourses][2];
+            for (int i=0; i<numberOfCourses; i++){
+                assignedCourses[i] = args.getStringArray("course"+String.valueOf(i+1));
+                //Log.e(TAG, "course "+String.valueOf(i+1)+" = "+assignedCourses[i][0]);
+                //Log.e(TAG, "section = "+assignedCourses[i][1]);
+            }
+        }else
+            Log.e(TAG, "#90 : received args is null");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account_profile, container, false);
+        Log.e(TAG, "onCreateView");
+        View v = inflater.inflate(R.layout.fragment_account_profile, container, false);
+
+        //setting views
+        TextView nameDisplay = (TextView) v.findViewById(R.id.account_name_display);
+        TextView studentIdDisplay = (TextView) v.findViewById(R.id.studentID_account);
+        TextView creditsDoneDisplay = (TextView) v.findViewById(R.id.completed_credits_account);
+
+        nameDisplay.setText(username.toUpperCase());
+        studentIdDisplay.setText(student_id);
+        creditsDoneDisplay.setText(credits_completed);
+
+        ImageView propic = (ImageView) v.findViewById(R.id.propic_account);
+        if (user_role.equals("student"))
+            propic.setImageResource(R.drawable.student);
+        else if (user_role.equals("teacher"))
+            propic.setImageResource(R.drawable.teacher);
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

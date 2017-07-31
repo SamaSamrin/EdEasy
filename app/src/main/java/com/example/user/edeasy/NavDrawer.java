@@ -48,8 +48,8 @@ public class NavDrawer extends AppCompatActivity
     String user_email;
     String user_role = "default role";
     String user_department;
-    String user_id;
-    String user_key;
+    String student_id;
+    String credits_completed;
     int numberOfCourses;
     String[][] assignedCourses;
     String[] departments;
@@ -238,6 +238,19 @@ public class NavDrawer extends AppCompatActivity
                 Log.e(TAG, "account drawer");
                 toolbar.setTitle("Account");
                 fragment = new AccountProfile();
+                args = new Bundle();
+                args.putString("email", currentUser.getEmail());
+                args.putString("username", username);
+                args.putString("role", user_role);
+                args.putString("student id", student_id);
+                args.putString("department", user_department);
+                args.putString("credits", credits_completed);
+                args.putStringArray("departments", departments);
+                args.putInt("numberOfCourses", numberOfCourses);
+                for (int j=0; j<numberOfCourses; j++)
+                    args.putStringArray("course"+ String.valueOf(j+1),
+                            assignedCourses[j]);
+                fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 break;
             case (R.id.course1_drawer_item) :
@@ -394,10 +407,39 @@ public class NavDrawer extends AppCompatActivity
             //retrieving user's info from database
             int croppedEmailIdLimit = user_email.length() - 4;
             String emailID = user_email.substring(0, croppedEmailIdLimit);
-            //assuming the user is a student
-            currentUserRef = studentsDatabaseReference.child(emailID);
+            //user role wise reference from database
+            if (user_role==null) {
+                if (studentsDatabaseReference.child(emailID) != null)
+                    currentUserRef = studentsDatabaseReference.child(emailID);
+                else if (teachersDatabaseReference.child(emailID) != null)
+                    currentUserRef = teachersDatabaseReference.child(emailID);
+            }else{
+                if (user_role.equals("student"))
+                    currentUserRef = studentsDatabaseReference.child(emailID);
+                else if (user_role.equals("teacher"))
+                    currentUserRef = teachersDatabaseReference.child(emailID);
+            }
+
+            //extracting necessary user info
             if (currentUserRef != null){
                 Log.e(TAG, "line 344: current user reference is - "+currentUserRef.toString());
+
+                currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        user_department = dataSnapshot.child("department").getValue(String.class);
+                        long id = dataSnapshot.child("studentID").getValue(Long.class);
+                        student_id = String.valueOf(id);
+                        int credits = dataSnapshot.child("credits_completed").getValue(Integer.class);
+                        credits_completed = String.valueOf(credits);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
                 //****************NAME*****************
                 DatabaseReference nameRef = currentUserRef.child("name");
                 nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
