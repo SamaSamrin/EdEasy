@@ -124,19 +124,47 @@ public class AccountProfile extends Fragment {
         View v = inflater.inflate(R.layout.fragment_account_profile, container, false);
 
         //setting views
+
+        //basic info
         TextView nameDisplay = (TextView) v.findViewById(R.id.account_name_display);
         TextView studentIdDisplay = (TextView) v.findViewById(R.id.studentID_account);
         TextView creditsDoneDisplay = (TextView) v.findViewById(R.id.completed_credits_account);
+        TextView departmentDisplay = (TextView) v.findViewById(R.id.department_account);
 
         nameDisplay.setText(username.toUpperCase());
         studentIdDisplay.setText(student_id);
+        departmentDisplay.setText(user_department);
         creditsDoneDisplay.setText(credits_completed);
 
+        //setting photo according to user role
         ImageView propic = (ImageView) v.findViewById(R.id.propic_account);
         if (user_role.equals("student"))
             propic.setImageResource(R.drawable.student);
         else if (user_role.equals("teacher"))
             propic.setImageResource(R.drawable.teacher);
+
+        //setting assigned courses
+        TextView course1name = (TextView) v.findViewById(R.id.first_course_name);
+        TextView course2name = (TextView) v.findViewById(R.id.second_course_name);
+        TextView course3name = (TextView) v.findViewById(R.id.third_course_name);
+        TextView course4name = (TextView) v.findViewById(R.id.fourth_course_name);
+        TextView course1section = (TextView) v.findViewById(R.id.first_course_section);
+        TextView course2section = (TextView) v.findViewById(R.id.second_course_section);
+        TextView course3section = (TextView) v.findViewById(R.id.third_course_section);
+        TextView course4section = (TextView) v.findViewById(R.id.fourth_course_section);
+
+        course1name.setText(assignedCourses[0][0]);
+        course2name.setText(assignedCourses[1][0]);
+        course3name.setText(assignedCourses[2][0]);
+        course4name.setText(assignedCourses[3][0]);
+        String section = "Section "+assignedCourses[0][1];
+        course1section.setText(section);
+        section = "Section "+assignedCourses[1][1];
+        course2section.setText(section);
+        section = "Section "+assignedCourses[2][1];
+        course3section.setText(section);
+        section = "Section "+assignedCourses[3][1];
+        course4section.setText(section);
 
         return v;
     }

@@ -13,13 +13,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="@dimen/action_bar_height"
         android:background="@color/lightBlue"
+        android:fontFamily="casual"
         android:padding="10dp"
         android:text="Sama Samrin"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/propic_account"
@@ -35,29 +37,29 @@
         android:id="@+id/studentID_account"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/completed_credits_account"
+        android:layout_alignStart="@+id/department_account"
         android:layout_alignTop="@+id/propic_account"
         android:gravity="start"
         android:text="13101125"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
-        android:id="@+id/completed_credits_account"
+        android:id="@+id/department_account"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/studentID_account"
         android:layout_marginStart="11dp"
         android:layout_marginTop="21dp"
-        android:layout_toEndOf="@+id/textView3"
+        android:layout_toEndOf="@+id/department_label_account"
         android:gravity="start"
-        android:text="132"
+        android:text="CSE"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/student_id_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/completed_credits_account"
+        android:layout_above="@+id/department_account"
         android:layout_centerHorizontal="true"
         android:fontFamily="sans-serif-condensed"
         android:labelFor="@+id/studentID_account"
@@ -65,14 +67,212 @@
         android:textColor="@color/blackTextColor" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/department_label_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/completed_credits_account"
-        android:layout_alignBottom="@+id/completed_credits_account"
+        android:layout_alignBaseline="@+id/department_account"
+        android:layout_alignBottom="@+id/department_account"
         android:layout_alignStart="@+id/student_id_label"
         android:fontFamily="sans-serif-condensed"
-        android:text="Credits Completed : "
+        android:text="Department : "
         android:textColor="@color/blackTextColor" />
+
+    <TableLayout
+        android:id="@+id/account_details_table"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/propic_account"
+        android:layout_marginTop="23dp"
+        android:layout_margin="5dp"
+        android:padding="5dp"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:id="@+id/completed_credits_row"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/completed_credits_label"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:fontFamily="sans-serif"
+                android:padding="5dp"
+                android:text="Credits Completed : "
+                android:textColor="@color/whiteTextColor"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/completed_credits_account"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="132 "
+                android:textColor="@color/blackTextColor"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/current_courses_title_row"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/current_courses_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/lightGray"
+                android:padding="5dp"
+                android:text="Current Courses : "
+                android:textColor="@color/blackTextColor"
+                android:textSize="18sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/lightGray"
+                android:textColor="@color/blackTextColor"
+                android:padding="5dp"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/course1_row"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/first_course_name"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:fontFamily="sans-serif"
+                android:text="CSE110 "
+                android:gravity="center"
+                android:textColor="@color/whiteTextColor"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"/>
+
+            <TextView
+                android:id="@+id/first_course_section"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:padding="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:text="Section 1"
+                android:textColor="@color/blackTextColor" />
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/course2_row"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/second_course_name"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:fontFamily="sans-serif"
+                android:text="CSE110 "
+                android:gravity="center"
+                android:textColor="@color/whiteTextColor"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:layout_marginBottom="3dp"/>
+
+            <TextView
+                android:id="@+id/second_course_section"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Section 1"
+                android:textColor="@color/blackTextColor"
+                android:layout_marginBottom="3dp"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/course3_row"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/third_course_name"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:fontFamily="sans-serif"
+                android:text="CSE110 "
+                android:gravity="center"
+                android:textColor="@color/whiteTextColor"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:layout_marginBottom="3dp"/>
+
+            <TextView
+                android:id="@+id/third_course_section"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Section 1"
+                android:textColor="@color/blackTextColor"
+                android:layout_marginBottom="3dp"/>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/course4_row"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/fourth_course_name"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:fontFamily="sans-serif"
+                android:text="CSE110 "
+                android:gravity="center"
+                android:textColor="@color/whiteTextColor"
+                android:textStyle="bold"
+                android:padding="5dp"
+                android:layout_marginBottom="3dp"/>
+
+            <TextView
+                android:id="@+id/fourth_course_section"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:background="@color/colorAccent"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="Section 1"
+                android:textColor="@color/blackTextColor"
+                android:layout_marginBottom="3dp"/>
+
+        </TableRow>
+
+    </TableLayout>
 
 </RelativeLayout>
