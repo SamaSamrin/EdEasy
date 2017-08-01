@@ -2,20 +2,29 @@ package com.example.user.edeasy;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
+
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
 
 
 /**
@@ -43,6 +52,9 @@ public class AccountProfile extends Fragment {
     StorageReference storageReference;
     StorageReference courseOneFilesRef;
     FirebaseUser currentUser;
+
+    SeekBar milestonerBar;
+    int m_progress = 0;
 
     String user_role;
     String user_department;
@@ -123,8 +135,81 @@ public class AccountProfile extends Fragment {
         Log.e(TAG, "onCreateView");
         View v = inflater.inflate(R.layout.fragment_account_profile, container, false);
 
-        //setting views
+        setBasicInfo(v);
 
+        //setting photo according to user role
+        ImageView propic = (ImageView) v.findViewById(R.id.propic_account);
+        if (user_role.equals("student"))
+            propic.setImageResource(R.drawable.student);
+        else if (user_role.equals("teacher"))
+            propic.setImageResource(R.drawable.teacher);
+
+
+        //milestone bar
+        milestonerBar = (SeekBar) v.findViewById(R.id.milestone_seekbar);
+        Calendar calendar = Calendar.getInstance();
+        int todayInt = calendar.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+        int monthInt = calendar.get(Calendar.MONTH);
+        String month = new DateFormatSymbols().getMonths()[monthInt];
+        Log.e(TAG, "today = "+todayInt+" month = "+month);
+        milestonerBar.cancelLongPress();
+        milestonerBar.setClickable(false);
+
+        m_progress = 5;
+        setProgressStuff(m_progress);
+        milestonerBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                setProgressStuff(m_progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                setProgressStuff(m_progress);
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                setProgressStuff(m_progress);
+            }
+        });
+
+        //todaysName = new DateFormatSymbols().getWeekdays()[todayInt];//today's week day name
+
+
+        return v;
+    }
+
+    void setProgressStuff(int progress){
+        int drawableId = R.drawable.black_1_27;
+        milestonerBar.setProgress(progress);
+        switch (progress) {
+            case 2 :
+                drawableId = R.drawable.black_2_27;
+                break;
+            case 3 :
+                drawableId = R.drawable.black_3_27;
+                break;
+            case 4 :
+                drawableId = R.drawable.black_4_27;
+                break;
+            case 5 :
+                drawableId = R.drawable.black_5_27;
+                break;
+            case 6 :
+                drawableId = R.drawable.black_6_27;
+                break;
+            case 1 :
+                drawableId = R.drawable.black_1_27;
+                break;
+        }
+        if (Build.VERSION.SDK_INT>20) {
+            Drawable drawable = getActivity().getDrawable(drawableId);
+            milestonerBar.setThumb(drawable);
+        }
+    }
+
+    void setBasicInfo(View v){
         //basic info
         TextView nameDisplay = (TextView) v.findViewById(R.id.account_name_display);
         TextView studentIdDisplay = (TextView) v.findViewById(R.id.studentID_account);
@@ -135,13 +220,6 @@ public class AccountProfile extends Fragment {
         studentIdDisplay.setText(student_id);
         departmentDisplay.setText(user_department);
         creditsDoneDisplay.setText(credits_completed);
-
-        //setting photo according to user role
-        ImageView propic = (ImageView) v.findViewById(R.id.propic_account);
-        if (user_role.equals("student"))
-            propic.setImageResource(R.drawable.student);
-        else if (user_role.equals("teacher"))
-            propic.setImageResource(R.drawable.teacher);
 
         //setting assigned courses
         TextView course1name = (TextView) v.findViewById(R.id.first_course_name);
@@ -166,7 +244,6 @@ public class AccountProfile extends Fragment {
         section = "Section "+assignedCourses[3][1];
         course4section.setText(section);
 
-        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

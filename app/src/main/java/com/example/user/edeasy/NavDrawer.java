@@ -85,6 +85,7 @@ public class NavDrawer extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Dashboard");
+        toolbar.hideOverflowMenu();
 
         auth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -135,8 +136,11 @@ public class NavDrawer extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+            //super.onBackPressed();
         } else {
-            super.onBackPressed();
+            Fragment fragment = new Dashboard();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            //super.onBackPressed();
         }
     }
 

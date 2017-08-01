@@ -275,4 +275,35 @@
 
     </TableLayout>
 
+    <SeekBar
+        android:id="@+id/milestone_seekbar"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/milestone_label"
+        android:layout_margin="5dp"
+        android:clickable="false"
+        android:contextClickable="false"
+        android:max="6"
+        android:progress="2"
+        android:thumb="@drawable/black_2_27" />
+
+    <TextView
+        android:id="@+id/milestone_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/account_details_table"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="Milestones covered this Semester"
+        android:textColor="@color/blackTextColor"
+        android:textSize="18sp"
+        android:background="@color/lightGray"
+        android:padding="5dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"/>
+
 </RelativeLayout>
