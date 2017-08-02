@@ -20,7 +20,11 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.DateFormatSymbols;
@@ -48,13 +52,18 @@ public class AccountProfile extends Fragment {
 
     FirebaseAuth auth;
     DatabaseReference databaseReference;
-    DatabaseReference courseFileDownloadUrls;
-    StorageReference storageReference;
-    StorageReference courseOneFilesRef;
-    FirebaseUser currentUser;
 
     SeekBar milestonerBar;
     int m_progress = 0;
+
+    String beginDate;
+    String endDate;
+    int todaysDay;
+    int todaysMonth;
+    int beginDay;
+    int beginMonth;
+    int endDay;
+    int endMonth;
 
     String user_role;
     String user_department;
@@ -65,7 +74,6 @@ public class AccountProfile extends Fragment {
     int numberOfCourses;
     String[][] assignedCourses;
     String[] departments;
-    DatabaseReference userRef;
 
     private OnFragmentInteractionListener mListener;
 
@@ -126,6 +134,10 @@ public class AccountProfile extends Fragment {
             }
         }else
             Log.e(TAG, "#90 : received args is null");
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        setBeginAndEndDates();
+
     }
 
     @Override
@@ -148,14 +160,15 @@ public class AccountProfile extends Fragment {
         //milestone bar
         milestonerBar = (SeekBar) v.findViewById(R.id.milestone_seekbar);
         Calendar calendar = Calendar.getInstance();
-        int todayInt = calendar.get(Calendar.DAY_OF_WEEK_IN_MONTH);
-        int monthInt = calendar.get(Calendar.MONTH);
-        String month = new DateFormatSymbols().getMonths()[monthInt];
-        Log.e(TAG, "today = "+todayInt+" month = "+month);
+        todaysDay = calendar.get(Calendar.DAY_OF_WEEK_IN_MONTH);
+        todaysMonth = calendar.get(Calendar.MONTH);
+        String month = new DateFormatSymbols().getMonths()[todaysMonth];
+        Log.e(TAG, "today = "+todaysDay+" month = "+month);
         milestonerBar.cancelLongPress();
         milestonerBar.setClickable(false);
 
         m_progress = 5;
+
         setProgressStuff(m_progress);
         milestonerBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -244,6 +257,68 @@ public class AccountProfile extends Fragment {
         section = "Section "+assignedCourses[3][1];
         course4section.setText(section);
 
+    }
+
+    void setBeginAndEndDates(){
+        DatabaseReference currentSemesterRef = databaseReference.child("current_semester");
+        currentSemesterRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                beginDate = dataSnapshot.child("begin date").getValue(String.class);
+                endDate = dataSnapshot.child("end date").getValue(String.class);
+
+                //set milestones
+                int totalSemesterDays = getTotalSemesterDays(beginDate, endDate) ;
+                Log.e(TAG, "total semester days = "+totalSemesterDays);
+//                todaysDay = 15;
+//                todaysMonth = 6;
+                todaysMonth = todaysMonth+1;
+                int numberOfDaysPassed = 0;
+                if (todaysMonth==beginMonth && todaysDay>beginDay)
+                    numberOfDaysPassed = todaysDay-beginDay;
+                else if (todaysMonth==endMonth){
+                    if (todaysDay<endDay)
+                        numberOfDaysPassed = totalSemesterDays-(endDay-todaysDay);
+                    else
+                        numberOfDaysPassed = totalSemesterDays;
+                }else if (todaysMonth>beginMonth && todaysMonth<endMonth){
+                    numberOfDaysPassed = 30-beginDay;
+                    int fullMonthsDifference = todaysMonth-beginMonth-1;
+                    numberOfDaysPassed = numberOfDaysPassed + (fullMonthsDifference*30);
+                    numberOfDaysPassed = numberOfDaysPassed + todaysDay;
+                }
+                Log.e(TAG, "number of days passed = "+numberOfDaysPassed);
+                int milestonesRatio = totalSemesterDays/5;
+                Log.e(TAG, "milestones ratio = "+milestonesRatio);
+                m_progress = (numberOfDaysPassed/milestonesRatio) + 1;
+                Log.e(TAG, "progress = "+m_progress);
+                setProgressStuff(m_progress);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    int getTotalSemesterDays(String beginDate, String endDate){
+        int numberOfDays = 0;
+        String[] beginDateArray = beginDate.split("\\.");
+        beginDay = Integer.parseInt(beginDateArray[0]);
+        beginMonth = Integer.parseInt(beginDateArray[1]);
+        String[] endDateArray = endDate.split("\\.");
+        endDay = Integer.parseInt(endDateArray[0]);
+        endMonth = Integer.parseInt(endDateArray[1]);
+        int fullMonthsDifference = endMonth-beginMonth-1;
+        /* counting the number of full months included in the semester. One month subtracted
+        to ignore the partial months in the beginning and the end of a semester.
+            For example, if begin month is 5 (May) and the end month is 8 (August), then to
+        count June and July properly we need fullMonthsDifference = 2. And that can be achieved
+        through this algorithm [8-5-1 = 3-1 = 2].
+         */
+        numberOfDays = (30-beginDay)+(fullMonthsDifference*30)+endDay;
+        return  numberOfDays;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
