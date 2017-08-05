@@ -40,6 +40,7 @@ public class CalendarDisplay extends AppCompatActivity {
 
     ListView eventsView;
     int numberOfCourses;
+    int totalNumberOfEvents;
     String[][] assignedCourses;
     String[][] events;
     String[] departments;
@@ -93,7 +94,7 @@ public class CalendarDisplay extends AppCompatActivity {
         allDepartmentsRef = databaseReference.child("departments");
         currentUser = auth.getCurrentUser();
 
-        events = new String[numberOfCourses][2];
+        events = new String[50][2];
         eventsView = (ListView) findViewById(R.id.calendar_events_display);
         //calendarView = (CalendarView) findViewById(R.id.calendarView);
         materialCalendarView = (MaterialCalendarView) findViewById(R.id.material_calendar_view);
@@ -104,7 +105,8 @@ public class CalendarDisplay extends AppCompatActivity {
         String fulldate = todaysYear+"-"+todaysMonth+"-"+todaysDate;
         Date currentDate = Date.valueOf(fulldate);
         materialCalendarView.setCurrentDate(currentDate);
-        materialCalendarView.setDateSelected(currentDate, true);
+        materialCalendarView.addDecorator(new CurrentDateDecorator(this));
+//        materialCalendarView.setDateSelected(currentDate, true);
        // calendarAdapter = new CalendarEventsAdapter(this, events);
         //ListAdapter adapter = new ArrayAdapter<String>();
 
@@ -124,33 +126,38 @@ public class CalendarDisplay extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //retrieving events from dataSnapshot
-                DataSnapshot ds = dataSnapshot.child("CSE")
-                        .child("courses").child("CSE220")
-                        .child("sections").child(assignedCourses[0][1])
-                        .child("events");
-                int i = 0;
-                //for (int i=0; i<numberOfCourses; i++) {
-//                    DataSnapshot ds = dataSnapshot.child(departments[i])
-//                            .child("courses").child(assignedCourses[i][0])
-//                            .child("sections").child(assignedCourses[i][1])
-//                            .child("events");
+//                DataSnapshot ds = dataSnapshot.child("CSE")
+//                        .child("courses").child("CSE220")
+//                        .child("sections").child(assignedCourses[0][1])
+//                        .child("events");
+//                int i = 0;
+                totalNumberOfEvents = 0;
+                int eventIndex = 0;
+                for (int i=0; i<numberOfCourses; i++) {
+                    DataSnapshot ds = dataSnapshot.child(departments[i])
+                            .child("courses").child(assignedCourses[i][0])
+                            .child("sections").child(assignedCourses[i][1])
+                            .child("events");
                     long eventsCount = ds.getChildrenCount();
                     int numberOfEvents = (int) eventsCount;
-                    Log.e(TAG, "#104 : " + String.valueOf(numberOfEvents));
+                    totalNumberOfEvents = totalNumberOfEvents + numberOfEvents;
+                    Log.e(TAG, "#104 : for course "+assignedCourses[i][0]
+                            +" number of events = " + String.valueOf(numberOfEvents));
                     for (DataSnapshot snap : ds.getChildren()) {
-                        events[i][0] = snap.child("name").getValue(String.class);
-                        Log.e(TAG, "#106 : event name = " + events[i][0]);
-                        events[i][1] = snap.child("due date").getValue(String.class);
-                        Log.e(TAG, "#110 : due date = " + events[i][1]);
-                        i++;
+                        String eventName = snap.child("name").getValue(String.class);
+                        events[eventIndex][0] = assignedCourses[i][0]+" "+eventName;
+                        Log.e(TAG, "#106 : event name = " + events[eventIndex][0]);
+                        events[eventIndex][1] = snap.child("due date").getValue(String.class);
+                        Log.e(TAG, "#110 : due date = " + events[eventIndex][1]);
+                        eventIndex++;
                     }
-
-                    //applying it on the CalendarView Adapter
-                    calendarAdapter = new CalendarEventsAdapter(CalendarDisplay.this,
-                            events, materialCalendarView);
-                    eventsView.setAdapter(calendarAdapter);
                 }
-            //}
+
+                //applying it on the CalendarView Adapter
+                calendarAdapter = new CalendarEventsAdapter(CalendarDisplay.this,
+                        events, materialCalendarView, totalNumberOfEvents);
+                eventsView.setAdapter(calendarAdapter);
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -176,9 +183,11 @@ class CalendarEventsAdapter extends BaseAdapter{
     //String todaysDate = currentMonth+" "+String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
     String selectedDate;
 
-    CalendarEventsAdapter(Context c, String[][] eventsInput, MaterialCalendarView cal){
+    CalendarEventsAdapter(Context c, String[][] eventsInput, MaterialCalendarView cal,
+                          int eventsCount){
         //Log.e(TAG, "today's date = "+todaysDate);
         Log.e(TAG, "month = "+currentMonth);
+        Log.e(TAG, "events number = "+eventsCount);
         numberOfEvents = 0;
         eventNames = new String[eventsInput.length];
         eventDates = new String[eventsInput.length];
@@ -186,9 +195,10 @@ class CalendarEventsAdapter extends BaseAdapter{
         for (int i = 0; i < eventsInput.length; i++) {
             eventNames[i] = eventsInput[i][0];
             eventDates[i] = eventsInput[i][1];
-            Log.e(TAG, "at i="+String.valueOf(i)+"event name = "+eventNames[i]+" on "+eventDates[i]);
-            if (eventsInput[i]!=null && eventDates[i]!=null)
+            if (eventsInput[i]!=null && eventDates[i]!=null) {
                 numberOfEvents++;
+                Log.e(TAG, "at i="+String.valueOf(i)+"event name = "+eventNames[i]+" on "+eventDates[i]);
+            }
         }
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         calendar = cal;
