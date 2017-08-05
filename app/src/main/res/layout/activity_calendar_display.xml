@@ -8,52 +8,63 @@
     tools:context="com.example.user.edeasy.CalendarDisplay">
 
     <!--Calendar displays current day by default-->
-    <CalendarView
-        android:id="@+id/calendarView"
+    <!--<CalendarView-->
+        <!--android:id="@+id/calendarView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:paddingBottom="5dp"-->
+        <!--tools:layout_editor_absoluteX="16dp"-->
+        <!--tools:layout_editor_absoluteY="55dp"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_below="@+id/toolbar2" />-->
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/material_calendar_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="55dp"
+        android:layout_height="300dp"
+        android:paddingTop="5dp"
+        app:mcv_arrowColor="@color/colorAccent"
+        app:mcv_selectionColor="@color/brightSkyBlue"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbar2" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:text="Events"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textSize="18sp"
-        android:layout_below="@+id/calendarView"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView2" />
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorAccent"
+    android:text="Events"
+    android:textAlignment="center"
+    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+    android:textSize="18sp"
+    android:layout_below="@+id/material_calendar_view"
+    android:layout_alignParentStart="true"
+    android:id="@+id/textView2" />
 
     <ListView
         android:id="@+id/calendar_events_display"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView2"
-        android:background="@color/colorAccentLight"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"/>
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar2"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@color/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:title="Your Calendar"
-        app:titleTextColor="@android:color/white" />
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/textView2"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
+        android:paddingBottom="10dp"
+        android:background="@color/colorAccentLight" />
 
-    <!--Make it show the deadlines, ekta date e click korle oi date-er deadlines
-    niche jeno display hoy, in a scrollView
-    each course will have a different color-->
+<android.support.v7.widget.Toolbar
+    android:id="@+id/toolbar2"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentTop="true"
+    android:background="@color/colorPrimary"
+    android:minHeight="?attr/actionBarSize"
+    android:theme="?attr/actionBarTheme"
+    app:title="Your Calendar"
+    app:titleTextColor="@android:color/white" />
+
+<!--Make it show the deadlines, ekta date e click korle oi date-er deadlines
+niche jeno display hoy, in a scrollView
+each course will have a different color-->
 </android.widget.RelativeLayout>

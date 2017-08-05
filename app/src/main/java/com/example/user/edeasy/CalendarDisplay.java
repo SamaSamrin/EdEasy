@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -28,10 +29,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import java.util.Calendar;
-
-//import com.roomorama.caldroid.CaldroidFragment;
-//import com.roomorama.caldroid.CaldroidListener;
+import java.sql.Date;
 
 @SuppressLint("SimpleDateFormat")
 public class CalendarDisplay extends AppCompatActivity {
@@ -48,6 +48,7 @@ public class CalendarDisplay extends AppCompatActivity {
     ListAdapter calendarAdapter;
     int index = 1;
     CalendarView calendarView;
+    MaterialCalendarView materialCalendarView;
 
     FirebaseAuth auth;
     DatabaseReference databaseReference;
@@ -94,7 +95,16 @@ public class CalendarDisplay extends AppCompatActivity {
 
         events = new String[numberOfCourses][2];
         eventsView = (ListView) findViewById(R.id.calendar_events_display);
-        calendarView = (CalendarView) findViewById(R.id.calendarView);
+        //calendarView = (CalendarView) findViewById(R.id.calendarView);
+        materialCalendarView = (MaterialCalendarView) findViewById(R.id.material_calendar_view);
+        String todaysDate = String.valueOf(Calendar.getInstance().get(Calendar.DATE));
+        int month = Calendar.getInstance().get(Calendar.MONTH);
+        String todaysMonth = String.valueOf(month+1);
+        String todaysYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        String fulldate = todaysYear+"-"+todaysMonth+"-"+todaysDate;
+        Date currentDate = Date.valueOf(fulldate);
+        materialCalendarView.setCurrentDate(currentDate);
+        materialCalendarView.setDateSelected(currentDate, true);
        // calendarAdapter = new CalendarEventsAdapter(this, events);
         //ListAdapter adapter = new ArrayAdapter<String>();
 
@@ -137,7 +147,7 @@ public class CalendarDisplay extends AppCompatActivity {
 
                     //applying it on the CalendarView Adapter
                     calendarAdapter = new CalendarEventsAdapter(CalendarDisplay.this,
-                            events, calendarView);
+                            events, materialCalendarView);
                     eventsView.setAdapter(calendarAdapter);
                 }
             //}
@@ -161,22 +171,24 @@ class CalendarEventsAdapter extends BaseAdapter{
     String[] eventDates;
     Context context;
     private static LayoutInflater inflater = null;
-    CalendarView calendar;
+    MaterialCalendarView calendar;
     String currentMonth = convertToMonthName(Calendar.getInstance().get(Calendar.MONTH));
     //String todaysDate = currentMonth+" "+String.valueOf(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
     String selectedDate;
 
-    CalendarEventsAdapter(Context c, String[][] eventsInput, CalendarView cal){
+    CalendarEventsAdapter(Context c, String[][] eventsInput, MaterialCalendarView cal){
         //Log.e(TAG, "today's date = "+todaysDate);
         Log.e(TAG, "month = "+currentMonth);
-        numberOfEvents = eventsInput.length;
-        eventNames = new String[numberOfEvents];
-        eventDates = new String[numberOfEvents];
+        numberOfEvents = 0;
+        eventNames = new String[eventsInput.length];
+        eventDates = new String[eventsInput.length];
         context = c;
-        for (int i = 0; i < numberOfEvents; i++) {
+        for (int i = 0; i < eventsInput.length; i++) {
             eventNames[i] = eventsInput[i][0];
             eventDates[i] = eventsInput[i][1];
             Log.e(TAG, "at i="+String.valueOf(i)+"event name = "+eventNames[i]+" on "+eventDates[i]);
+            if (eventsInput[i]!=null && eventDates[i]!=null)
+                numberOfEvents++;
         }
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         calendar = cal;
@@ -187,13 +199,14 @@ class CalendarEventsAdapter extends BaseAdapter{
         String dateInWords = "";
         //Log.e(TAG, "date="+date);
         if (date!=null){
+
         String[] sections = date.split("\\.");
             if (sections.length>0) {
                 String day = sections[0];
                 String month = convertToMonthName(sections[1]);
                 String year = sections[2];
                 dateInWords = month + " " + day + "," + year;
-                Log.e(TAG, "date in words = "+dateInWords);
+                //Log.e(TAG, "date in words = "+dateInWords);
             }else {
                 Log.e(TAG, "splitted array length is zero ");
                 dateInWords = date;
@@ -290,19 +303,27 @@ class CalendarEventsAdapter extends BaseAdapter{
         return  month;
     }
 
+    String formatDates(String previousDate){
+        String formattedDate = "";
+        String[] dateArray = previousDate.split("\\.");
+        formattedDate = dateArray[2]+"-"+dateArray[1]+"-"+dateArray[0];
+        //Log.e(TAG, "#305 : formatted date = "+formattedDate);
+        return  formattedDate;
+    }
+
     void calendarListenerSetup(){
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                String dateInt = String.valueOf(dayOfMonth)+"."+
-                        String.valueOf(month+1)+"."+
-                        String.valueOf(year);
-                selectedDate = dateToWords(dateInt);
-                currentMonth = convertToMonthName(month);
-                notifyDataSetChanged();
-                Log.e(TAG, "selected month = "+currentMonth);
-            }
-        });
+//        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+//            @Override
+//            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+//                String dateInt = String.valueOf(dayOfMonth)+"."+
+//                        String.valueOf(month+1)+"."+
+//                        String.valueOf(year);
+//                selectedDate = dateToWords(dateInt);
+//                currentMonth = convertToMonthName(month);
+//                notifyDataSetChanged();
+//                Log.e(TAG, "selected month = "+currentMonth);
+//            }
+//        });
     }
 
     @Override
@@ -336,18 +357,11 @@ class CalendarEventsAdapter extends BaseAdapter{
 
         if (eventNames[position]!=null && eventDates[position]!=null){
             String month = (dateToWords(eventDates[position]).split(" ")) [0];
-            Log.e(TAG, "month="+month+" current month="+currentMonth);
-            //if (month.equals(currentMonth)) {
-            // --> working but, keeping the other list items empty
-            // sort the events or keep them in monthlyEvents[][]
-            // where the first index will be the months's number or name
-            // and the second index will carry the events' names and dates
+            //Log.e(TAG, "month="+month+" current month="+currentMonth);
                 event_tv.setText(eventNames[position]);
                 date_tv.setText(dateToWords(eventDates[position]));
-//            }else{
-//                event_tv.setText("");
-//                date_tv.setText("");
-//            }
+                Date date = Date.valueOf(formatDates(eventDates[position]));
+                calendar.setDateSelected(date, true);
         }else{
                 event_tv.setText("");
                 date_tv.setText("");
