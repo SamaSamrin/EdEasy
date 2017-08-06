@@ -42,8 +42,8 @@ class CurrentDateDecorator implements DayViewDecorator {
 
         view.setBackgroundDrawable(highlightDrawable);
         view.addSpan(new ForegroundColorSpan(Color.WHITE));
-        view.addSpan(new StyleSpan(Typeface.BOLD));
-        view.addSpan(new RelativeSizeSpan(1.5f));
+//        view.addSpan(new StyleSpan(Typeface.BOLD));
+//        view.addSpan(new RelativeSizeSpan(1.5f));
 
     }
 }

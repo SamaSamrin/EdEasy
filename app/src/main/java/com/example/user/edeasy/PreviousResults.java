@@ -117,7 +117,6 @@ public class PreviousResults extends Activity {
                 numberOfPreviousSemester = (int) count;
                 numberOfCoursesDone = new int[numberOfPreviousSemester];
                 resultList = new ArrayList<String>();
-                Log.e(TAG, "number of previous semesters = "+numberOfPreviousSemester);
                 int semesterCount = 0;
                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
                     String semester = snap.getKey();
@@ -125,25 +124,16 @@ public class PreviousResults extends Activity {
                     semester_headers.add(semester);//semester's name
                     long c = snap.getChildrenCount();
                     numberOfCompletedCourses = (int) c;
-                    Log.e(TAG, "semester # "+semesterCount+", courses number = "+numberOfCompletedCourses);
                     numberOfCoursesDone[semesterCount] = numberOfCompletedCourses;
                     int index = 0;
-                    //resultLists[resultIndex] = new ArrayList<String>();
-                    String[] courses = new String[numberOfCompletedCourses];
-                    String[] grades = new String[numberOfCompletedCourses];
                     Double[] gpas = new Double[numberOfCompletedCourses];
                     for (DataSnapshot snapChild : snap.getChildren()){
-                        //courses[index] = snapChild.getKey();//coursename
-                        Log.e(TAG, "#136 : course name = "+snapChild.getKey());
-                        resultList.add(snapChild.getKey());
+                        resultList.add(snapChild.getKey());//course name
                         if(snapChild.child("gpa").getValue(Double.class)!=null) {
                             gpas[index] = snapChild.child("gpa").getValue(Double.class);//gpa
                         }
-                        //Log.e(TAG, "#141 : gpa = "+String.valueOf(gpas[index]));
                         resultList.add(String.valueOf(gpas[index]));
-                        //Log.e(TAG, "#143 : grade = "+snapChild.child("grade").getValue(String.class));
-                        resultList.add(snapChild.child("grade").getValue(String.class));
-                        //grades[index] = String.valueOf(snapChild.child("grade").getValue(String.class));//grade
+                        resultList.add(snapChild.child("grade").getValue(String.class));//grade
                         index++;
                         semester_result_details.put(semester, resultList);
                         adapter.notifyDataSetChanged();
@@ -154,13 +144,7 @@ public class PreviousResults extends Activity {
                             semester_headers, semester_result_details, numberOfCoursesDone);
                     previous_results_list.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-//                    resultLists[resultIndex] = addAllToList(resultLists[resultIndex], courses);//first all course names
-//                    resultLists[resultIndex] = addAllToList(resultLists[resultIndex], gpas);//second all corresponding gpas
-//                    resultLists[resultIndex] = addAllToList(resultLists[resultIndex], grades);//lastly all corresponding grades
-//                    //semester_result_details.put(semester, resultLists[resultIndex]);
                 }
-                //printAll();
-               // adapter.notifyDataSetChanged();
             }
 
             @Override

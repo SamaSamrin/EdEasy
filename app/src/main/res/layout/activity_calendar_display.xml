@@ -24,7 +24,7 @@
         android:layout_height="300dp"
         android:paddingTop="5dp"
         app:mcv_arrowColor="@color/colorAccent"
-        app:mcv_selectionColor="@color/brightSkyBlue"
+        app:mcv_selectionColor="@color/colorAccent"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/toolbar2" />
 

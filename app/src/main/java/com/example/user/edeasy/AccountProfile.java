@@ -266,12 +266,8 @@ public class AccountProfile extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 beginDate = dataSnapshot.child("begin date").getValue(String.class);
                 endDate = dataSnapshot.child("end date").getValue(String.class);
-
-                //set milestones
+                //calculation
                 int totalSemesterDays = getTotalSemesterDays(beginDate, endDate) ;
-                Log.e(TAG, "total semester days = "+totalSemesterDays);
-//                todaysDay = 15;
-//                todaysMonth = 6;
                 todaysMonth = todaysMonth+1;
                 int numberOfDaysPassed = 0;
                 if (todaysMonth==beginMonth && todaysDay>beginDay)
@@ -287,11 +283,8 @@ public class AccountProfile extends Fragment {
                     numberOfDaysPassed = numberOfDaysPassed + (fullMonthsDifference*30);
                     numberOfDaysPassed = numberOfDaysPassed + todaysDay;
                 }
-                Log.e(TAG, "number of days passed = "+numberOfDaysPassed);
                 int milestonesRatio = totalSemesterDays/5;
-                Log.e(TAG, "milestones ratio = "+milestonesRatio);
                 m_progress = (numberOfDaysPassed/milestonesRatio) + 1;
-                Log.e(TAG, "progress = "+m_progress);
                 setProgressStuff(m_progress);
             }
 
