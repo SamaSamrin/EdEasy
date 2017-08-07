@@ -34,8 +34,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 //import layout.CourseOneMaterials;
 
@@ -55,6 +62,9 @@ public class NavDrawer extends AppCompatActivity
     String[] departments;
     MenuItem[] menuItems;
     User user;
+    final String SENDER_ID = "203799295922";
+    final String appID = "edeasy-510c6";
+    static AtomicInteger msgId = new AtomicInteger(0);
 
     private View containerView;
     Toolbar toolbar;
@@ -68,6 +78,7 @@ public class NavDrawer extends AppCompatActivity
     StorageReference storageReference;
     StorageReference CSE_storageRef;
     FirebaseUser currentUser;
+    FirebaseMessaging fcm;
 
     Bundle bundle;
     TextView nav_user;
@@ -94,6 +105,29 @@ public class NavDrawer extends AppCompatActivity
         storageReference = FirebaseStorage.getInstance().getReference();
         CSE_storageRef = storageReference.child("CSE");
         currentUser = auth.getCurrentUser();
+        fcm = FirebaseMessaging.getInstance();
+
+        //sending upstream message
+        RemoteMessage message = new RemoteMessage.Builder(SENDER_ID+"@gcm.googleapis.com")
+                .setMessageId(Integer.toString(msgId.incrementAndGet()))
+                .addData("my_message", "Hello World")
+                .addData("my_action","SAY_HELLO")
+                .build();;
+        fcm.send(message);
+
+
+
+        //trying for push notifications
+        try {
+            PushNotificationHelper.sendPushNotification("hello?");
+            Log.e(TAG, "#105 : sending notification");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "#108 : IO Exception "+e.getMessage());//android.os.NetworkOnMainThreadException
+        } catch (JSONException jo) {
+            Log.e(TAG, "#110 : Json wrong ");
+            jo.printStackTrace();
+        }
 
         //myMenu = (Menu)findViewById(R.id.top_drawer_menu);
         menuItems = new MenuItem[5];

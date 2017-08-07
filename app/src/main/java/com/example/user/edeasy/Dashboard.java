@@ -40,6 +40,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+
 
 public class Dashboard extends Fragment {
 
@@ -83,6 +87,17 @@ public class Dashboard extends Fragment {
         //setContentView(R.layout.activity_nav_drawer);
 
         Log.e(TAG, "onCreate");
+
+//        try {
+//            PushNotificationHelper.sendPushNotification("hello?");
+//            Log.e(TAG, "#93 : sending notification");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            Log.e(TAG, "#96 : IO Exception "+e.getMessage());
+//        } catch (JSONException jo) {
+//            Log.e(TAG, "#98 : Json wrong");
+//            jo.printStackTrace();
+//        }
 
         Intent intent = getActivity().getIntent();
         username = intent.getStringExtra("username");

@@ -30,10 +30,15 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 
 public class Welcome extends AppCompatActivity {
+
+    static PushNotificationHelper helper;
 
     private static final String TAG = "**Welcome**";
     TabHost tabHost_login;
@@ -74,6 +79,9 @@ public class Welcome extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        //helper = new PushNotificationHelper();
+        sendingNotif();
 
         auth = FirebaseAuth.getInstance();
         databaseInitialization();
@@ -264,6 +272,7 @@ public class Welcome extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        sendingNotif();
         Log.e(TAG, "onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN){
@@ -278,6 +287,7 @@ public class Welcome extends AppCompatActivity {
     @Override
     protected void onStart() {
         Log.e(TAG, "onStart");
+        sendingNotif();
         super.onStart();
         //auth.addAuthStateListener(authStateListener);
     }
@@ -363,7 +373,7 @@ public class Welcome extends AppCompatActivity {
                 user_email = dataSnapshot.child("email").getValue(String.class);
                 Log.e(TAG, "new student : username = "+username+" email="+user_email);
 
-                Toast.makeText(Welcome.this, "username is = "+username, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(Welcome.this, "username is = "+username, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -531,7 +541,7 @@ public class Welcome extends AppCompatActivity {
         User user = new User(emailInput, password);
         DatabaseReference newRef = null;
         //user_key = auth.getCurrentUser().getUid();
-        if (emailInput != null) {
+        if (!emailInput.equals("")) {//emailInput!=null
             if (selectedRole.equals("student")) {
                 newRef = studentsDatabaseReference.child(emailID);
                 //newRef.setValue(user);
@@ -552,6 +562,19 @@ public class Welcome extends AppCompatActivity {
             }else{
                 Log.e(TAG, "addNewUser to db: new Ref is null");
             }
+        }
+    }
+
+    void sendingNotif(){
+        try {
+            PushNotificationHelper.sendPushNotification("hello?");
+            Log.e(TAG, "#86 : sending notification");
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.e(TAG, "#89 : IO Exception "+e.getMessage());
+        } catch (JSONException jo) {
+            Log.e(TAG, "#90 : Json wrong");
+            jo.printStackTrace();
         }
     }
 }
