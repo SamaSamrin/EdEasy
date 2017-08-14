@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.user.edeasy.ChatroomCourse2">
+    tools:context="com.example.user.edeasy.activities.chatrooms.ChatroomCourse2">
 
     <ListView
         android:id="@+id/course2_chatroom_list"

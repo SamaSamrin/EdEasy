@@ -27,7 +27,7 @@
             android:label="Dashboard"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".NavDrawer"
+            android:name=".activities.NavDrawer"
             android:theme="@style/AppTheme.NoActionBar">
 
             <!-- <intent-filter> -->
@@ -37,10 +37,10 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".CurrentRoutine"
+            android:name=".activities.CurrentRoutine"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".PreviousResults"
+            android:name=".activities.PreviousResults"
             android:label="Previous Results"
             android:theme="@style/AppTheme" />
         <activity
@@ -48,22 +48,22 @@
             android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Chatroom"
+            android:name=".activities.chatrooms.Chatroom"
             android:label="@string/title_activity_chatroom"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".CurrentMarksheet"
+            android:name=".activities.CurrentMarksheet"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".CourseMaterials" />
+        <activity android:name=".fragments.course_materials.CourseMaterials" />
         <activity
-            android:name=".CalendarDisplay"
+            android:name=".activities.CalendarDisplay"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".NotificationsDisplay"
+            android:name=".activities.NotificationsDisplay"
             android:label="Notifications"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Welcome"
+            android:name=".activities.Welcome"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -72,23 +72,23 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignUp"
+            android:name=".activities.SignUp"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ChatroomCourse1" />
-        <activity android:name=".ChatroomCourse2" />
-        <activity android:name=".ChatroomCourse3" />
-        <activity android:name=".ChatroomCourse4" />
-        <activity android:name=".ChatroomCourse5" />
+        <activity android:name=".activities.chatrooms.ChatroomCourse1" />
+        <activity android:name=".activities.chatrooms.ChatroomCourse2" />
+        <activity android:name=".activities.chatrooms.ChatroomCourse3" />
+        <activity android:name=".activities.chatrooms.ChatroomCourse4" />
+        <activity android:name=".activities.chatrooms.ChatroomCourse5" />
         <activity
-            android:name=".FullRoutine"
+            android:name=".activities.FullRoutine"
             android:screenOrientation="landscape" />
         <receiver android:name=".AlarmReceiver"/>
-        <service android:name=".EdEasyMessagingService">
+        <service android:name=".push_notification_helpers.EdEasyMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name=".FirebaseIDService">
+        <service android:name=".push_notification_helpers.FirebaseIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>

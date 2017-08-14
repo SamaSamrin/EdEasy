@@ -18,7 +18,7 @@ import com.prolificinteractive.materialcalendarview.DayViewFacade;
  * Created by ASUS on 05-Aug-17.
  */
 
-class CurrentDateDecorator implements DayViewDecorator {
+public class CurrentDateDecorator implements DayViewDecorator {
 
     private Drawable highlightDrawable;
     private Context context;

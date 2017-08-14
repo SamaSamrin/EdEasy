@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.user.edeasy.PreviousResults">
+    tools:context="com.example.user.edeasy.activities.PreviousResults">
     <!--tools:showIn="@layout/activity_previous_results">-->
 
 </android.support.constraint.ConstraintLayout>

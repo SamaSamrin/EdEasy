@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="com.example.user.edeasy.FullRoutine">
+    tools:context="com.example.user.edeasy.activities.FullRoutine">
 
     <ScrollView
         android:layout_width="match_parent"

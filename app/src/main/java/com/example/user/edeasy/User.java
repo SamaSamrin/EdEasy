@@ -1,10 +1,12 @@
 package com.example.user.edeasy;
 
+import com.example.user.edeasy.fragments.course_materials.Course;
+
 /**
  * Created by ASUS on 5/29/2017.
  */
 
-class User {
+public class User {
 
    // private Course[] courses_assigned;
     private String department;
@@ -22,12 +24,12 @@ class User {
 
     }
 
-    User(String email, String password){
+    public User(String email, String password){
         this.email = email;
         this.password = password;
     }
 
-    User(Course[] courses_assigned, String department, String email, String full_name,
+    public User(Course[] courses_assigned, String department, String email, String full_name,
          String password, String semester, String student_id){
         this.department = department;
         this.email = email;
