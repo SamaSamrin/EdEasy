@@ -46,9 +46,9 @@
 
     <group  android:id="@+id/bottom_drawer_menu"
         android:checkableBehavior="single">
-            <!--<item android:id="@+id/settings_drawer_option"-->
-                <!--android:title="Settings"-->
-                <!--android:icon="@drawable/ic_menu_manage"/>-->
+            <item android:id="@+id/library_drawer_option"
+                android:title="Library"
+                android:icon="@drawable/library"/>
             <item android:id="@+id/logout_drawer_option"
                 android:title="Log Out"
                 android:icon="@drawable/logout"/>

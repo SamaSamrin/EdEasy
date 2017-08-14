@@ -1,0 +1,26 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.user.edeasy.OnlineLibraryFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <!--<ListView-->
+        <!--android:id="@+id/library_listview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginTop="@dimen/action_bar_height"/>-->
+
+    <GridView
+        android:id="@+id/departments_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/action_bar_height"
+        android:background="@color/coolGray"
+        android:columnWidth="80dp"
+        android:gravity="center"
+        android:numColumns="2"
+        android:padding="5dp"
+        android:stretchMode="columnWidth" />
+
+</FrameLayout>

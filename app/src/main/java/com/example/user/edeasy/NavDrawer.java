@@ -233,6 +233,12 @@ public class NavDrawer extends AppCompatActivity
             Log.e(TAG, "settings action");
             Intent i = new Intent(NavDrawer.this, Settings.class);
             startActivity(i);
+        }else if (id == R.id.library_drawer_option){
+            Log.e(TAG, "#237 : library option selected");
+            Fragment fragment = new OnlineLibraryFragment();
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+//            Intent i = new Intent(NavDrawer.this, OnlineLibraryFragment.class);
+//            startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
@@ -368,6 +374,10 @@ public class NavDrawer extends AppCompatActivity
                 Log.e(TAG, "logout drawer");
                 logOut();
                 break;
+            case (R.id.library_drawer_option) :
+                Log.e(TAG, "#378 : library option selected");
+                fragment = new OnlineLibraryFragment();
+                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
             }
 
 
