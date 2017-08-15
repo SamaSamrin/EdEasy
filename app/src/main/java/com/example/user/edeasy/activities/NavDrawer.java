@@ -189,7 +189,9 @@ public class NavDrawer extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         Log.e(TAG, "on create options menu");
-        getMenuInflater().inflate(R.menu.activity_nav_drawer_drawer, menu);
+        //getMenuInflater().inflate(R.menu.activity_nav_drawer_drawer, menu);
+        //^ removed the overflow on fragments
+       // getMenuInflater().inflate(R.menu.options_menu, menu);
         return true;
     }
 
@@ -383,6 +385,8 @@ public class NavDrawer extends AppCompatActivity
                 break;
             case (R.id.library_drawer_option) :
                 Log.e(TAG, "#378 : library option selected");
+                if(toolbar != null)
+                    toolbar.setTitle("Online Library");
                 fragment = new OnlineLibraryFragment();
                 args = new Bundle();
                 args.putString("email", currentUser.getEmail());
