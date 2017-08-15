@@ -21,6 +21,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
@@ -69,6 +73,7 @@ public class AccountProfile extends Fragment {
     int numberOfCourses;
     String[][] assignedCourses;
     String[] departments;
+    String[][] previousResults;
 
     private OnFragmentInteractionListener mListener;
 
@@ -183,6 +188,44 @@ public class AccountProfile extends Fragment {
         });
 
         //todaysName = new DateFormatSymbols().getWeekdays()[todayInt];//today's week day name
+
+        //graph view
+        GraphView graphView = (GraphView) v.findViewById(R.id.results_graph);
+        //graphView.setPivotY(Float.parseFloat("4.0"));
+
+        double[] modifiedGrades = new double[4];
+        modifiedGrades[0] = 2 * 3.29;
+        modifiedGrades[1] = 2 * 3.43;
+        modifiedGrades[2] = 2 * 3.7;
+        modifiedGrades[3] = 2 * 3.35;
+        for (int i = 0; i < modifiedGrades.length; i++) {
+            //Log.e(TAG, "modified grade = "+String.valueOf(modifiedGrades[i]));
+        }
+//
+//        new DataPoint(1, 6.58),
+//                new DataPoint(2, 6.86),
+//                new DataPoint(3, 7.4),
+//                new DataPoint(4, 6.7)
+
+        DataPoint[] grades = {
+//                new DataPoint(0, 0.0),
+                new DataPoint(1, 3.35),
+                new DataPoint(2, 2.98),
+                new DataPoint(3, 3.8),
+                new DataPoint(4, 3.93)
+        };
+        StaticLabelsFormatter formatter = new StaticLabelsFormatter(graphView);
+        formatter.setHorizontalLabels(new String[] {"Spr'16","Sum'16", "Fall'16", "Spr'17"});
+        //formatter.setVerticalLabels(new String[] {"0.0", "1.0", "2.0", "3.0", "4.0"});
+        graphView.getGridLabelRenderer().setLabelFormatter(formatter);
+
+        graphView.getViewport().setYAxisBoundsManual(true);
+        graphView.getViewport().setMaxY(4.0);
+        graphView.getViewport().setMinY(2.5);
+
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(grades);
+        series.setAnimated(true);
+        graphView.addSeries(series);
 
 
         return v;
