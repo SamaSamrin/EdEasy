@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Filter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -25,6 +27,8 @@ import android.widget.Toast;
 
 import com.example.user.edeasy.R;
 import com.example.user.edeasy.adapters.LibraryAdapter;
+import android.widget.Filterable;
+import com.example.user.edeasy.adapters.SearchResultsAdapter;
 import com.example.user.edeasy.fragments.OnlineLibraryFragment;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -60,10 +64,11 @@ public class LibraryCSE extends Fragment {
     StorageReference cseBooksStorageReference = FirebaseStorage.getInstance().getReference().child("CSE/Books");
     ListView booksListView;
     SearchView booksSearchView;
-    ListAdapter adapter;
+    LibraryAdapter adapter;
     String[] bookNames;
     String[][] details;
     String queryText;
+    ListView searchResultsListview;
 
     public LibraryCSE() {
         // Required empty public constructor
@@ -114,6 +119,7 @@ public class LibraryCSE extends Fragment {
         adapter = new LibraryAdapter(getContext(), bookNames);
         //adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, bookNames);
         booksListView.setAdapter(adapter);
+        booksListView.setTextFilterEnabled(true);
         setListViewListener();
         return v;
     }
@@ -183,34 +189,52 @@ public class LibraryCSE extends Fragment {
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
+//                    SearchResultsAdapter adapter = new SearchResultsAdapter(getContext(), bookNames);
+//                    adapter.
+                    adapter.getFilter().filter(query);
                     queryText = query;
                     Log.e(TAG, "query = "+queryText);
                     int counter = 0;
+                    String[] matchedResults = new String[10];
+                    int emptyIndex = 0 ;
                     for (String bookName : bookNames) {
                         if (bookName.contains(query)) {
                             Toast.makeText(getContext(), bookName, Toast.LENGTH_SHORT).show();
+                            //need to display results in a list
+                            bookName = bookName+".pdf";
+                            StorageReference bookRef = cseBooksStorageReference.child(bookName);
+                            //Log.e(TAG, "#194: book ref = "+bookRef);
+                            matchedResults[emptyIndex] = bookName;
+                            emptyIndex++;
                             break;
                         }else
                             counter++;
                     }
-                    if (counter>=bookNames.length)
+                    if (counter>=bookNames.length) {
                         Toast.makeText(getContext(), "NO MATCH FOUND", Toast.LENGTH_SHORT).show();
+                    }else{
+                        //send the matched book names to search results listview
+
+                    }
+
                     return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    //queryText = newText;
-                    //Log.e(TAG, "on change query = "+queryText);
-                    return true;
+                    if (adapter==null)
+                        Log.e(TAG, "#226 : adapter is null");
+                    adapter.getFilter().filter(newText);
+                    return false;
                 }
             });
         }
         return true;
     }
 
-
-
+    void onQueryTextChange(String query) {
+        //adapter.getFilter().filter(query);
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
