@@ -19,7 +19,7 @@ import android.widget.TextView;
 public class DepartmentsGridAdapter extends BaseAdapter {
 
     Context context;
-    String[] departments = {"BBS","BIL","CSE","EEE","MNS","PHR"};
+    String[] departments = {"BBS","BIL","CSE","EEE","MNS","ESS"};
     String[] backgroundColors = {"#B3E5FC", "#EDE7F6",
             "#EDE7F6", "#B3E5FC", "#B3E5FC", "#EDE7F6"};
 

@@ -1,6 +1,6 @@
 package com.example.user.edeasy;
 
-import com.example.user.edeasy.fragments.course_materials.Course;
+//import com.example.user.edeasy.fragments.course_materials.Course;
 
 /**
  * Created by ASUS on 5/29/2017.
@@ -29,15 +29,15 @@ public class User {
         this.password = password;
     }
 
-    public User(Course[] courses_assigned, String department, String email, String full_name,
-         String password, String semester, String student_id){
-        this.department = department;
-        this.email = email;
-        this.full_name = full_name;
-        this.password = password;
-        //this.semester = semester;
-        this.student_id = student_id;
-    }
+//    public User(Course[] courses_assigned, String department, String email, String full_name,
+//         String password, String semester, String student_id){
+//        this.department = department;
+//        this.email = email;
+//        this.full_name = full_name;
+//        this.password = password;
+//        //this.semester = semester;
+//        this.student_id = student_id;
+//    }
 
     public String getEmail(){
         return email;

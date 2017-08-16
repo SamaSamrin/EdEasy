@@ -3,21 +3,17 @@ package com.example.user.edeasy.fragments.department_libraries;
 import android.app.SearchManager;
 import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -35,29 +31,27 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link LibraryCSE.OnFragmentInteractionListener} interface
+ * {@link LibraryESS.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link LibraryCSE#newInstance} factory method to
+ * Use the {@link LibraryESS#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LibraryCSE extends Fragment {
-
+public class LibraryESS extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-//    // TODO: Rename and change types of parameters
-//    private String mParam1;
-//    private String mParam2;
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
     private OnFragmentInteractionListener mListener;
 
-    private static final String TAG = "**Library CSE**";
-    DatabaseReference cseBooksDatabaseRef = FirebaseDatabase.getInstance().getReference().child("departments/CSE/books");
-    StorageReference cseBooksStorageReference = FirebaseStorage.getInstance().getReference().child("CSE/Books");
+    private static final String TAG = "**ESS Library**";
+    DatabaseReference essBooksDatabaseRef = FirebaseDatabase.getInstance().getReference().child("departments/ESS/books");
+    StorageReference essBooksStorageReference = FirebaseStorage.getInstance().getReference().child("ESS/Books");
     ListView booksListView;
     SearchView booksSearchView;
     ListAdapter adapter;
@@ -65,7 +59,7 @@ public class LibraryCSE extends Fragment {
     String[][] details;
     String queryText;
 
-    public LibraryCSE() {
+    public LibraryESS() {
         // Required empty public constructor
     }
 
@@ -75,12 +69,14 @@ public class LibraryCSE extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment LibraryCSE.
+     * @return A new instance of fragment LibraryESS.
      */
     // TODO: Rename and change types and number of parameters
-    public static LibraryCSE newInstance(String param1, String param2) {
-        LibraryCSE fragment = new LibraryCSE();
+    public static LibraryESS newInstance(String param1, String param2) {
+        LibraryESS fragment = new LibraryESS();
         Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -90,26 +86,25 @@ public class LibraryCSE extends Fragment {
         super.onCreate(savedInstanceState);
         retrieveAllBooks();
         if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e(TAG, "db ref = "+cseBooksDatabaseRef.toString());
-        Log.e(TAG, "storage ref = "+cseBooksStorageReference.toString());
         // Inflate the layout for this fragment
-        Log.e(TAG, "onCreateView");
-        View v = inflater.inflate(R.layout.fragment_library_cse, container, false);
+        View v = inflater.inflate(R.layout.fragment_library_ess, container, false);
         //setting the right title
         if (((AppCompatActivity)getActivity()).getSupportActionBar()!=null)
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("CSE Library");
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("ESS Library");
         else
             Log.e(TAG, "action bar is null");
         //search view in actionbar
         setHasOptionsMenu(true);
         //views
-        booksListView = (ListView) v.findViewById(R.id.library_cse_listView);
+        booksListView = (ListView) v.findViewById(R.id.library_ess_listView);
         bookNames = new String[]{"Dummy 1.pdf", "Dummy 2.docx", "Dummy 3.txt"};
         adapter = new LibraryAdapter(getContext(), bookNames);
         //adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, bookNames);
@@ -118,42 +113,12 @@ public class LibraryCSE extends Fragment {
         return v;
     }
 
-    void retrieveAllBooks(){
-        cseBooksDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                long number = dataSnapshot.getChildrenCount();
-                int numberOfBooks = (int) number;
-                bookNames = new String[numberOfBooks];
-                details = new String[numberOfBooks][2];// authors, edition
-                //Log.e(TAG, "number = "+numberOfBooks);
-                int i = 1;
-                for (DataSnapshot snap: dataSnapshot.getChildren()) {
-                    String name = snap.child("name").getValue(String.class);
-                    String type = snap.child("type").getValue(String.class);
-                    bookNames[i-1] = name+"."+type;
-                    details[i-1][0] = snap.child("author").getValue(String.class);
-                    details[i-1][1] = snap.child("edition").getValue(String.class);
-                    //Log.e(TAG, "at i = "+i+" details = "+details[i-1][0]+", "+details[i-1][1]);
-                    i++;
-                }
-                adapter = new LibraryAdapter(getContext(), bookNames, details);
-                booksListView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
     void setListViewListener(){
         booksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Log.e(TAG, "#131 : "+bookNames[position]);
-                StorageReference newRef = cseBooksStorageReference.child(bookNames[position]);
+                StorageReference newRef = essBooksStorageReference.child(bookNames[position]);
                 Task<Uri> downloadUrl = newRef.getDownloadUrl();
                 //Log.e(TAG, "#136 : "+downloadUrl.toString());
             }
@@ -209,8 +174,35 @@ public class LibraryCSE extends Fragment {
         return true;
     }
 
+    void retrieveAllBooks(){
+        essBooksDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long number = dataSnapshot.getChildrenCount();
+                int numberOfBooks = (int) number;
+                bookNames = new String[numberOfBooks];
+                details = new String[numberOfBooks][2];// authors, edition
+                //Log.e(TAG, "number = "+numberOfBooks);
+                int i = 1;
+                for (DataSnapshot snap: dataSnapshot.getChildren()) {
+                    String name = snap.child("name").getValue(String.class);
+                    String type = snap.child("type").getValue(String.class);
+                    bookNames[i-1] = name+"."+type;
+                    details[i-1][0] = snap.child("author").getValue(String.class);
+                    details[i-1][1] = snap.child("edition").getValue(String.class);
+                    //Log.e(TAG, "at i = "+i+" details = "+details[i-1][0]+", "+details[i-1][1]);
+                    i++;
+                }
+                adapter = new LibraryAdapter(getContext(), bookNames, details);
+                booksListView.setAdapter(adapter);
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -234,7 +226,6 @@ public class LibraryCSE extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        Log.e(TAG, "on Detach");
         Fragment fragment = new OnlineLibraryFragment();
         getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, fragment).commit();

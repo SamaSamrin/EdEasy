@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.example.user.edeasy.adapters.ChatMessageAdapter;
 import com.example.user.edeasy.chat_message_items.FriendlyMessage;
 import com.example.user.edeasy.R;
 import com.google.firebase.database.DataSnapshot;

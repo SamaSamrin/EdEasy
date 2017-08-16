@@ -24,6 +24,7 @@ import com.example.user.edeasy.R;
 import com.example.user.edeasy.User;
 import com.example.user.edeasy.activities.CalendarDisplay;
 import com.example.user.edeasy.activities.CurrentRoutine;
+import com.example.user.edeasy.activities.Welcome;
 import com.example.user.edeasy.activities.chatrooms.Chatroom;
 import com.example.user.edeasy.adapters.GridAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -143,10 +144,12 @@ public class Dashboard extends Fragment {
 
         dashboard_gv = (GridView) view.findViewById(R.id.dashboard_gridview);
 
+        Log.e(TAG, "#146 : user role = "+user_role);
+
         if(Build.VERSION.SDK_INT >= 23)
-            dashboard_gv.setAdapter(new GridAdapter(getContext()));
+            dashboard_gv.setAdapter(new GridAdapter(getContext(), user_role));
         else
-            dashboard_gv.setAdapter(new GridAdapter(getActivity().getApplicationContext()));
+            dashboard_gv.setAdapter(new GridAdapter(getActivity().getApplicationContext(), user_role));
 
         dashboard_gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -301,8 +304,8 @@ public class Dashboard extends Fragment {
                         //checking if assigned courses are retrieved correctly
                         if (assignedCourses != null){
                             for (int k=0; k<assignedCourses.length; k++){
-                                Log.e(TAG, "#382: department="+departments[k]+" course "+String.valueOf(k)+" : "+
-                                        assignedCourses[k][0]+" section "+assignedCourses[k][1]);
+//                                Log.e(TAG, "#382: department="+departments[k]+" course "+String.valueOf(k)+" : "+
+//                                        assignedCourses[k][0]+" section "+assignedCourses[k][1]);
                             }
                         }else
                             Log.e(TAG, "#386 : null assigned courses");
@@ -316,6 +319,8 @@ public class Dashboard extends Fragment {
             }
         }else{
             Log.e(TAG, "line 395: current Firebase user is null");
+            Intent intent = new Intent(getContext(), Welcome.class);
+            startActivity(intent);
         }
     }
 

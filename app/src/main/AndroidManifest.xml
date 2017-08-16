@@ -23,19 +23,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Dashboard_Activity"
-            android:label="Dashboard"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".activities.NavDrawer"
             android:theme="@style/AppTheme.NoActionBar">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.VIEW"/> -->
             <!-- <category android:name="android.intent.category.BROWSABLE"/> -->
             <!-- <data android:host="www.google.com" android:scheme="http"/> -->
             <!-- </intent-filter> -->
-        </activity>
         <activity
             android:name=".activities.CurrentRoutine"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -54,7 +53,6 @@
         <activity
             android:name=".activities.CurrentMarksheet"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".fragments.course_materials.CourseMaterials" />
         <activity
             android:name=".activities.CalendarDisplay"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -65,11 +63,8 @@
         <activity
             android:name=".activities.Welcome"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+            <!--</intent-filter>-->
         </activity>
         <activity
             android:name=".activities.SignUp"

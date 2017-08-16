@@ -9,8 +9,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.example.user.edeasy.R;
+import com.example.user.edeasy.fragments.OnlineLibraryFragment;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,6 +39,14 @@ public class LibraryPHR extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private static final String TAG = "**PHR Library**";
+    DatabaseReference phrBooksDatabaseRef = FirebaseDatabase.getInstance().getReference().child("departments/PHR/books");
+    StorageReference phrBooksStorageReference = FirebaseStorage.getInstance().getReference().child("PHR/Books");
+    ListView booksListView;
+    SearchView booksSearchView;
+    ListAdapter adapter;
+    String[] bookNames;
+    String[][] details;
+    String queryText;
 
     public LibraryPHR() {
         // Required empty public constructor
@@ -98,6 +114,9 @@ public class LibraryPHR extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        Fragment fragment = new OnlineLibraryFragment();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
     }
 
     /**

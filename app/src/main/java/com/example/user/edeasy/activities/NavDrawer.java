@@ -113,7 +113,6 @@ public class NavDrawer extends AppCompatActivity
         CSE_storageRef = storageReference.child("CSE");
         currentUser = auth.getCurrentUser();
         fcm = FirebaseMessaging.getInstance();
-
         //sending upstream message
         RemoteMessage message = new RemoteMessage.Builder(SENDER_ID+"@gcm.googleapis.com")
                 .setMessageId(Integer.toString(msgId.incrementAndGet()))
@@ -121,9 +120,6 @@ public class NavDrawer extends AppCompatActivity
                 .addData("my_action","SAY_HELLO")
                 .build();;
         fcm.send(message);
-
-
-
         //trying for push notifications
         try {
             PushNotificationHelper.sendPushNotification("hello?");
@@ -142,7 +138,7 @@ public class NavDrawer extends AppCompatActivity
         bundle = getIntent().getExtras();
         if (bundle!=null) {
             user_role = bundle.getString("role");
-            Log.e(TAG, "#103 : received role = "+user_role);
+            Log.e(TAG, "#145 : received role = "+user_role);
         }
 
         Fragment fragment = new Dashboard();
@@ -158,14 +154,12 @@ public class NavDrawer extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View hView =  navigationView.getHeaderView(0);
-        Log.e(TAG, "line 109: headerView is - "+hView.toString());
         nav_user = (TextView)hView.findViewById(R.id.drawer_header_title);
-        Log.e(TAG, "line 111: setting username - "+username);
         nav_user.setText(username);
         nav_user_email = (TextView) hView.findViewById(R.id.drawer_header_subtitle);
         nav_user_email.setText(user_email);
+        Log.e(TAG, "line 165: setting username - "+username+" & email - "+user_email);
         myMenu = navigationView.getMenu();
-
         navigationView.setNavigationItemSelectedListener(this);
 
         handleCurrentUserInfo();//whole process of retrieving current user data
@@ -174,15 +168,30 @@ public class NavDrawer extends AppCompatActivity
     @Override
     public void onBackPressed() {
         Log.e(TAG, "onBackPressed");
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-            //super.onBackPressed();
-        } else {
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+        if (count == 0) {
+            Log.e(TAG, "ON BACK PRESSED : count is ZERO");
+            this.finish();
+        } else if (count == 1) {
+            Log.e(TAG, "ON BACK PRESSED : count is 1");
             Fragment fragment = new Dashboard();
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-            //super.onBackPressed();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+            getSupportFragmentManager().popBackStack();
+            Log.e(TAG, "count is decreased to 0");
+        } else {
+            Log.e(TAG, "ON BACK PRESSED : count is " + count);
+            getSupportFragmentManager().popBackStack();
         }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        if (drawer.isDrawerOpen(GravityCompat.START)) {
+//            drawer.closeDrawer(GravityCompat.START);
+//        } else {
+//            Fragment fragment = new Dashboard();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+//        }
     }
 
     @Override
@@ -217,8 +226,10 @@ public class NavDrawer extends AppCompatActivity
                         item = menu.findItem(R.id.course5_drawer_item);
                         break;
                 }
-                if (item!=null)
+                if (item!=null) {
                     item.setTitle(assignedCourses[i][0]);
+                    Log.e(TAG, "item = "+assignedCourses[i][0]);
+                }
                 else
                     Log.e(TAG, "#168, menu item is null");
             }
@@ -304,7 +315,9 @@ public class NavDrawer extends AppCompatActivity
                     args.putStringArray("course"+ String.valueOf(j+1),
                             assignedCourses[j]);
                 fragment.setArguments(args);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack("Account").commit();
                 break;
             case (R.id.course1_drawer_item) :
                 fragment = new CourseOneMaterials();
@@ -313,12 +326,16 @@ public class NavDrawer extends AppCompatActivity
                     toolbar.setTitle(assignedCourses[0][0]);
                 args = new Bundle();
                 args.putString("username", username);
-                args.putString("department", departments[0]);
-                args.putString("course", assignedCourses[0][0]);
-                args.putString("section", assignedCourses[0][1]);
+                if (departments!=null) {
+                    args.putString("department", departments[0]);
+                    args.putString("course", assignedCourses[0][0]);
+                    args.putString("section", assignedCourses[0][1]);
+                }
                 args.putString("role", user_role);
                 fragment.setArguments(args);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack("Course One").commit();
                 break;
             case (R.id.course2_drawer_item) :
                 fragment = new CourseTwoMaterials();
@@ -326,12 +343,16 @@ public class NavDrawer extends AppCompatActivity
                     toolbar.setTitle(assignedCourses[1][0]);
                 args = new Bundle();
                 args.putString("username", username);
-                args.putString("department", departments[1]);//assignedCourses[1][0].substring(0,3)
-                args.putString("course", assignedCourses[1][0]);
-                args.putString("section", assignedCourses[1][1]);
+                if (departments!=null) {
+                    args.putString("department", departments[1]);//assignedCourses[1][0].substring(0,3)
+                    args.putString("course", assignedCourses[1][0]);
+                    args.putString("section", assignedCourses[1][1]);
+                }
                 args.putString("role", user_role);
                 fragment.setArguments(args);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack("Course Two").commit();
                 break;
             case (R.id.course3_drawer_item) :
                 fragment = new CourseThreeMaterials();
@@ -344,7 +365,9 @@ public class NavDrawer extends AppCompatActivity
                 args.putString("section", assignedCourses[2][1]);
                 args.putString("role", user_role);
                 fragment.setArguments(args);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack("Course Three").commit();
                 break;
             case (R.id.course4_drawer_item) :
                 fragment = new CourseFourMaterials();
@@ -357,7 +380,9 @@ public class NavDrawer extends AppCompatActivity
                 args.putString("section", assignedCourses[3][1]);
                 args.putString("role", user_role);
                 fragment.setArguments(args);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack("Course Four").commit();
                 break;
             case (R.id.course5_drawer_item) :
                 fragment = new CourseFiveMaterials();
@@ -370,7 +395,9 @@ public class NavDrawer extends AppCompatActivity
                 args.putString("section", assignedCourses[4][1]);
                 args.putString("role", user_role);
                 fragment.setArguments(args);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack("Course Five").commit();
                 break;
 //            case (R.id.settings_drawer_option) :
 //                //loads settings activity
@@ -392,7 +419,9 @@ public class NavDrawer extends AppCompatActivity
                 args.putString("email", currentUser.getEmail());
                 args.putString("username", username);
                 fragment.setArguments(args);
-                fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, fragment)
+                        .addToBackStack("library").commit();
             }
 
 
@@ -463,19 +492,31 @@ public class NavDrawer extends AppCompatActivity
     void handleCurrentUserInfo(){//whole process of retrieving current user data
         Log.e(TAG, "handleCurrentUserInfo");
         if(currentUser != null){
-            Log.e(TAG, "line 377: current user is not null");
+            Log.e(TAG, "line 502: current user is not null");
             user_email = currentUser.getEmail();
-            Log.e(TAG, "line 379: current user email = " + user_email);
+            Log.e(TAG, "line 504: current user email = " + user_email);
+            nav_user_email.setText(user_email);
 
             //retrieving user's info from database
             int croppedEmailIdLimit = user_email.length() - 4;
             String emailID = user_email.substring(0, croppedEmailIdLimit);
+            Log.e(TAG, "#495: email id = "+emailID);
             //user role wise reference from database
-            if (user_role==null) {
-                if (studentsDatabaseReference.child(emailID) != null)
+            studentsDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users")
+                    .child("students");
+            Log.e(TAG, "students db ref = "+studentsDatabaseReference.toString()
+                    +" role = "+user_role);
+            if (user_role==null || user_role.equals("default role")) {
+                Log.e(TAG, "user role is null");
+                if (studentsDatabaseReference.child(emailID) != null) {
+                    Log.e(TAG, "#499: student");
                     currentUserRef = studentsDatabaseReference.child(emailID);
-                else if (teachersDatabaseReference.child(emailID) != null)
+                    user_role = "student";
+                }else if (teachersDatabaseReference.child(emailID) != null) {
+                    Log.e(TAG, "#503: teacher");
                     currentUserRef = teachersDatabaseReference.child(emailID);
+                    user_role="teacher";
+                }
             }else{
                 if (user_role.equals("student"))
                     currentUserRef = studentsDatabaseReference.child(emailID);
@@ -485,8 +526,7 @@ public class NavDrawer extends AppCompatActivity
 
             //extracting necessary user info
             if (currentUserRef != null){
-                Log.e(TAG, "line 344: current user reference is - "+currentUserRef.toString());
-
+                Log.e(TAG, "line 511: current user reference is - "+currentUserRef.toString());
                 currentUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -495,6 +535,8 @@ public class NavDrawer extends AppCompatActivity
                         student_id = String.valueOf(id);
                         int credits = dataSnapshot.child("credits_completed").getValue(Integer.class);
                         credits_completed = String.valueOf(credits);
+                        Log.e(TAG, "#535 : dept="+user_department+
+                        " id="+student_id+" credits="+credits_completed);
                     }
 
                     @Override
@@ -508,9 +550,8 @@ public class NavDrawer extends AppCompatActivity
                 nameRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.e(TAG, "#392 : onDataChange");
                         username = dataSnapshot.getValue(String.class);
-                        Log.e(TAG, "#394: the current username from snapshot is = "+username);
+                        Log.e(TAG, "#550: the current username from snapshot is = "+username);
                         nav_user.setText(username);
                         setUsername(username);
                         nav_user_email.setText(user_email);
@@ -518,7 +559,7 @@ public class NavDrawer extends AppCompatActivity
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.e(TAG, "#402: database error = "+databaseError.toString());
+                        Log.e(TAG, "#559: database error = "+databaseError.toString());
                     }
                 });
                 //********************COURSES*******************
@@ -527,10 +568,9 @@ public class NavDrawer extends AppCompatActivity
                 coursesRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.e(TAG, "onDataChange : COURSES");
                         long numberOfChildren = dataSnapshot.getChildrenCount();
                         numberOfCourses = (int) numberOfChildren;
-                        Log.e(TAG, "#412 : number of courses = "+ String.valueOf(numberOfCourses));
+                        Log.e(TAG, "#570 : number of courses = "+ String.valueOf(numberOfCourses));
                         assignedCourses = new String[numberOfCourses][2];
                         departments = new String[numberOfCourses];
                         int i = 1;
@@ -542,6 +582,8 @@ public class NavDrawer extends AppCompatActivity
                             assignedCourses[i-1][1] = String.valueOf(section);//section
                             String department = postSnapshot.child("department").getValue(String.class);
                             departments[i-1] = department;
+                            Log.e(TAG, "#582: course="+assignedCourses[i-1][0]+
+                                    " department="+departments[i-1]);
                             i++;
                         }
                         //filling up the drawer options
@@ -552,21 +594,21 @@ public class NavDrawer extends AppCompatActivity
                     }
                 });
             }else{
-                Log.e(TAG, "line 392: current user reference is null");
+                Log.e(TAG, "line 592: current user reference is null");
             }
         }else{
-            Log.e(TAG, "line 395: current Firebase user is null");
+            Log.e(TAG, "line 595: current Firebase user is null");
         }
     }
 
     private void setUsername(String newname){
         username = newname;
-        Log.e(TAG, "line 468: setUsername: "+username);
+        Log.e(TAG, "line 603: setUsername: "+username);
     }
 
     public String getUsername(){
         handleCurrentUserInfo();
-        Log.e(TAG, "line 473: returning username = "+username);
+        Log.e(TAG, "line 608: returning username = "+username);
         return username;
     }
 

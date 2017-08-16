@@ -93,6 +93,9 @@ public class LessonPlannerFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+//        Fragment fragment = new Dashboard();
+//        getFragmentManager().beginTransaction()
+//                .replace(R.id.fragment_container, fragment).commit();
     }
 
     /**

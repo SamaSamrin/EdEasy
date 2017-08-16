@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.example.user.edeasy.push_notification_helpers.PushNotificationHelper;
 import com.example.user.edeasy.R;
 import com.example.user.edeasy.User;
-import com.example.user.edeasy.fragments.course_materials.Course;
+//import com.example.user.edeasy.fragments.course_materials.Course;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -54,7 +54,7 @@ public class Welcome extends AppCompatActivity {
     String password;
     String studentID;
     String department;
-    Course[] courses;
+    //Course[] courses;
     String roleFromSignup;
     String user_key;
 

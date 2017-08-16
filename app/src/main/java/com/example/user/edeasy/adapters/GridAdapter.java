@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,18 +19,23 @@ import android.widget.TextView;
 
 public class GridAdapter extends BaseAdapter {
 
+    private static final String TAG = "**Grid Adapter**";
+
     Context context;
+    String user_role;
     String[] dashboard_items = {"PREVIOUS RESULTS", "CURRENT ROUTINE", "CURRENT MARKSHEET",
             "CHATROOM", "CALENDER", "NOTIFICATIONS"};
-    String[] colorBacks = {"#FFEA00", "#76FF03", "#00B0FF", "#BA68C8", "#EC407A", "#FF3D00"};
+    String[] colorBacks = {"#fcde00", "#64DD17", "#00B0FF", "#BA68C8", "#EC407A", "#FF3D00"};
 //    int[] colors = {Color.CYAN, Color.YELLOW, Color.GREEN, Color.MAGENTA, Color.RED, Color.BLACK};
 //    int[] colors2 = {R.color.previousResultsBackg, R.color.currentRoutineBackg,
 //                      R.color.currentMarksheetBackg, R.color.courseMaterialsBackg,
 //                      R.color.calendarBackg, R.color.notificationsBackg};
 
-    public GridAdapter(Context context){
+    public GridAdapter(Context context, String role){
         super();
         this.context = context;
+        user_role = role;
+        Log.e(TAG, "role = "+user_role);
     }
 
     @Override
@@ -66,7 +72,18 @@ public class GridAdapter extends BaseAdapter {
         }else{
             itemText = (TextView) view;
         }
-        itemText.setText(dashboard_items[i]);
+        if (i!=0)
+            itemText.setText(dashboard_items[i]);
+        else {if (user_role!=null) {
+                if (user_role.equals("student"))
+                    itemText.setText(dashboard_items[i]);
+                else if (user_role.equals("teacher")) {
+                    String teachersChoice = "LESSON PLANNER";
+                    itemText.setText(teachersChoice);
+                }
+            }else
+                itemText.setText(dashboard_items[i]);
+        }
         itemText.setBackgroundColor(Color.parseColor(colorBacks[i]));
         return itemText;
     }

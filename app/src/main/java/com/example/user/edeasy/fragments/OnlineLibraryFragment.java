@@ -22,6 +22,7 @@ import com.example.user.edeasy.fragments.department_libraries.LibraryBIL;
 import com.example.user.edeasy.fragments.department_libraries.LibraryCSE;
 import com.example.user.edeasy.adapters.DepartmentsGridAdapter;
 import com.example.user.edeasy.fragments.department_libraries.LibraryEEE;
+import com.example.user.edeasy.fragments.department_libraries.LibraryESS;
 import com.example.user.edeasy.fragments.department_libraries.LibraryMNS;
 import com.example.user.edeasy.fragments.department_libraries.LibraryPHR;
 
@@ -98,6 +99,12 @@ public class OnlineLibraryFragment extends Fragment {
         Log.e(TAG, "onCreateView");
         View v = inflater.inflate(R.layout.fragment_online_library, container, false);
 
+        //setting the right title
+        if (((AppCompatActivity)getActivity()).getSupportActionBar()!=null)
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Online Library");
+        else
+            Log.e(TAG, "action bar is null");
+
         departmentsGridView = (GridView) v.findViewById(R.id.departments_gridview);
         ListAdapter adapter = new DepartmentsGridAdapter(getContext());
         departmentsGridView.setAdapter(adapter);
@@ -112,30 +119,44 @@ public class OnlineLibraryFragment extends Fragment {
                 switch (position){
                     case 0 :
                         fragment = new LibraryBBS();
-                        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, fragment)
+                                .addToBackStack("BBS").commit();
                         break;
                     case 1 :
                         fragment = new LibraryBIL();
-                        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, fragment)
+                                .addToBackStack("BIL").commit();
                         break;
                     case 2 :
                         fragment = new LibraryCSE();
-                        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, fragment)
+                                .addToBackStack("CSE").commit();
                         break;
                     case 3 :
                         fragment = new LibraryEEE();
-                        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, fragment)
+                                .addToBackStack("EEE").commit();
                         break;
                     case 4 : //MNS
                         fragment = new LibraryMNS();
-                        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, fragment)
+                                .addToBackStack("MNS").commit();
                         break;
-                    case 5 : //PHR
-                        fragment = new LibraryPHR();
-                        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                    case 5 : //ESS
+                        fragment = new LibraryESS();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, fragment)
+                                .addToBackStack("ESS").commit();
                         break;
                     case 6 :
-                        fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.fragment_container, fragment)
+                                .addToBackStack("PHR").commit();
                         break;
                 }
 
@@ -168,6 +189,9 @@ public class OnlineLibraryFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+//        Fragment fragment = new Dashboard();
+//        getFragmentManager().beginTransaction()
+//                .replace(R.id.fragment_container, fragment).commit();
     }
 
     /**

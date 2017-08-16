@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.user.edeasy.R;
+import com.example.user.edeasy.fragments.Dashboard;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -347,6 +348,9 @@ public class CourseThreeMaterials extends Fragment {
         Log.e(TAG, "onDetach");
         super.onDetach();
         mListener = null;
+        Fragment fragment = new Dashboard();
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
     }
 
     public static void verifyStoragePermissions(Activity activity) {

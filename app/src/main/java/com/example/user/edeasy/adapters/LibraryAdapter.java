@@ -32,7 +32,7 @@ public class LibraryAdapter extends BaseAdapter {
     }
 
     public LibraryAdapter(Context c,  String[] namesOfBooks, String[][] details){
-        Log.e(TAG, "constructor" );
+        //Log.e(TAG, "constructor" );
         context = c;
         bookNames = namesOfBooks;
         numberOfBooks = namesOfBooks.length;

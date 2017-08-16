@@ -1,4 +1,4 @@
-package com.example.user.edeasy.activities.chatrooms;
+package com.example.user.edeasy.adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -32,7 +32,7 @@ public class ChatMessageAdapter extends BaseAdapter {
     int previousMessagesNumber;
     private static LayoutInflater inflater = null;
 
-    ChatMessageAdapter(Context context, DatabaseReference chatsRef,
+    public ChatMessageAdapter(Context context, DatabaseReference chatsRef,
                        String[] messages, String[] senders, String username){
         super();
         this.context = context;

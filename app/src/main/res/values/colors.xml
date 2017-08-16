@@ -7,8 +7,8 @@
     <color name="colorAccentLight">#ffff52</color>
     <color name="colorAccentDark">#C7A500</color>
 
-    <color name="previousResultsBackg">#FFFF00</color>
-    <color name="currentRoutineBackg">#C6FF00</color>
+    <color name="previousResultsBackg">#fcde00</color>
+    <color name="currentRoutineBackg">#64dd17</color>
     <color name="currentMarksheetBackg">#00B0FF</color>
     <color name="courseMaterialsBackg">#BA68C8</color>
     <color name="calendarBackg">#EC407A</color>
